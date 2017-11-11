@@ -180,8 +180,8 @@ Tables::createSimple(std::shared_ptr<arrow::Table>& table)
 
     arrow::PrettyPrintOptions options{0};
     std::string result;
-    arrow::PrettyPrint(*(table->schema()), options, &result);
-    std::cout << "Schema: " << result << std::endl;
+    //arrow::PrettyPrint(*(table->schema()), options, &result);
+    //std::cout << "Schema: " << result << std::endl;
 
     return Status::OK();
 }
