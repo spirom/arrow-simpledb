@@ -4,7 +4,7 @@
 #define FILTERPROJECTTABLECURSOR_H
 
 #include <arrow/table.h>
-#include "ColumnCursorWrapper.h"
+#include "columns/ColumnCursorWrapper.h"
 #include "TableCursor.h"
 #include "filters/Filter.h"
 

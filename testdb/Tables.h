@@ -5,9 +5,9 @@
 
 #include "arrow/api.h"
 
-#include "ChunkedColumnCursor.h"
-#include "ScanTableCursor.h"
-#include "FilterProjectTableCursor.h"
+#include "columns/ChunkedColumnCursor.h"
+#include "tables/ScanTableCursor.h"
+#include "tables/FilterProjectTableCursor.h"
 
 class Tables {
 public:

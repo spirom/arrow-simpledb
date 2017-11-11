@@ -26,7 +26,7 @@ TEST_F(TableTest, Cursor) {
         EXPECT_EQ(count, tc.getPosition());
         count++;
     }
-    EXPECT_EQ(200, count);
+    EXPECT_EQ(200u, count);
 }
 
 TEST_F(TableTest, SmallSimpleColumns) {
@@ -35,7 +35,6 @@ TEST_F(TableTest, SmallSimpleColumns) {
     EXPECT_EQ(2, table->num_rows());
     EXPECT_EQ(2, table->num_columns());
     ScanTableCursor tc(table);
-    uint64_t count = 0;
     auto id_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Array>>(
             tc.getColumn(std::string("id")));
     auto cost_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleArray>>(
@@ -55,7 +54,6 @@ TEST_F(TableTest, SmallChunkedColumns) {
     EXPECT_EQ(4, table->num_rows());
     EXPECT_EQ(2, table->num_columns());
     ScanTableCursor tc(table);
-    uint64_t count = 0;
     auto id_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Array>>(
             tc.getColumn(std::string("id")));
     auto cost_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleArray>>(
@@ -91,7 +89,7 @@ TEST_F(TableTest, ComplexColumns) {
         EXPECT_EQ(0.5 * val, cost_cursor->get());
         count++;
     }
-    EXPECT_EQ(200, count);
+    EXPECT_EQ(200u, count);
 }
 
 TEST_F(TableTest, SimpleFilter) {
@@ -104,7 +102,6 @@ TEST_F(TableTest, SimpleFilter) {
     std::shared_ptr<Filter> filter = std::make_shared<GreaterThanFilter<arrow::Int64Array>>("id", 31);
     FilterProjectTableCursor fptc(tc, filter);
 
-    uint64_t count = 0;
     auto id_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Array>>(
             fptc.getColumn(std::string("id")));
     auto cost_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleArray>>(
@@ -130,7 +127,6 @@ TEST_F(TableTest, ConjunctiveFilter) {
 
     FilterProjectTableCursor fptc(tc, andFilter);
 
-    uint64_t count = 0;
     auto id_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Array>>(
             fptc.getColumn(std::string("id")));
     auto cost_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleArray>>(
@@ -158,7 +154,6 @@ TEST_F(TableTest, NeverTrueFilter) {
 
     FilterProjectTableCursor fptc(tc, andFilter);
 
-    uint64_t count = 0;
     auto id_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Array>>(
             fptc.getColumn(std::string("id")));
     auto cost_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleArray>>(
@@ -180,7 +175,6 @@ TEST_F(TableTest, TwoTypesSameFilter) {
 
     FilterProjectTableCursor fptc(tc, andFilter);
 
-    uint64_t count = 0;
     auto id_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Array>>(
             fptc.getColumn(std::string("id")));
     auto cost_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleArray>>(
@@ -201,7 +195,6 @@ TEST_F(TableTest, FilterComposition) {
     std::shared_ptr<Filter> second_filter = std::make_shared<LessThanFilter<arrow::DoubleArray>>("cost", 42);
     FilterProjectTableCursor second_cursor(first_cursor, second_filter);
 
-    uint64_t count = 0;
     auto id_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Array>>(
             second_cursor.getColumn(std::string("id")));
     auto cost_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleArray>>(

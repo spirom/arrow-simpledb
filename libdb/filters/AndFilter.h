@@ -5,7 +5,7 @@
 
 #include <string>
 #include "filters/Filter.h"
-#include "TableCursor.h"
+#include "tables/TableCursor.h"
 
 class AndFilter : public Filter {
 public:

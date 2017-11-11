@@ -7,7 +7,7 @@ ScanTableCursor::ScanTableCursor(std::shared_ptr<arrow::Table> table)
     for (int i = 0; i < table->num_columns(); i++) {
         addColumn(table->column(i));
     }
-    _size = table->num_rows();
+    _size = (uint64_t) table->num_rows();
     reset();
 }
 

@@ -5,7 +5,7 @@
 
 #include <unordered_map>
 #include <arrow/table.h>
-#include "ColumnCursorWrapper.h"
+#include "columns/ColumnCursorWrapper.h"
 #include "TableCursor.h"
 
 template <typename T>
@@ -31,7 +31,7 @@ protected:
 private:
     std::shared_ptr<arrow::Table> _table;
     uint64_t _position;
-    int64_t _size;
+    uint64_t _size;
     std::unordered_map<std::string, std::shared_ptr<GenericColumnCursor>> _cursors;
     bool _initial_state;
 };

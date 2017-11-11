@@ -3,8 +3,8 @@
 #ifndef COLUMNCURSORWRAPPER_H
 #define COLUMNCURSORWRAPPER_H
 
-#include "ChunkedColumnCursor.h"
-#include "ScanTableCursor.h"
+#include "columns/ChunkedColumnCursor.h"
+#include "tables/ScanTableCursor.h"
 #include "GenericColumnCursor.h"
 
 class ScanTableCursor;

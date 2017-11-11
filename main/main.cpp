@@ -4,9 +4,9 @@
 #include "arrow/ipc/api.h"
 #include "arrow/io/api.h"
 
-#include "../libdb/ChunkedColumnCursor.h"
-#include "../libdb/ScanTableCursor.h"
-#include "../libdb/FilterProjectTableCursor.h"
+#include "columns/ChunkedColumnCursor.h"
+#include "tables/ScanTableCursor.h"
+#include "tables/FilterProjectTableCursor.h"
 
 
 

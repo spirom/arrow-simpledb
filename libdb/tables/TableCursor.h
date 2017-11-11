@@ -8,7 +8,7 @@ class ColumnCursorWrapper;
 
 #include <cstdint>
 #include <memory>
-#include "GenericColumnCursor.h"
+#include "columns/GenericColumnCursor.h"
 
 class TableCursor {
 public:

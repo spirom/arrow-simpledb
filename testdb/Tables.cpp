@@ -178,7 +178,7 @@ Tables::createSimple(std::shared_ptr<arrow::Table>& table)
 
     table.reset(new Table(schema, columns));
 
-    arrow::PrettyPrintOptions options{0};
+    //arrow::PrettyPrintOptions options{0};
     std::string result;
     //arrow::PrettyPrint(*(table->schema()), options, &result);
     //std::cout << "Schema: " << result << std::endl;

@@ -5,8 +5,8 @@
 
 #include <string>
 #include "filters/Filter.h"
-#include "TableCursor.h"
-#include "ColumnCursorWrapper.h"
+#include "tables/TableCursor.h"
+#include "columns/ColumnCursorWrapper.h"
 
 template <typename T>
 class GreaterThanFilter : public Filter {

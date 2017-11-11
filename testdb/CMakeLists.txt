@@ -7,8 +7,6 @@ include_directories(/home/spiro/GitRepos/googletest/googletest/include)
 link_directories(/home/spiro/GitRepos/googletest/build/googlemock/gtest)
 link_directories(/home/spiro/GitRepos/arrow/cpp/release/release)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread")
-
 add_executable(testdb TableTest.cpp main.cpp Tables.cpp)
 
 target_link_libraries(testdb libgtest.a libdb)
