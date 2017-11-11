@@ -9,7 +9,11 @@ and thus how the complexities of Arrow's table and column representation (such a
 abstracted away so that most of the query engine is oblivious to them. Of course, an important goal is to
 preserve Arrow's performance advantages.
 
-Iterators (here called table cursors) are used to process queries against tables.
+A fairly typical implementation model is used for operators: composable iterators
+(here called table cursors) are used to process queries against tables.
+
+The core wrapping mechanism can be seen in the files `libdb/columns/ChunkedColumnCursor.{h,cpp}`, where the
+multiple chunks that comprise a column are hidden behind a uniform interface, including a `seek()` method.
 
 # Queries Over Arrow Tables
 
@@ -37,7 +41,7 @@ For example, a scan cursor can be used to simply scan a table:
         //
     }
 
-Note that column cursors are automatically positioned by the table cursor positioned when accessed,
+Note that column cursors are automatically positioned by the table cursor's position when thay are accessed,
 so any column (or part of a column) that is not needed for a query will not receive any memory accesses
 when the query is executed.
 
@@ -83,8 +87,8 @@ Table cursors can be composed arbitrarily:
 * A cleaner way to create tables
 * Encodings (dictionary, ...)
 * Data representation
-** Nulls
-** Non-relational data
+ * Nulls
+ * Non-relational data
 * A full range of column types (currently just int64 and double)
 * Vectorized execution
 * Parallelism
