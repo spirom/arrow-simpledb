@@ -87,8 +87,8 @@ Table cursors can be composed arbitrarily:
 * A cleaner way to create tables
 * Encodings (dictionary, ...)
 * Data representation
- * Nulls
- * Non-relational data
+  * Nulls
+  * Non-relational data
 * A full range of column types (currently just int64 and double)
 * Vectorized execution
 * Parallelism
