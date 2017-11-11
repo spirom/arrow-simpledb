@@ -8,10 +8,11 @@
 #include "TableCursor.h"
 #include "ColumnCursorWrapper.h"
 
+template <typename T>
 class GreaterThanFilter : public Filter {
 public:
 
-    GreaterThanFilter(std::string column_name, double value);
+    GreaterThanFilter(std::string column_name, typename T::value_type value);
 
     void initialize(TableCursor& table_cursor) override;
 
@@ -23,7 +24,7 @@ private:
 
     double _value;
 
-    std::shared_ptr<ColumnCursorWrapper<arrow::Int64Array>> _cursor;
+    std::shared_ptr<ColumnCursorWrapper<T>> _cursor;
 };
 
 

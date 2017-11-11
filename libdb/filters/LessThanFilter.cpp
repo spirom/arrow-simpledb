@@ -4,20 +4,26 @@
 
 #include "arrow/api.h"
 
-LessThanFilter::LessThanFilter(std::string column_name, double value)
+template <typename T>
+LessThanFilter<T>::LessThanFilter(std::string column_name, typename T::value_type value)
         : _column_name(column_name), _value(value)
 {
 
 }
 
+template <typename T>
 void
-LessThanFilter::initialize(TableCursor& table_cursor) {
-    _cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleArray>>(
+LessThanFilter<T>::initialize(TableCursor& table_cursor) {
+    _cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<T>>(
             table_cursor.getColumn(_column_name));
 }
 
+template <typename T>
 bool
-LessThanFilter::evaluate()
+LessThanFilter<T>::evaluate()
 {
     return _cursor->get() < _value;
 }
+
+template class LessThanFilter<arrow::Int64Array>;
+template class LessThanFilter<arrow::DoubleArray>;
