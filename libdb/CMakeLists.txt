@@ -1,14 +1,15 @@
 
 project(libdb)
 
-find_package( Threads )
+MESSAGE(STATUS "Arrow root = " ${ARROW_ROOT})
 
-set(ARROW_INCLIDE_DIRS /home/spiro/GitRepos/arrow/cpp/src)
+find_package(Threads REQUIRED)
+
 set(ARROW_LIBS libarrow.a)
 
-include_directories(BEFORE ${ARROW_INCLIDE_DIRS})
+include_directories(${ARROW_INCLIDE_DIRS})
 
-link_directories(/home/spiro/GitRepos/arrow/cpp/release/release)
+link_directories(${ARROW_LINK_DIRS})
 
 set(SOURCE_FILES columns/ChunkedColumnCursor.cpp tables/ScanTableCursor.cpp
         columns/ColumnCursorWrapper.cpp columns/GenericColumnCursor.cpp tables/TableCursor.cpp

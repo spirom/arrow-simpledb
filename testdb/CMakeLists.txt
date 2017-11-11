@@ -1,11 +1,12 @@
 project(testdb)
 
-set(ARROW_INCLIDE_DIRS /home/spiro/GitRepos/arrow/cpp/src)
-include_directories(BEFORE ${ARROW_INCLIDE_DIRS})
-include_directories(/home/spiro/GitRepos/googletest/googletest/include)
+set(GTEST_ROOT "" CACHE PATH "GoogleTest root directory")
 
-link_directories(/home/spiro/GitRepos/googletest/build/googlemock/gtest)
-link_directories(/home/spiro/GitRepos/arrow/cpp/release/release)
+include_directories(${ARROW_INCLIDE_DIRS})
+include_directories(${GTEST_ROOT}/googletest/include)
+
+link_directories(${GTEST_ROOT}/build/googlemock/gtest)
+link_directories(${ARROW_LINK_DIRS})
 
 add_executable(testdb TableTest.cpp main.cpp Tables.cpp)
 
