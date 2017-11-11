@@ -4,7 +4,7 @@
 #define GREATERTHANFILTER_H
 
 #include <string>
-#include "Filter.h"
+#include "filters/Filter.h"
 #include "TableCursor.h"
 #include "ColumnCursorWrapper.h"
 

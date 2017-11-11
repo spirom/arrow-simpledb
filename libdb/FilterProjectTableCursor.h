@@ -6,7 +6,7 @@
 #include <arrow/table.h>
 #include "ColumnCursorWrapper.h"
 #include "TableCursor.h"
-#include "Filter.h"
+#include "filters/Filter.h"
 
 class FilterProjectTableCursor : public TableCursor {
 public:

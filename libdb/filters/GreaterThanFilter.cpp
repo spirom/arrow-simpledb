@@ -2,7 +2,6 @@
 #include "arrow/api.h"
 
 #include "GreaterThanFilter.h"
-#include "TableCursor.h"
 
 GreaterThanFilter::GreaterThanFilter(std::string column_name, double value)
         : _column_name(column_name), _value(value)

@@ -15,7 +15,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 set(SOURCE_FILES ChunkedColumnCursor.cpp ScanTableCursor.cpp
         ColumnCursorWrapper.cpp GenericColumnCursor.cpp TableCursor.cpp
-        FilterProjectTableCursor.cpp GreaterThanFilter.cpp GreaterThanFilter.h)
+        FilterProjectTableCursor.cpp filters/GreaterThanFilter.cpp filters/GreaterThanFilter.h filters/LessThanFilter.cpp filters/LessThanFilter.h filters/AndFilter.cpp filters/AndFilter.h)
 add_library(libdb STATIC ${SOURCE_FILES})
 
 target_link_libraries(libdb ${ARROW_LIBS} ${CMAKE_THREAD_LIBS_INIT})
