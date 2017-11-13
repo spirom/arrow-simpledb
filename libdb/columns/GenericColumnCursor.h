@@ -5,18 +5,18 @@
 #ifndef GENERICCOLUMNCURSOR_H
 #define GENERICCOLUMNCURSOR_H
 
-class ScanTableCursor;
+class TableCursor;
 
 class GenericColumnCursor {
 public:
     virtual ~GenericColumnCursor() {}
     virtual void reset() = 0;
 protected:
-    GenericColumnCursor(ScanTableCursor &table_cursor);
-    ScanTableCursor &get_table_cursor();
+    GenericColumnCursor(TableCursor &table_cursor);
+    TableCursor &get_table_cursor();
 
 private:
-    ScanTableCursor &_table_cursor;
+    TableCursor &_table_cursor;
 };
 
 

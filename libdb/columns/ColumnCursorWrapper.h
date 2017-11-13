@@ -7,7 +7,7 @@
 #include "tables/ScanTableCursor.h"
 #include "GenericColumnCursor.h"
 
-class ScanTableCursor;
+class TableCursor;
 
 /**
  * This cursor is actually used for executing queries. Notice it only has the
@@ -21,7 +21,7 @@ class ColumnCursorWrapper : public GenericColumnCursor {
 public:
     explicit ColumnCursorWrapper(
             std::shared_ptr<ChunkedColumnCursor<T>> base_cursor,
-            ScanTableCursor &table_cursor);
+            TableCursor &table_cursor);
 
     bool isNull();
 

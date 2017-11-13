@@ -7,7 +7,7 @@
 template <typename T>
 ColumnCursorWrapper<T>::ColumnCursorWrapper(
         std::shared_ptr<ChunkedColumnCursor<T>> base_cursor,
-        ScanTableCursor &table_cursor)
+        TableCursor &table_cursor)
         : GenericColumnCursor(table_cursor), _base_cursor(base_cursor)
 {
 
