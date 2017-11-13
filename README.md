@@ -9,11 +9,18 @@ and thus how the complexities of Arrow's table and column representation (such a
 abstracted away so that most of the query engine is oblivious to them. Of course, an important goal is to
 preserve Arrow's performance advantages.
 
+**_Note:_** this is not, and will not become, a functioning DBMS that you can use for your applications. It's an
+exploration, and illustration, of how the core of such a DBMS could be built on top of Apache Arrow,
+and a learning tool for developers of database internals.
+
 A fairly typical implementation model is used for operators: composable iterators
 (here called table cursors) are used to process queries against tables.
 
-The core wrapping mechanism can be seen in the files `libdb/columns/ChunkedColumnCursor.{h,cpp}`, where the
-multiple chunks that comprise a column are hidden behind a uniform interface, including a `seek()` method.
+The core wrapping mechanism can be seen in the files
+[libdb/columns/ChunkedColumnCursor.h](libdb/columns/ChunkedColumnCursor.h)
+and
+[libdb/columns/ChunkedColumnCursor.cpp](libdb/columns/ChunkedColumnCursor.cpp),
+where the multiple chunks that comprise a column are hidden behind a uniform interface, including a `seek()` method.
 
 # Queries Over Arrow Tables
 

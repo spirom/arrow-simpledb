@@ -9,6 +9,13 @@
 
 class ScanTableCursor;
 
+/**
+ * This cursor is actually used for executing queries. Notice it only has the
+ * most minimal methods for cursor positioning, since it gets its position from the
+ * table cursor it belongs to.
+ *
+ * @tparam T The underlying Arrow array type:: for example, arrow::Int64Array.
+ */
 template <typename T>
 class ColumnCursorWrapper : public GenericColumnCursor {
 public:

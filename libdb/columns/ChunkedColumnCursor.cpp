@@ -8,7 +8,6 @@ ChunkedColumnCursor<T>::ChunkedColumnCursor(std::shared_ptr<arrow::Column> colum
         : _column(std::move(column))
 {
     reset();
-
 }
 
 template <typename T>
@@ -25,7 +24,10 @@ ChunkedColumnCursor<T>::next()
     if ((_pos + 1) < _column->length()) {
         _pos++;
         _pos_in_chunk++;
+        // may have hit the end of the current chunk
         if (_pos_in_chunk >= _current_chunk->length()) {
+            // invariant: if this could fail (we are ignoring the return) it would have been caught above
+            // TODO: still check the invariant as it's cheap
             advance_chunk();
         }
         return true;
@@ -56,12 +58,14 @@ ChunkedColumnCursor<T>::reset()
     _pos_in_chunk = 0;
     _current_chunk =
             std::static_pointer_cast<T>(_column->data()->chunk(_chunk));
+    // TODO: this may fail if the column is empty
 }
 
 template <typename T>
 bool
 ChunkedColumnCursor<T>::seek(uint64_t to)
 {
+    // the key idea here is to avoid touching the memory of the intervening chunks completely
     int64_t distance = to - _pos;
     while (_pos_in_chunk + distance >= _current_chunk->length()) {
         int64_t advancing =_current_chunk->length() - _pos_in_chunk;

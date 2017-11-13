@@ -207,3 +207,9 @@ TEST_F(TableTest, FilterComposition) {
     EXPECT_EQ(41.9, cost_cursor->get());
     EXPECT_FALSE(second_cursor.hasMore());
 }
+
+// TODO: test empty column
+
+// TODO: test mismatched column lengths
+
+// TODO: test mismatched chunk lengths
