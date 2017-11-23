@@ -1,11 +1,14 @@
 
 #include "ScanTableCursor.h"
 
-ScanTableCursor::ScanTableCursor(std::shared_ptr<arrow::Table> table)
+ScanTableCursor::ScanTableCursor(
+        std::shared_ptr<arrow::Table> table,
+        std::vector<GenericColumnCursor::Encoding> encodings
+    )
 : _table(table)
 {
     for (int i = 0; i < table->num_columns(); i++) {
-        addColumn(table->column(i));
+        addColumn(table->column(i), encodings.at(i));
     }
     _size = (uint64_t) table->num_rows();
     reset();
@@ -19,35 +22,23 @@ ScanTableCursor::getColumn(std::string colName)
 }
 
 bool
-ScanTableCursor::addColumn(std::shared_ptr<arrow::Column> column)
+ScanTableCursor::addColumn(std::shared_ptr<arrow::Column> column, GenericColumnCursor::Encoding encoding)
 {
     switch (column->type()->id()) {
         case arrow::Type::INT64: {
-            std::shared_ptr<BaseColumnCursor<arrow::Int64Type>> chunked =
-                    std::make_shared<ChunkedColumnCursor<arrow::Int64Type>>(column);
-
-            std::shared_ptr<ColumnCursorWrapper<arrow::Int64Type>> wrapper =
-                    std::make_shared<ColumnCursorWrapper<arrow::Int64Type>>(chunked, *this);
-
-            _cursors[column->name()] = wrapper;
-
-
+            _cursors[column->name()] =
+                    std::make_shared<ColumnCursorWrapper<arrow::Int64Type>>(column, encoding, *this);;
             return true;
         }
         case arrow::Type::DOUBLE: {
-            std::shared_ptr<ChunkedColumnCursor<arrow::DoubleType>> chunked =
-                    std::make_shared<ChunkedColumnCursor<arrow::DoubleType>>(column);
-
-            std::shared_ptr<ColumnCursorWrapper<arrow::DoubleType>> wrapper =
-                    std::make_shared<ColumnCursorWrapper<arrow::DoubleType>>(chunked, *this);
-
-            _cursors[column->name()] = wrapper;
-
+            _cursors[column->name()] =
+                    std::make_shared<ColumnCursorWrapper<arrow::DoubleType>>(column, encoding, *this);;
             return true;
         }
         default:
             return false;
     }
+
 }
 
 bool

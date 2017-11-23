@@ -3,9 +3,11 @@
 #ifndef COLUMNCURSORWRAPPER_H
 #define COLUMNCURSORWRAPPER_H
 
-#include "columns/ChunkedColumnCursor.h"
 #include "tables/ScanTableCursor.h"
 #include "GenericColumnCursor.h"
+
+template <typename T>
+class BaseColumnCursor;
 
 class TableCursor;
 
@@ -19,6 +21,13 @@ class TableCursor;
 template <typename T>
 class ColumnCursorWrapper : public GenericColumnCursor {
 public:
+
+    explicit ColumnCursorWrapper(
+            std::shared_ptr<arrow::Column> column,
+            Encoding encoding,
+            TableCursor &table_cursor);
+
+
     explicit ColumnCursorWrapper(
             std::shared_ptr<BaseColumnCursor<T>> base_cursor,
             TableCursor &table_cursor);

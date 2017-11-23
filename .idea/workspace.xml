@@ -13,15 +13,19 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="950ec565-2a19-4611-a879-0616d272b7d7" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/libdb/columns/BaseColumnCursor.h" />
+    <list default="true" id="950ec565-2a19-4611-a879-0616d272b7d7" name="Default" comment="Chunked cursor polymorphism">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libdb/columns/ChunkedColumnCursor.h" afterPath="$PROJECT_DIR$/libdb/columns/ChunkedColumnCursor.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libdb/CMakeLists.txt" afterPath="$PROJECT_DIR$/libdb/CMakeLists.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libdb/columns/ChunkedDictColumnCursor.cpp" afterPath="$PROJECT_DIR$/libdb/columns/ChunkedDictColumnCursor.cpp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libdb/columns/ChunkedDictColumnCursor.h" afterPath="$PROJECT_DIR$/libdb/columns/ChunkedDictColumnCursor.h" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libdb/columns/ColumnCursorWrapper.cpp" afterPath="$PROJECT_DIR$/libdb/columns/ColumnCursorWrapper.cpp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libdb/columns/ColumnCursorWrapper.h" afterPath="$PROJECT_DIR$/libdb/columns/ColumnCursorWrapper.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libdb/columns/GenericColumnCursor.h" afterPath="$PROJECT_DIR$/libdb/columns/GenericColumnCursor.h" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libdb/tables/ScanTableCursor.cpp" afterPath="$PROJECT_DIR$/libdb/tables/ScanTableCursor.cpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libdb/tables/ScanTableCursor.h" afterPath="$PROJECT_DIR$/libdb/tables/ScanTableCursor.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libdb/tables/TableCursor.h" afterPath="$PROJECT_DIR$/libdb/tables/TableCursor.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdb/TableTest.cpp" afterPath="$PROJECT_DIR$/testdb/TableTest.cpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdb/Tables.cpp" afterPath="$PROJECT_DIR$/testdb/Tables.cpp" />
     </list>
     <ignored path="arrow-simpledb.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -45,8 +49,11 @@
         <entry file="file://$PROJECT_DIR$/libdb/columns/ColumnCursorWrapper.h">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="342">
-              <caret line="21" column="13" lean-forward="false" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
-              <folding />
+              <caret line="22" column="7" lean-forward="false" selection-start-line="22" selection-start-column="7" selection-end-line="22" selection-end-column="7" />
+              <folding>
+                <element signature="e#63#98#0" expanded="true" />
+                <element signature="e#142#154#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -54,9 +61,24 @@
       <file leaf-file-name="ColumnCursorWrapper.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/libdb/columns/ColumnCursorWrapper.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
-              <caret line="6" column="21" lean-forward="true" selection-start-line="6" selection-start-column="21" selection-end-line="6" selection-end-column="21" />
-              <folding />
+            <state relative-caret-position="450">
+              <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+              <folding>
+                <element signature="e#39#71#0" expanded="true" />
+                <element signature="e#170#182#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TableTest.cpp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/testdb/TableTest.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="4194">
+              <caret line="233" column="16" lean-forward="false" selection-start-line="233" selection-start-column="16" selection-end-line="233" selection-end-column="16" />
+              <folding>
+                <element signature="e#1#39#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -64,58 +86,18 @@
       <file leaf-file-name="ChunkedDictColumnCursor.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/libdb/columns/ChunkedDictColumnCursor.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="882">
-              <caret line="110" column="56" lean-forward="false" selection-start-line="110" selection-start-column="56" selection-end-line="110" selection-end-column="56" />
+            <state relative-caret-position="929">
+              <caret line="103" column="28" lean-forward="false" selection-start-line="103" selection-start-column="28" selection-end-line="103" selection-end-column="28" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GenericColumnCursor.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/libdb/columns/GenericColumnCursor.cpp">
+      <file leaf-file-name="new_allocator.h" pinned="false" current-in-tab="false">
+        <entry file="file:///usr/include/c++/5/ext/new_allocator.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="14" column="1" lean-forward="false" selection-start-line="14" selection-start-column="1" selection-end-line="14" selection-end-column="1" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GenericColumnCursor.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/libdb/columns/GenericColumnCursor.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="11" column="37" lean-forward="true" selection-start-line="11" selection-start-column="4" selection-end-line="11" selection-end-column="37" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BaseColumnCursor.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/libdb/columns/BaseColumnCursor.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="493">
-              <caret line="37" column="7" lean-forward="true" selection-start-line="37" selection-start-column="7" selection-end-line="37" selection-end-column="7" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ScanTableCursor.cpp" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/libdb/tables/ScanTableCursor.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="288">
-              <caret line="26" column="20" lean-forward="false" selection-start-line="26" selection-start-column="20" selection-end-line="26" selection-end-column="20" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ScanTableCursor.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/libdb/tables/ScanTableCursor.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
-              <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+            <state relative-caret-position="254">
+              <caret line="119" column="0" lean-forward="false" selection-start-line="119" selection-start-column="0" selection-end-line="119" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -124,8 +106,28 @@
       <file leaf-file-name="ChunkedColumnCursor.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/libdb/columns/ChunkedColumnCursor.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
-              <caret line="6" column="24" lean-forward="true" selection-start-line="6" selection-start-column="24" selection-end-line="6" selection-end-column="24" />
+            <state relative-caret-position="-907">
+              <caret line="6" column="24" lean-forward="false" selection-start-line="6" selection-start-column="24" selection-end-line="6" selection-end-column="24" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ChunkedColumnCursor.cpp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/libdb/columns/ChunkedColumnCursor.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="479">
+              <caret line="82" column="21" lean-forward="false" selection-start-line="82" selection-start-column="21" selection-end-line="82" selection-end-column="21" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Tables.cpp" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/testdb/Tables.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1072">
+              <caret line="246" column="7" lean-forward="false" selection-start-line="246" selection-start-column="7" selection-end-line="246" selection-end-column="7" />
               <folding />
             </state>
           </provider>
@@ -134,11 +136,21 @@
       <file leaf-file-name="ChunkedDictColumnCursor.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/libdb/columns/ChunkedDictColumnCursor.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="17" column="38" lean-forward="false" selection-start-line="17" selection-start-column="38" selection-end-line="17" selection-end-column="38" />
+            <state relative-caret-position="766">
+              <caret line="81" column="70" lean-forward="false" selection-start-line="81" selection-start-column="70" selection-end-line="81" selection-end-column="70" />
               <folding>
-                <element signature="e#64#93#0" expanded="true" />
+                <element signature="e#72#101#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CMakeLists.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/libdb/CMakeLists.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="252">
+              <caret line="14" column="34" lean-forward="false" selection-start-line="14" selection-start-column="34" selection-end-line="14" selection-end-column="34" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -178,7 +190,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/ChunkedColumnCursor.h" />
         <option value="$PROJECT_DIR$/src/GenericColumnCursor.cpp" />
         <option value="$PROJECT_DIR$/src/ChunkedColumnCursor.cpp" />
         <option value="$PROJECT_DIR$/src/ColumnCursorWrapper.h" />
@@ -207,28 +218,29 @@
         <option value="$PROJECT_DIR$/libdb/GreaterThanFilter.h" />
         <option value="$PROJECT_DIR$/libdb/filters/AndFilter.h" />
         <option value="$PROJECT_DIR$/libdb/filters/AndFilter.cpp" />
-        <option value="$PROJECT_DIR$/libdb/tables/ScanTableCursor.h" />
         <option value="$PROJECT_DIR$/testdb/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/libdb/columns/GenericColumnCursor.h" />
         <option value="$PROJECT_DIR$/libdb/columns/GenericColumnCursor.cpp" />
         <option value="$PROJECT_DIR$/testdb/Tables.h" />
-        <option value="$PROJECT_DIR$/testdb/Tables.cpp" />
-        <option value="$PROJECT_DIR$/libdb/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/libdb/columns/ChunkedColumnCursor.cpp" />
         <option value="$PROJECT_DIR$/libdb/filters/LessThanFilter.cpp" />
         <option value="$PROJECT_DIR$/libdb/filters/GreaterThanFilter.h" />
         <option value="$PROJECT_DIR$/libdb/filters/GreaterThanFilter.cpp" />
         <option value="$PROJECT_DIR$/libdb/filters/LessThanFilter.h" />
+        <option value="$PROJECT_DIR$/libdb/columns/BaseColumnCursor.h" />
+        <option value="$PROJECT_DIR$/libdb/columns/ChunkedColumnCursor.h" />
+        <option value="$PROJECT_DIR$/libdb/tables/TableCursor.h" />
+        <option value="$PROJECT_DIR$/libdb/columns/ColumnCursorWrapper.h" />
+        <option value="$PROJECT_DIR$/libdb/columns/GenericColumnCursor.h" />
+        <option value="$PROJECT_DIR$/libdb/columns/ColumnCursorWrapper.cpp" />
+        <option value="$PROJECT_DIR$/libdb/tables/ScanTableCursor.h" />
+        <option value="$PROJECT_DIR$/libdb/tables/ScanTableCursor.cpp" />
         <option value="$PROJECT_DIR$/testdb/TableTest.cpp" />
         <option value="$PROJECT_DIR$/libdb/columns/ChunkedDictColumnCursor.cpp" />
-        <option value="$PROJECT_DIR$/libdb/columns/ColumnCursorWrapper.h" />
-        <option value="$PROJECT_DIR$/libdb/columns/ColumnCursorWrapper.cpp" />
-        <option value="$PROJECT_DIR$/libdb/columns/BaseColumnCursor.h" />
         <option value="$PROJECT_DIR$/libdb/columns/ChunkedDictColumnCursor.h" />
-        <option value="$PROJECT_DIR$/libdb/columns/ChunkedColumnCursor.h" />
-        <option value="$PROJECT_DIR$/libdb/tables/ScanTableCursor.cpp" />
+        <option value="$PROJECT_DIR$/libdb/CMakeLists.txt" />
+        <option value="$PROJECT_DIR$/testdb/Tables.cpp" />
       </list>
     </option>
   </component>
@@ -338,6 +350,9 @@
     <configuration name="TableTest.SmallChunkedColumns" type="CMakeGoogleTestRunConfigurationType" factoryName="Google Test" temporary="true" PASS_PARENT_ENVS_2="true" PROJECT_NAME="arrow_simpledb" TARGET_NAME="testdb" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="arrow_simpledb" RUN_TARGET_NAME="testdb" TEST_CLASS="TableTest" TEST_METHOD="SmallChunkedColumns" TEST_MODE="SUITE_TEST">
       <envs />
     </configuration>
+    <configuration name="TableTest.SmallDictionaryColumns" type="CMakeGoogleTestRunConfigurationType" factoryName="Google Test" temporary="true" PASS_PARENT_ENVS_2="true" PROJECT_NAME="arrow_simpledb" TARGET_NAME="testdb" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="arrow_simpledb" RUN_TARGET_NAME="testdb" TEST_CLASS="TableTest" TEST_METHOD="SmallDictionaryColumns" TEST_MODE="SUITE_TEST">
+      <envs />
+    </configuration>
     <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="arrow_simpledb" TARGET_NAME="learning_arrow_cpp" CONFIG_NAME="Debug">
       <envs />
     </configuration>
@@ -370,16 +385,18 @@
     <configuration name="testdb" type="CMakeGoogleTestRunConfigurationType" factoryName="Google Test" PASS_PARENT_ENVS_2="true" PROJECT_NAME="arrow_simpledb" TARGET_NAME="testdb" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="arrow_simpledb" RUN_TARGET_NAME="testdb" TEST_MODE="SUITE_TEST">
       <envs />
     </configuration>
-    <list size="5">
+    <list size="6">
       <item index="0" class="java.lang.String" itemvalue="Application.Build All" />
       <item index="1" class="java.lang.String" itemvalue="Application.libdb" />
       <item index="2" class="java.lang.String" itemvalue="Application.learning_arrow_cpp" />
       <item index="3" class="java.lang.String" itemvalue="Google Test.testdb" />
       <item index="4" class="java.lang.String" itemvalue="Google Test.TableTest.SmallChunkedColumns" />
+      <item index="5" class="java.lang.String" itemvalue="Google Test.TableTest.SmallDictionaryColumns" />
     </list>
     <recent_temporary>
-      <list size="1">
-        <item index="0" class="java.lang.String" itemvalue="Google Test.TableTest.SmallChunkedColumns" />
+      <list size="2">
+        <item index="0" class="java.lang.String" itemvalue="Google Test.TableTest.SmallDictionaryColumns" />
+        <item index="1" class="java.lang.String" itemvalue="Google Test.TableTest.SmallChunkedColumns" />
       </list>
     </recent_temporary>
   </component>
@@ -397,7 +414,7 @@
       <workItem from="1510071514948" duration="31848000" />
       <workItem from="1510424002261" duration="29000" />
       <workItem from="1510424258824" duration="15608000" />
-      <workItem from="1511277467522" duration="11482000" />
+      <workItem from="1511277467522" duration="18498000" />
     </task>
     <task id="LOCAL-00001" summary="Initial">
       <created>1509374480620</created>
@@ -595,43 +612,50 @@
       <option name="project" value="LOCAL" />
       <updated>1511460027659</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="Chunked cursor polymorphism">
+      <created>1511462244514</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1511462244514</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="testdb - 2017.11.11 at 11h 09m 14s.xml">
-      <configuration name="testdb" configurationId="CMakeGoogleTestRunConfigurationType" />
+    <history-entry file="TableTest_SmallDictionaryColumns - 2017.11.23 at 13h 17m 04s.xml">
+      <configuration name="TableTest.SmallDictionaryColumns" configurationId="CMakeGoogleTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="testdb - 2017.11.11 at 11h 10m 44s.xml">
-      <configuration name="testdb" configurationId="CMakeGoogleTestRunConfigurationType" />
+    <history-entry file="TableTest_SmallDictionaryColumns - 2017.11.23 at 13h 18m 25s.xml">
+      <configuration name="TableTest.SmallDictionaryColumns" configurationId="CMakeGoogleTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="testdb - 2017.11.11 at 15h 07m 16s.xml">
-      <configuration name="testdb" configurationId="CMakeGoogleTestRunConfigurationType" />
+    <history-entry file="TableTest_SmallDictionaryColumns - 2017.11.23 at 13h 23m 24s.xml">
+      <configuration name="TableTest.SmallDictionaryColumns" configurationId="CMakeGoogleTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="testdb - 2017.11.13 at 06h 27m 57s.xml">
-      <configuration name="testdb" configurationId="CMakeGoogleTestRunConfigurationType" />
+    <history-entry file="TableTest_SmallDictionaryColumns - 2017.11.23 at 13h 24m 57s.xml">
+      <configuration name="TableTest.SmallDictionaryColumns" configurationId="CMakeGoogleTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="testdb - 2017.11.13 at 06h 29m 22s.xml">
-      <configuration name="testdb" configurationId="CMakeGoogleTestRunConfigurationType" />
+    <history-entry file="TableTest_SmallDictionaryColumns - 2017.11.23 at 13h 26m 38s.xml">
+      <configuration name="TableTest.SmallDictionaryColumns" configurationId="CMakeGoogleTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="testdb - 2017.11.21 at 08h 03m 26s.xml">
-      <configuration name="testdb" configurationId="CMakeGoogleTestRunConfigurationType" />
+    <history-entry file="TableTest_SmallDictionaryColumns - 2017.11.23 at 13h 29m 22s.xml">
+      <configuration name="TableTest.SmallDictionaryColumns" configurationId="CMakeGoogleTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="testdb - 2017.11.23 at 09h 58m 11s.xml">
-      <configuration name="testdb" configurationId="CMakeGoogleTestRunConfigurationType" />
+    <history-entry file="TableTest_SmallDictionaryColumns - 2017.11.23 at 13h 30m 23s.xml">
+      <configuration name="TableTest.SmallDictionaryColumns" configurationId="CMakeGoogleTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="testdb - 2017.11.23 at 09h 59m 39s.xml">
-      <configuration name="testdb" configurationId="CMakeGoogleTestRunConfigurationType" />
+    <history-entry file="TableTest_SmallDictionaryColumns - 2017.11.23 at 13h 34m 33s.xml">
+      <configuration name="TableTest.SmallDictionaryColumns" configurationId="CMakeGoogleTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="testdb - 2017.11.23 at 10h 21m 18s.xml">
-      <configuration name="testdb" configurationId="CMakeGoogleTestRunConfigurationType" />
+    <history-entry file="TableTest_SmallDictionaryColumns - 2017.11.23 at 13h 35m 13s.xml">
+      <configuration name="TableTest.SmallDictionaryColumns" configurationId="CMakeGoogleTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="testdb - 2017.11.23 at 10h 36m 39s.xml">
+    <history-entry file="testdb - 2017.11.23 at 13h 35m 23s.xml">
       <configuration name="testdb" configurationId="CMakeGoogleTestRunConfigurationType" />
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="82467000" />
+    <option name="totallyTimeSpent" value="89483000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="476" width="2495" height="1444" extended-state="6" />
@@ -645,7 +669,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39929014" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39923954" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32987013" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -667,7 +691,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Trivial example works&#10;" />
     <MESSAGE value="Cleaned up" />
     <MESSAGE value="Building against 0.7.1" />
     <MESSAGE value="Load and save works" />
@@ -692,46 +715,33 @@
     <MESSAGE value="Fixed a polymorphism bug." />
     <MESSAGE value="Started on dictionary encoding" />
     <MESSAGE value="Reorganized column types" />
-    <option name="LAST_COMMIT_MESSAGE" value="Reorganized column types" />
+    <MESSAGE value="Chunked cursor polymorphism" />
+    <option name="LAST_COMMIT_MESSAGE" value="Chunked cursor polymorphism" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="2" />
+      <breakpoints>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/testdb/TableTest.cpp</url>
+          <line>212</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/testdb/TableTest.cpp</url>
+          <line>220</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/libdb/columns/ChunkedDictColumnCursor.cpp</url>
+          <line>12</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="9" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/libdb/filters/GreaterThanFilter.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="8" column="32" lean-forward="false" selection-start-line="8" selection-start-column="32" selection-end-line="8" selection-end-column="32" />
-          <folding>
-            <element signature="e#59#76#0" expanded="false" />
-            <element signature="e#188#200#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/testdb/TableTest.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2034">
-          <caret line="113" column="33" lean-forward="true" selection-start-line="113" selection-start-column="33" selection-end-line="113" selection-end-column="33" />
-          <folding>
-            <element signature="e#1#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main/main.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1548">
-          <caret line="86" column="0" lean-forward="false" selection-start-line="86" selection-start-column="0" selection-end-line="86" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#19#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/libdb/tables/ScanTableCursor.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="378">
@@ -811,13 +821,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="14292">
           <caret line="794" column="0" lean-forward="false" selection-start-line="794" selection-start-column="0" selection-end-line="794" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/include/c++/5/bits/shared_ptr_base.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="1007" column="6" lean-forward="false" selection-start-line="1007" selection-start-column="6" selection-end-line="1007" selection-end-column="6" />
         </state>
       </provider>
     </entry>
@@ -916,37 +919,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/libdb/tables/TableCursor.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/libdb/tables/TableCursor.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../arrow/cpp/src/arrow/table.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
           <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/libdb/columns/ChunkedColumnCursor.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="508">
-          <caret line="82" column="21" lean-forward="false" selection-start-line="82" selection-start-column="21" selection-end-line="82" selection-end-column="21" />
-          <folding>
-            <element signature="e#2#21#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -992,14 +969,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="16" column="24" lean-forward="false" selection-start-line="16" selection-start-column="24" selection-end-line="16" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/libdb/filters/Filter.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
@@ -1008,68 +977,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/libdb/CMakeLists.txt">
+    <entry file="file://$PROJECT_DIR$/libdb/tables/TableCursor.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="14" column="27" lean-forward="false" selection-start-line="14" selection-start-column="27" selection-end-line="14" selection-end-column="27" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/testdb/TableTest.cpp">
+    <entry file="file://$PROJECT_DIR$/libdb/tables/TableCursor.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="370">
-          <caret line="217" column="86" lean-forward="false" selection-start-line="217" selection-start-column="86" selection-end-line="217" selection-end-column="86" />
-          <folding>
-            <element signature="e#1#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/testdb/Tables.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="407">
-          <caret line="207" column="47" lean-forward="true" selection-start-line="207" selection-start-column="47" selection-end-line="207" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/libdb/columns/GenericColumnCursor.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="11" column="37" lean-forward="true" selection-start-line="11" selection-start-column="4" selection-end-line="11" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/libdb/columns/BaseColumnCursor.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="37" column="7" lean-forward="true" selection-start-line="37" selection-start-column="7" selection-end-line="37" selection-end-column="7" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/libdb/tables/ScanTableCursor.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/libdb/columns/ColumnCursorWrapper.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="6" column="21" lean-forward="true" selection-start-line="6" selection-start-column="21" selection-end-line="6" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/libdb/columns/ChunkedDictColumnCursor.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="882">
-          <caret line="110" column="56" lean-forward="false" selection-start-line="110" selection-start-column="56" selection-end-line="110" selection-end-column="56" />
+        <state relative-caret-position="234">
+          <caret line="15" column="1" lean-forward="false" selection-start-line="15" selection-start-column="1" selection-end-line="15" selection-end-column="1" />
           <folding />
         </state>
       </provider>
@@ -1082,36 +1001,158 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/libdb/columns/ColumnCursorWrapper.h">
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="21" column="13" lean-forward="false" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
+        <state relative-caret-position="288">
+          <caret line="16" column="24" lean-forward="false" selection-start-line="16" selection-start-column="24" selection-end-line="16" selection-end-column="24" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/libdb/columns/ChunkedDictColumnCursor.h">
+    <entry file="file://$PROJECT_DIR$/libdb/columns/GenericColumnCursor.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="11" column="38" lean-forward="false" selection-start-line="11" selection-start-column="38" selection-end-line="11" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libdb/columns/BaseColumnCursor.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libdb/tables/ScanTableCursor.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
-          <caret line="17" column="38" lean-forward="false" selection-start-line="17" selection-start-column="38" selection-end-line="17" selection-end-column="38" />
+          <caret line="17" column="54" lean-forward="true" selection-start-line="17" selection-start-column="54" selection-end-line="17" selection-end-column="54" />
           <folding>
-            <element signature="e#64#93#0" expanded="true" />
+            <element signature="e#55#79#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libdb/tables/ScanTableCursor.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="10" column="46" lean-forward="false" selection-start-line="10" selection-start-column="46" selection-end-line="10" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/include/c++/5/ext/atomicity.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="254">
+          <caret line="52" column="0" lean-forward="false" selection-start-line="52" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/include/c++/5/bits/alloc_traits.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="254">
+          <caret line="529" column="0" lean-forward="false" selection-start-line="529" selection-start-column="0" selection-end-line="529" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/include/c++/5/bits/shared_ptr_base.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="254">
+          <caret line="616" column="0" lean-forward="false" selection-start-line="616" selection-start-column="0" selection-end-line="616" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/include/c++/5/ext/new_allocator.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="254">
+          <caret line="119" column="0" lean-forward="false" selection-start-line="119" selection-start-column="0" selection-end-line="119" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libdb/columns/ColumnCursorWrapper.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+          <folding>
+            <element signature="e#39#71#0" expanded="true" />
+            <element signature="e#170#182#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/libdb/columns/ChunkedColumnCursor.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="6" column="24" lean-forward="true" selection-start-line="6" selection-start-column="24" selection-end-line="6" selection-end-column="24" />
+        <state relative-caret-position="-907">
+          <caret line="6" column="24" lean-forward="false" selection-start-line="6" selection-start-column="24" selection-end-line="6" selection-end-column="24" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/libdb/tables/ScanTableCursor.cpp">
+    <entry file="file://$PROJECT_DIR$/libdb/columns/ChunkedColumnCursor.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="26" column="20" lean-forward="false" selection-start-line="26" selection-start-column="20" selection-end-line="26" selection-end-column="20" />
+        <state relative-caret-position="479">
+          <caret line="82" column="21" lean-forward="false" selection-start-line="82" selection-start-column="21" selection-end-line="82" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libdb/columns/ColumnCursorWrapper.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="22" column="7" lean-forward="false" selection-start-line="22" selection-start-column="7" selection-end-line="22" selection-end-column="7" />
+          <folding>
+            <element signature="e#63#98#0" expanded="true" />
+            <element signature="e#142#154#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/testdb/TableTest.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4194">
+          <caret line="233" column="16" lean-forward="false" selection-start-line="233" selection-start-column="16" selection-end-line="233" selection-end-column="16" />
+          <folding>
+            <element signature="e#1#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libdb/columns/ChunkedDictColumnCursor.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="929">
+          <caret line="103" column="28" lean-forward="false" selection-start-line="103" selection-start-column="28" selection-end-line="103" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libdb/columns/ChunkedDictColumnCursor.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="766">
+          <caret line="81" column="70" lean-forward="false" selection-start-line="81" selection-start-column="70" selection-end-line="81" selection-end-column="70" />
+          <folding>
+            <element signature="e#72#101#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libdb/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="14" column="34" lean-forward="false" selection-start-line="14" selection-start-column="34" selection-end-line="14" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/testdb/Tables.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1072">
+          <caret line="246" column="7" lean-forward="false" selection-start-line="246" selection-start-column="7" selection-end-line="246" selection-end-column="7" />
           <folding />
         </state>
       </provider>

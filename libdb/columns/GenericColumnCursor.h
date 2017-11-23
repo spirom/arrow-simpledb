@@ -9,6 +9,7 @@ class TableCursor;
 
 class GenericColumnCursor {
 public:
+    enum Encoding { PLAIN = 0, DICT };
     virtual ~GenericColumnCursor() {}
     virtual void reset() = 0;
 protected:

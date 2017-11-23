@@ -1,7 +1,7 @@
 
 
-#ifndef CHUNKEDCOLUMNCURSOR_H
-#define CHUNKEDCOLUMNCURSOR_H
+#ifndef CHUNKEDDICTCOLUMNCURSOR_H
+#define CHUNKEDDICTCOLUMNCURSOR_H
 
 
 #include "BaseColumnCursor.h"
@@ -77,11 +77,9 @@ private:
     /**
      * The current chunk of the underlying column
      */
-    //std::shared_ptr<arrow::DictionaryArray> _current_chunk;
 
     std::shared_ptr<arrow::NumericArray<T>> _current_dict;
-    std::shared_ptr<arrow::NumericArray<arrow::Int32Type>> _current_indices;
-
+    std::shared_ptr<arrow::NumericArray<arrow::Int8Type>> _current_indices;
 
     /**
      * Offset of current chunk inthe sequence of chunks
@@ -97,7 +95,10 @@ private:
      * Position within the (logical) column.
      */
     int64_t _pos = 0;
+
+private:
+    void populate_pointers();
 };
 
 
-#endif // CHUNKEDCOLUMNCURSOR_H
+#endif // CHUNKEDDICTCOLUMNCURSOR_H

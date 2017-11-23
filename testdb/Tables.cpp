@@ -196,7 +196,7 @@ Tables::createSmallDictionaryColumns(std::shared_ptr<arrow::Table>& table)
 
     std::vector<std::shared_ptr<arrow::Field>> schema_vector = {
             arrow::field("id", arrow::int64()),
-            arrow::field("cost", arrow::float64())
+            arrow::field("cost", arrow::int64())
     };
     auto schema = std::make_shared<arrow::Schema>(schema_vector);
 
@@ -221,7 +221,7 @@ Tables::createSmallDictionaryColumns(std::shared_ptr<arrow::Table>& table)
 
 
     shared_ptr<Field> id_field = arrow::field("id", arrow::int64());
-    shared_ptr<Field> cost_field = arrow::field("cost", arrow::float64());
+    shared_ptr<Field> cost_field = arrow::field("cost", arrow::int64());
 
     shared_ptr<Column> id_col = std::make_shared<Column>(id_field, id_array);
     shared_ptr<Column> cost_col = std::make_shared<Column>(cost_field, cost_array);
@@ -229,6 +229,23 @@ Tables::createSmallDictionaryColumns(std::shared_ptr<arrow::Table>& table)
     std::vector<std::shared_ptr<Column>> columns = {id_col, cost_col};
 
     table.reset(new Table(schema, columns));
+
+    /*
+    std::shared_ptr<Column> c0 = table->column(0);
+    std::cout << "Num chunks: " << c0->data()->num_chunks() << std::endl;
+    std::cout << "Chunk 0 length: " << c0->data()->chunk(0)->length() << std::endl;
+    std::shared_ptr<arrow::DictionaryArray> da = dynamic_pointer_cast<arrow::DictionaryArray>(c0->data()->chunk(0));
+    std::cout << "dict array: " << da.get() << std::endl;
+
+    std::cout << "dict array length: " << da->length() << std::endl;
+    std::cout << "dict array dict length: " << da->dictionary()->length() << std::endl;
+    std::cout << "dict array indices length: " << da->indices()->length() << std::endl;
+
+    std::cout << "dict array dictionary type: " << da->dictionary()->type_id() << std::endl;
+
+    std::cout << "dict array indices type: " << da->indices()->type_id() << std::endl;
+     */
+
 
     return Status::OK();
 

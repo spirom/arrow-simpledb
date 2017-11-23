@@ -20,7 +20,7 @@ TEST_F(TableTest, Simple) {
 TEST_F(TableTest, Cursor) {
     std::shared_ptr<Table> table;
     EXPECT_EQ(Status::OK().code(), Tables::createSimple(table).code());
-    ScanTableCursor tc(table);
+    ScanTableCursor tc(table, { GenericColumnCursor::PLAIN, GenericColumnCursor::PLAIN });
     uint64_t count = 0;
     while (tc.hasMore()) {
         EXPECT_EQ(count, tc.getPosition());
@@ -34,7 +34,7 @@ TEST_F(TableTest, SmallSimpleColumns) {
     EXPECT_EQ(Status::OK().code(), Tables::createSmallSimpleColumns(table).code());
     EXPECT_EQ(2, table->num_rows());
     EXPECT_EQ(2, table->num_columns());
-    ScanTableCursor tc(table);
+    ScanTableCursor tc(table, { GenericColumnCursor::PLAIN, GenericColumnCursor::PLAIN });
     auto id_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Type>>(
             tc.getColumn(std::string("id")));
     auto cost_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleType>>(
@@ -53,7 +53,7 @@ TEST_F(TableTest, SmallChunkedColumns) {
     EXPECT_EQ(Status::OK().code(), Tables::createSmallChunkedColumns(table).code());
     EXPECT_EQ(4, table->num_rows());
     EXPECT_EQ(2, table->num_columns());
-    ScanTableCursor tc(table);
+    ScanTableCursor tc(table, { GenericColumnCursor::PLAIN, GenericColumnCursor::PLAIN });
     auto id_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Type>>(
             tc.getColumn(std::string("id")));
     auto cost_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleType>>(
@@ -76,7 +76,7 @@ TEST_F(TableTest, SmallChunkedColumns) {
 TEST_F(TableTest, ComplexColumns) {
     std::shared_ptr<Table> table;
     EXPECT_EQ(Status::OK().code(), Tables::createSimple(table).code());
-    ScanTableCursor tc(table);
+    ScanTableCursor tc(table, { GenericColumnCursor::PLAIN, GenericColumnCursor::PLAIN });
     uint64_t count = 0;
     auto id_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Type>>(
             tc.getColumn(std::string("id")));
@@ -97,7 +97,7 @@ TEST_F(TableTest, SimpleFilter) {
     EXPECT_EQ(Status::OK().code(), Tables::createSmallChunkedColumns(table).code());
     EXPECT_EQ(4, table->num_rows());
     EXPECT_EQ(2, table->num_columns());
-    ScanTableCursor tc(table);
+    ScanTableCursor tc(table, { GenericColumnCursor::PLAIN, GenericColumnCursor::PLAIN });
 
     std::shared_ptr<Filter> filter = std::make_shared<GreaterThanFilter<arrow::Int64Type>>("id", 31);
     FilterProjectTableCursor fptc(tc, filter);
@@ -118,7 +118,7 @@ TEST_F(TableTest, ConjunctiveFilter) {
     EXPECT_EQ(Status::OK().code(), Tables::createSmallChunkedColumns(table).code());
     EXPECT_EQ(4, table->num_rows());
     EXPECT_EQ(2, table->num_columns());
-    ScanTableCursor tc(table);
+    ScanTableCursor tc(table, { GenericColumnCursor::PLAIN, GenericColumnCursor::PLAIN });
 
     std::shared_ptr<Filter> leftFilter = std::make_shared<GreaterThanFilter<arrow::Int64Type>>("id", 11);
     std::shared_ptr<Filter> rightFilter = std::make_shared<LessThanFilter<arrow::DoubleType>>("cost", 42);
@@ -145,7 +145,7 @@ TEST_F(TableTest, NeverTrueFilter) {
     EXPECT_EQ(Status::OK().code(), Tables::createSmallChunkedColumns(table).code());
     EXPECT_EQ(4, table->num_rows());
     EXPECT_EQ(2, table->num_columns());
-    ScanTableCursor tc(table);
+    ScanTableCursor tc(table, { GenericColumnCursor::PLAIN, GenericColumnCursor::PLAIN });
 
     std::shared_ptr<Filter> leftFilter = std::make_shared<GreaterThanFilter<arrow::Int64Type>>("id", 31);
     std::shared_ptr<Filter> rightFilter = std::make_shared<LessThanFilter<arrow::DoubleType>>("cost", 22);
@@ -166,7 +166,7 @@ TEST_F(TableTest, TwoTypesSameFilter) {
     EXPECT_EQ(Status::OK().code(), Tables::createSmallChunkedColumns(table).code());
     EXPECT_EQ(4, table->num_rows());
     EXPECT_EQ(2, table->num_columns());
-    ScanTableCursor tc(table);
+    ScanTableCursor tc(table, { GenericColumnCursor::PLAIN, GenericColumnCursor::PLAIN });
 
     std::shared_ptr<Filter> leftFilter = std::make_shared<GreaterThanFilter<arrow::Int64Type>>("id", 31);
     std::shared_ptr<Filter> rightFilter = std::make_shared<GreaterThanFilter<arrow::DoubleType>>("cost", 100);
@@ -187,7 +187,7 @@ TEST_F(TableTest, FilterComposition) {
     EXPECT_EQ(Status::OK().code(), Tables::createSmallChunkedColumns(table).code());
     EXPECT_EQ(4, table->num_rows());
     EXPECT_EQ(2, table->num_columns());
-    ScanTableCursor tc(table);
+    ScanTableCursor tc(table, { GenericColumnCursor::PLAIN, GenericColumnCursor::PLAIN });
 
     std::shared_ptr<Filter> first_filter = std::make_shared<GreaterThanFilter<arrow::Int64Type>>("id", 11);
     FilterProjectTableCursor first_cursor(tc, first_filter);
@@ -209,12 +209,16 @@ TEST_F(TableTest, FilterComposition) {
 }
 
 
-TEST_F(TableTest, DISABLED_SmallDictionaryColumns) {
+TEST_F(TableTest, SmallDictionaryColumns) {
     std::shared_ptr<Table> table;
     EXPECT_EQ(Status::OK().code(), Tables::createSmallDictionaryColumns(table).code());
     EXPECT_EQ(4, table->num_rows());
     EXPECT_EQ(2, table->num_columns());
-    ScanTableCursor tc(table);
+
+    EXPECT_EQ(arrow::Type::INT64, table->column(0)->type()->id());
+    EXPECT_EQ(arrow::Type::INT64, table->column(1)->type()->id());
+
+    ScanTableCursor tc(table, { GenericColumnCursor::DICT, GenericColumnCursor::DICT });
     auto id_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Type>>(
             tc.getColumn(std::string("id")));
     auto cost_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Type>>(
@@ -224,10 +228,10 @@ TEST_F(TableTest, DISABLED_SmallDictionaryColumns) {
     EXPECT_EQ(23, cost_cursor->get());
     EXPECT_TRUE(tc.hasMore());
     EXPECT_EQ(12, id_cursor->get());
-    EXPECT_EQ(25, cost_cursor->get());
+    EXPECT_EQ(23, cost_cursor->get());
     EXPECT_TRUE(tc.hasMore());
     EXPECT_EQ(11, id_cursor->get());
-    EXPECT_EQ(23, cost_cursor->get());
+    EXPECT_EQ(25, cost_cursor->get());
     EXPECT_TRUE(tc.hasMore());
     EXPECT_EQ(12, id_cursor->get());
     EXPECT_EQ(25, cost_cursor->get());

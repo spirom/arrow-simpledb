@@ -3,6 +3,38 @@
 //
 
 #include "ColumnCursorWrapper.h"
+#include "columns/ChunkedColumnCursor.h"
+#include "columns/ChunkedDictColumnCursor.h"
+
+
+
+template <typename T>
+ColumnCursorWrapper<T>::ColumnCursorWrapper(
+        std::shared_ptr<arrow::Column> column,
+        Encoding encoding,
+        TableCursor &table_cursor) : GenericColumnCursor(table_cursor)
+{
+
+    switch (encoding) {
+        case ColumnCursorWrapper::Encoding::PLAIN: {
+            _base_cursor =
+                    std::make_shared<ChunkedColumnCursor<T>>(column);
+            break;
+        }
+        case ColumnCursorWrapper::Encoding::DICT:
+        {
+            _base_cursor =
+                    std::make_shared<ChunkedDictColumnCursor<T>>(column);
+            break;
+        }
+        default:
+            // do something
+            break;
+
+    }
+}
+
+
 
 template <typename T>
 ColumnCursorWrapper<T>::ColumnCursorWrapper(
@@ -12,6 +44,7 @@ ColumnCursorWrapper<T>::ColumnCursorWrapper(
 {
 
 }
+
 
 template <typename T>
 bool

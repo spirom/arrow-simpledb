@@ -11,7 +11,9 @@ include_directories(${ARROW_INCLIDE_DIRS})
 
 link_directories(${ARROW_LINK_DIRS})
 
-set(SOURCE_FILES columns/ChunkedColumnCursor.cpp
+set(SOURCE_FILES
+        columns/BaseColumnCursor.h
+        columns/ChunkedColumnCursor.cpp
         columns/ChunkedDictColumnCursor.cpp
         tables/ScanTableCursor.cpp
         columns/ColumnCursorWrapper.cpp columns/GenericColumnCursor.cpp tables/TableCursor.cpp

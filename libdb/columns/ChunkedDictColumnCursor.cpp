@@ -4,11 +4,11 @@
 #include "ChunkedDictColumnCursor.h"
 
 using arrow::Int64Type;
-using arrow::Int32Type;
+using arrow::Int8Type;
 
 template <typename T>
 ChunkedDictColumnCursor<T>::ChunkedDictColumnCursor(std::shared_ptr<arrow::Column> column)
-        : _column(std::move(column))
+        : _column(column)
 {
     reset();
 }
@@ -55,18 +55,24 @@ ChunkedDictColumnCursor<T>::get()
 
 template <typename T>
 void
+ChunkedDictColumnCursor<T>::populate_pointers()
+{
+    std::shared_ptr<arrow::DictionaryArray> dict_array =
+            std::dynamic_pointer_cast<arrow::DictionaryArray>(_column->data()->chunk(_chunk));
+    _current_indices =
+            std::dynamic_pointer_cast<arrow::NumericArray<Int8Type>>(dict_array->indices());
+    _current_dict =
+            std::dynamic_pointer_cast<arrow::NumericArray<T>>(dict_array->dictionary());
+}
+
+template <typename T>
+void
 ChunkedDictColumnCursor<T>::reset()
 {
     _pos = 0;
     _chunk = 0;
     _pos_in_chunk = 0;
-    std::shared_ptr<arrow::DictionaryArray> dict_array =
-            std::dynamic_pointer_cast<arrow::DictionaryArray>(_column->data()->chunk(_chunk));
-    std::shared_ptr<arrow::Array> indices = dict_array->indices();
-    _current_indices =
-            std::dynamic_pointer_cast<arrow::NumericArray<Int32Type>>(dict_array->indices());
-    _current_dict =
-            std::dynamic_pointer_cast<arrow::NumericArray<T>>(dict_array->dictionary());
+    populate_pointers();
     // TODO: this may fail if the column is empty
 }
 
@@ -95,12 +101,7 @@ ChunkedDictColumnCursor<T>::advance_chunk() {
     if ((_chunk + 1) < _column->data()->num_chunks()) {
         _chunk++;
         _pos_in_chunk = 0;
-        std::shared_ptr<arrow::DictionaryArray> dict_array =
-                std::dynamic_pointer_cast<arrow::DictionaryArray>(_column->data()->chunk(_chunk));
-        _current_indices =
-                std::dynamic_pointer_cast<arrow::NumericArray<Int32Type>>(dict_array->indices());
-        _current_dict =
-                std::dynamic_pointer_cast<arrow::NumericArray<T>>(dict_array->dictionary());
+        populate_pointers();
         return true;
     } else {
         return false;

@@ -8,14 +8,15 @@
 #include "columns/ColumnCursorWrapper.h"
 #include "TableCursor.h"
 
-template <typename T>
-class ColumnCursorWrapper;
 
 class GenericColumnCursor;
 
 class ScanTableCursor : public TableCursor {
 public:
-    explicit ScanTableCursor(std::shared_ptr<arrow::Table> table);
+    explicit ScanTableCursor(
+            std::shared_ptr<arrow::Table> table,
+            std::vector<GenericColumnCursor::Encoding> encodings
+    );
 
     std::shared_ptr<GenericColumnCursor> getColumn(std::string colName);
 
@@ -26,7 +27,7 @@ public:
     uint64_t getPosition();
 
 protected:
-    bool addColumn(std::shared_ptr<arrow::Column> column);
+    bool addColumn(std::shared_ptr<arrow::Column> column, GenericColumnCursor::Encoding encoding);
 
 private:
     std::shared_ptr<arrow::Table> _table;

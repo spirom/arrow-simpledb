@@ -12,6 +12,7 @@ class ColumnCursorWrapper;
 
 class TableCursor {
 public:
+
     virtual std::shared_ptr<GenericColumnCursor> getColumn(std::string colName) = 0;
 
     virtual bool hasMore() = 0;
