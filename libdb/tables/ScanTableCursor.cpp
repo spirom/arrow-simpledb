@@ -23,11 +23,11 @@ ScanTableCursor::addColumn(std::shared_ptr<arrow::Column> column)
 {
     switch (column->type()->id()) {
         case arrow::Type::INT64: {
-            std::shared_ptr<ChunkedColumnCursor<arrow::Int64Array>> chunked =
-                    std::make_shared<ChunkedColumnCursor<arrow::Int64Array>>(column);
+            std::shared_ptr<ChunkedColumnCursor<arrow::Int64Type>> chunked =
+                    std::make_shared<ChunkedColumnCursor<arrow::Int64Type>>(column);
 
-            std::shared_ptr<ColumnCursorWrapper<arrow::Int64Array>> wrapper =
-                    std::make_shared<ColumnCursorWrapper<arrow::Int64Array>>(chunked, *this);
+            std::shared_ptr<ColumnCursorWrapper<arrow::Int64Type>> wrapper =
+                    std::make_shared<ColumnCursorWrapper<arrow::Int64Type>>(chunked, *this);
 
             _cursors[column->name()] = wrapper;
 
@@ -35,11 +35,11 @@ ScanTableCursor::addColumn(std::shared_ptr<arrow::Column> column)
             return true;
         }
         case arrow::Type::DOUBLE: {
-            std::shared_ptr<ChunkedColumnCursor<arrow::DoubleArray>> chunked =
-                    std::make_shared<ChunkedColumnCursor<arrow::DoubleArray>>(column);
+            std::shared_ptr<ChunkedColumnCursor<arrow::DoubleType>> chunked =
+                    std::make_shared<ChunkedColumnCursor<arrow::DoubleType>>(column);
 
-            std::shared_ptr<ColumnCursorWrapper<arrow::DoubleArray>> wrapper =
-                    std::make_shared<ColumnCursorWrapper<arrow::DoubleArray>>(chunked, *this);
+            std::shared_ptr<ColumnCursorWrapper<arrow::DoubleType>> wrapper =
+                    std::make_shared<ColumnCursorWrapper<arrow::DoubleType>>(chunked, *this);
 
             _cursors[column->name()] = wrapper;
 

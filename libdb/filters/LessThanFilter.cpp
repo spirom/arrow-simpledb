@@ -5,7 +5,7 @@
 #include "arrow/api.h"
 
 template <typename T>
-LessThanFilter<T>::LessThanFilter(std::string column_name, typename T::value_type value)
+LessThanFilter<T>::LessThanFilter(std::string column_name, typename T::c_type value)
         : _column_name(column_name), _value(value)
 {
 
@@ -25,5 +25,5 @@ LessThanFilter<T>::evaluate()
     return _cursor->get() < _value;
 }
 
-template class LessThanFilter<arrow::Int64Array>;
-template class LessThanFilter<arrow::DoubleArray>;
+template class LessThanFilter<arrow::Int64Type>;
+template class LessThanFilter<arrow::DoubleType>;

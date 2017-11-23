@@ -4,7 +4,7 @@
 #include "GreaterThanFilter.h"
 
 template <typename T>
-GreaterThanFilter<T>::GreaterThanFilter(std::string column_name, typename T::value_type value)
+GreaterThanFilter<T>::GreaterThanFilter(std::string column_name, typename T::c_type value)
         : _column_name(column_name), _value(value)
 {
 
@@ -24,5 +24,5 @@ GreaterThanFilter<T>::evaluate()
     return _cursor->get() > _value;
 }
 
-template class GreaterThanFilter<arrow::Int64Array>;
-template class GreaterThanFilter<arrow::DoubleArray>;
+template class GreaterThanFilter<arrow::Int64Type>;
+template class GreaterThanFilter<arrow::DoubleType>;

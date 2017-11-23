@@ -14,7 +14,7 @@ class TableCursor;
  * most minimal methods for cursor positioning, since it gets its position from the
  * table cursor it belongs to.
  *
- * @tparam T The underlying Arrow array type:: for example, arrow::Int64Array.
+ * @tparam T The underlying Arrow element type for the array, :: for example, arrow::Int64Type.
  */
 template <typename T>
 class ColumnCursorWrapper : public GenericColumnCursor {
@@ -25,7 +25,7 @@ public:
 
     bool isNull();
 
-    typename T::value_type get();
+    typename T::c_type get();
 
     void reset();
 

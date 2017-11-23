@@ -43,7 +43,7 @@ public:
      * Get value at current position.
      * @return
      */
-    typename T::value_type get();
+    typename T::c_type get();
 
     /**
      * Reset to the first element, if any.
@@ -75,7 +75,7 @@ private:
     /**
      * The current chunk of the underlying column
      */
-    std::shared_ptr<T> _current_chunk;
+    std::shared_ptr<arrow::NumericArray<T>> _current_chunk;
 
     /**
      * Offset of current chunk inthe sequence of chunks

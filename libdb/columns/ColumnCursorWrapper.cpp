@@ -22,7 +22,7 @@ ColumnCursorWrapper<T>::isNull()
 }
 
 template <typename T>
-typename T::value_type
+typename T::c_type
 ColumnCursorWrapper<T>::get()
 {
     _base_cursor->seek(get_table_cursor().getPosition());
@@ -35,5 +35,5 @@ void ColumnCursorWrapper<T>::reset()
     _base_cursor->reset();
 }
 
-template class ColumnCursorWrapper<arrow::Int64Array>;
-template class ColumnCursorWrapper<arrow::DoubleArray>;
+template class ColumnCursorWrapper<arrow::Int64Type>;
+template class ColumnCursorWrapper<arrow::DoubleType>;
