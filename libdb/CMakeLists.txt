@@ -11,7 +11,9 @@ include_directories(${ARROW_INCLIDE_DIRS})
 
 link_directories(${ARROW_LINK_DIRS})
 
-set(SOURCE_FILES columns/ChunkedColumnCursor.cpp tables/ScanTableCursor.cpp
+set(SOURCE_FILES columns/ChunkedColumnCursor.cpp
+        columns/ChunkedDictColumnCursor.cpp
+        tables/ScanTableCursor.cpp
         columns/ColumnCursorWrapper.cpp columns/GenericColumnCursor.cpp tables/TableCursor.cpp
         tables/FilterProjectTableCursor.cpp filters/GreaterThanFilter.cpp filters/GreaterThanFilter.h filters/LessThanFilter.cpp filters/LessThanFilter.h filters/AndFilter.cpp filters/AndFilter.h)
 add_library(libdb STATIC ${SOURCE_FILES})

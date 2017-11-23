@@ -208,6 +208,32 @@ TEST_F(TableTest, FilterComposition) {
     EXPECT_FALSE(second_cursor.hasMore());
 }
 
+
+TEST_F(TableTest, SmallDictionaryColumns) {
+    std::shared_ptr<Table> table;
+    EXPECT_EQ(Status::OK().code(), Tables::createSmallDictionaryColumns(table).code());
+    EXPECT_EQ(4, table->num_rows());
+    EXPECT_EQ(2, table->num_columns());
+    ScanTableCursor tc(table);
+    auto id_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Array>>(
+            tc.getColumn(std::string("id")));
+    auto cost_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Array>>(
+            tc.getColumn(std::string("cost")));
+    EXPECT_TRUE(tc.hasMore());
+    EXPECT_EQ(11, id_cursor->get());
+    EXPECT_EQ(23, cost_cursor->get());
+    EXPECT_TRUE(tc.hasMore());
+    EXPECT_EQ(12, id_cursor->get());
+    EXPECT_EQ(25, cost_cursor->get());
+    EXPECT_TRUE(tc.hasMore());
+    EXPECT_EQ(11, id_cursor->get());
+    EXPECT_EQ(23, cost_cursor->get());
+    EXPECT_TRUE(tc.hasMore());
+    EXPECT_EQ(12, id_cursor->get());
+    EXPECT_EQ(25, cost_cursor->get());
+    EXPECT_FALSE(tc.hasMore());
+}
+
 // TODO: test empty column
 
 // TODO: test mismatched column lengths

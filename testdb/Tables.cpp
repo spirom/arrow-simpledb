@@ -15,6 +15,8 @@ using arrow::Field;
 using arrow::ChunkedArray;
 using arrow::ArrayVector;
 using arrow::TableBatchReader;
+using arrow::Int64Type;
+using arrow::DictionaryBuilder;
 
 arrow::Status
 Tables::createSmallSimpleColumns(std::shared_ptr<arrow::Table>& table)
@@ -184,4 +186,50 @@ Tables::createSimple(std::shared_ptr<arrow::Table>& table)
     //std::cout << "Schema: " << result << std::endl;
 
     return Status::OK();
+}
+
+arrow::Status
+Tables::createSmallDictionaryColumns(std::shared_ptr<arrow::Table>& table)
+{
+
+    arrow::MemoryPool* pool = arrow::default_memory_pool();
+
+    std::vector<std::shared_ptr<arrow::Field>> schema_vector = {
+            arrow::field("id", arrow::int64()),
+            arrow::field("cost", arrow::float64())
+    };
+    auto schema = std::make_shared<arrow::Schema>(schema_vector);
+
+
+    DictionaryBuilder<Int64Type> id_builder(pool);
+    ARROW_RETURN_NOT_OK(id_builder.Append(11));
+    ARROW_RETURN_NOT_OK(id_builder.Append(12));
+    ARROW_RETURN_NOT_OK(id_builder.Append(11));
+    ARROW_RETURN_NOT_OK(id_builder.Append(12));
+
+
+    DictionaryBuilder<Int64Type> cost_builder(pool);
+    ARROW_RETURN_NOT_OK(cost_builder.Append(23));
+    ARROW_RETURN_NOT_OK(cost_builder.Append(23));
+    ARROW_RETURN_NOT_OK(cost_builder.Append(25));
+    ARROW_RETURN_NOT_OK(cost_builder.Append(25));
+
+    std::shared_ptr<arrow::Array> id_array;
+    ARROW_RETURN_NOT_OK(id_builder.Finish(&id_array));
+    std::shared_ptr<arrow::Array> cost_array;
+    ARROW_RETURN_NOT_OK(cost_builder.Finish(&cost_array));
+
+
+    shared_ptr<Field> id_field = arrow::field("id", arrow::int64());
+    shared_ptr<Field> cost_field = arrow::field("cost", arrow::float64());
+
+    shared_ptr<Column> id_col = std::make_shared<Column>(id_field, id_array);
+    shared_ptr<Column> cost_col = std::make_shared<Column>(cost_field, cost_array);
+
+    std::vector<std::shared_ptr<Column>> columns = {id_col, cost_col};
+
+    table.reset(new Table(schema, columns));
+
+    return Status::OK();
+
 }
