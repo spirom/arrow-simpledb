@@ -23,7 +23,7 @@ ScanTableCursor::addColumn(std::shared_ptr<arrow::Column> column)
 {
     switch (column->type()->id()) {
         case arrow::Type::INT64: {
-            std::shared_ptr<ChunkedColumnCursor<arrow::Int64Type>> chunked =
+            std::shared_ptr<BaseColumnCursor<arrow::Int64Type>> chunked =
                     std::make_shared<ChunkedColumnCursor<arrow::Int64Type>>(column);
 
             std::shared_ptr<ColumnCursorWrapper<arrow::Int64Type>> wrapper =

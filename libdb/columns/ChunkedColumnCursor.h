@@ -5,6 +5,7 @@
 
 
 #include <arrow/table.h>
+#include "BaseColumnCursor.h"
 
 /**
  * A simple column cursor implemented on top of a possibly chunked Arrow column, the hides the
@@ -13,7 +14,7 @@
  * @tparam T The underlying Arrow array type:: for example, arrow::Int64Array.
  */
 template <typename T>
-class ChunkedColumnCursor {
+class ChunkedColumnCursor : public BaseColumnCursor<T> {
 public:
     /**
      * Create from a column -- initially positioned at first element, if any.

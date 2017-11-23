@@ -20,7 +20,7 @@ template <typename T>
 class ColumnCursorWrapper : public GenericColumnCursor {
 public:
     explicit ColumnCursorWrapper(
-            std::shared_ptr<ChunkedColumnCursor<T>> base_cursor,
+            std::shared_ptr<BaseColumnCursor<T>> base_cursor,
             TableCursor &table_cursor);
 
     bool isNull();
@@ -30,7 +30,7 @@ public:
     void reset();
 
 private:
-    std::shared_ptr<ChunkedColumnCursor<T>> _base_cursor;
+    std::shared_ptr<BaseColumnCursor<T>> _base_cursor;
 
 };
 

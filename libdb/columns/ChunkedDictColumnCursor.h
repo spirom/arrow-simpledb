@@ -4,6 +4,8 @@
 #define CHUNKEDCOLUMNCURSOR_H
 
 
+#include "BaseColumnCursor.h"
+
 #include <arrow/table.h>
 
 /**
@@ -13,7 +15,7 @@
  * @tparam T The underlying Arrow array type:: for example, arrow::Int64Array.
  */
 template <typename T>
-class ChunkedDictColumnCursor {
+class ChunkedDictColumnCursor : public BaseColumnCursor<T> {
 public:
     /**
      * Create from a column -- initially positioned at first element, if any.

@@ -108,4 +108,4 @@ ChunkedDictColumnCursor<T>::advance_chunk() {
 }
 
 template class ChunkedDictColumnCursor<arrow::Int64Type>;
-//template class ChunkedDictColumnCursor<arrow::DoubleArray>;
+template class ChunkedDictColumnCursor<arrow::DoubleType>;
