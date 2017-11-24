@@ -23,7 +23,6 @@ TEST_F(TableTest, Cursor) {
     ScanTableCursor tc(table, { GenericColumnCursor::PLAIN, GenericColumnCursor::PLAIN });
     uint64_t count = 0;
     while (tc.hasMore()) {
-        EXPECT_EQ(count, tc.getPosition());
         count++;
     }
     EXPECT_EQ(200u, count);
@@ -83,7 +82,6 @@ TEST_F(TableTest, ComplexColumns) {
     auto cost_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleType>>(
             tc.getColumn(std::string("cost")));
     while (tc.hasMore()) {
-        EXPECT_EQ(count, tc.getPosition());
         int64_t val = count % 100;
         EXPECT_EQ(val, id_cursor->get());
         EXPECT_EQ(0.5 * val, cost_cursor->get());

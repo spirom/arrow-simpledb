@@ -17,9 +17,10 @@ public:
 
     void reset() override;
 
-    uint64_t getPosition() override;
+
 
 protected:
+    uint64_t getPosition() override;
 
     bool satisfiesFilter();
 

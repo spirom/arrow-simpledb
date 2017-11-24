@@ -11,11 +11,13 @@
 
 
 class GenericColumnCursor;
+class TableTest;
 
 /**
  * Table cursor implementation for scanning a table.
  */
 class ScanTableCursor : public TableCursor {
+    friend class TableTest;
 public:
     /**
      * Overload for specifying non-default column encodings.
@@ -41,10 +43,12 @@ public:
 
     void reset();
 
-    uint64_t getPosition();
+
 
 protected:
     bool addColumn(std::shared_ptr<arrow::Column> column, GenericColumnCursor::Encoding encoding);
+
+    uint64_t getPosition();
 
 private:
     std::shared_ptr<arrow::Table> _table;
