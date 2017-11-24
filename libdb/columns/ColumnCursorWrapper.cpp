@@ -50,7 +50,7 @@ template <typename T>
 bool
 ColumnCursorWrapper<T>::isNull()
 {
-    _base_cursor->seek(get_table_cursor().getPosition());
+    _base_cursor->seek(get_table_cursor_position());
     return _base_cursor->isNull();
 }
 
@@ -58,7 +58,7 @@ template <typename T>
 typename T::c_type
 ColumnCursorWrapper<T>::get()
 {
-    _base_cursor->seek(get_table_cursor().getPosition());
+    _base_cursor->seek(get_table_cursor_position());
     return _base_cursor->get();
 }
 

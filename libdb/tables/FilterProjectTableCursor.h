@@ -1,12 +1,11 @@
 
 
-#ifndef FILTERPROJECTTABLECURSOR_H
-#define FILTERPROJECTTABLECURSOR_H
+#ifndef FILTER_PROJECT_TABLECURSOR_H
+#define FILTER_PROJECT_TABLECURSOR_H
 
-#include <arrow/table.h>
-#include "columns/ColumnCursorWrapper.h"
 #include "TableCursor.h"
-#include "filters/Filter.h"
+
+class Filter;
 
 class FilterProjectTableCursor : public TableCursor {
 public:

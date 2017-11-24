@@ -187,7 +187,7 @@ TEST_F(TableTest, FilterComposition) {
     EXPECT_EQ(Status::OK().code(), Tables::createSmallChunkedColumns(table).code());
     EXPECT_EQ(4, table->num_rows());
     EXPECT_EQ(2, table->num_columns());
-    ScanTableCursor tc(table, { GenericColumnCursor::PLAIN, GenericColumnCursor::PLAIN });
+    ScanTableCursor tc(table);
 
     std::shared_ptr<Filter> first_filter = std::make_shared<GreaterThanFilter<arrow::Int64Type>>("id", 11);
     FilterProjectTableCursor first_cursor(tc, first_filter);
@@ -237,6 +237,12 @@ TEST_F(TableTest, SmallDictionaryColumns) {
     EXPECT_EQ(25, cost_cursor->get());
     EXPECT_FALSE(tc.hasMore());
 }
+
+// TODO: table cursor reset
+
+// TODO: more complex dictionary column
+
+// TODO: filter on dictionary column (efficiently?)
 
 // TODO: test empty column
 

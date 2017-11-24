@@ -1,21 +1,38 @@
 
 
-#ifndef SCANTABLECURSOR_H
-#define SCANTABLECURSOR_H
+#ifndef SCAN_TABLE_CURSOR_H
+#define SCAN_TABLE_CURSOR_H
 
 #include <unordered_map>
 #include <arrow/table.h>
 #include "columns/ColumnCursorWrapper.h"
+#include "columns/GenericColumnCursor.h"
 #include "TableCursor.h"
 
 
 class GenericColumnCursor;
 
+/**
+ * Table cursor implementation for scanning a table.
+ */
 class ScanTableCursor : public TableCursor {
 public:
+    /**
+     * Overload for specifying non-default column encodings.
+     * @param table
+     * @param encodings
+     */
     explicit ScanTableCursor(
             std::shared_ptr<arrow::Table> table,
             std::vector<GenericColumnCursor::Encoding> encodings
+    );
+
+    /**
+     * Overload using default (PLAIN) column encodings
+     * @param table
+     */
+    explicit ScanTableCursor(
+            std::shared_ptr<arrow::Table> table
     );
 
     std::shared_ptr<GenericColumnCursor> getColumn(std::string colName);
@@ -38,4 +55,4 @@ private:
 };
 
 
-#endif // SCANTABLECURSOR_H
+#endif // SCAN_TABLE_CURSOR_H

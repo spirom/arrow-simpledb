@@ -17,7 +17,8 @@ set(SOURCE_FILES
         columns/ChunkedDictColumnCursor.cpp
         tables/ScanTableCursor.cpp
         columns/ColumnCursorWrapper.cpp columns/GenericColumnCursor.cpp tables/TableCursor.cpp
-        tables/FilterProjectTableCursor.cpp filters/GreaterThanFilter.cpp filters/GreaterThanFilter.h filters/LessThanFilter.cpp filters/LessThanFilter.h filters/AndFilter.cpp filters/AndFilter.h)
+        tables/FilterProjectTableCursor.cpp
+        filters/Filter.h filters/GreaterThanFilter.cpp filters/GreaterThanFilter.h filters/LessThanFilter.cpp filters/LessThanFilter.h filters/AndFilter.cpp filters/AndFilter.h)
 add_library(libdb STATIC ${SOURCE_FILES})
 
 target_link_libraries(libdb ${ARROW_LIBS} ${CMAKE_THREAD_LIBS_INIT})

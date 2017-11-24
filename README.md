@@ -25,6 +25,9 @@ where the multiple chunks that comprise a column are hidden behind a uniform int
 # Queries Over Arrow Tables
 
 The unit tests show how simple queries can be executed against tables created through Arrow APIs.
+Queries are constructed by composing implementations of the `TableCursor` virtual class: currently just
+`ScanTableCursor` and `FilterProjectTableCursor`. To get access to column data, call `getColumn()` on your
+outermost `TableCursor` to obtain a `GenericColumnCursor`.
 
 For example, a scan cursor can be used to simply scan a table:
 
@@ -33,10 +36,10 @@ For example, a scan cursor can be used to simply scan a table:
 
     // get pointers to two columns named "id" and "cost"
     auto id_cursor =
-        std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Array>>(
+        std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Type>>(
                 tc.getColumn(std::string("id")));
     auto cost_cursor =
-        std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleArray>>(
+        std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleType>>(
                 tc.getColumn(std::string("cost")));
 
     // iterate through the table and print it
@@ -57,9 +60,9 @@ Additionally, a filtering and projection cursor can be composed to fetch certain
     ScanTableCursor tc(table);
 
     std::shared_ptr<Filter> leftFilter =
-        std::make_shared<GreaterThanFilter<arrow::Int64Array>>("id", 31);
+        std::make_shared<GreaterThanFilter<arrow::Int64Type>>("id", 31);
     std::shared_ptr<Filter> rightFilter =
-        std::make_shared<GreaterThanFilter<arrow::DoubleArray>>("cost", 100);
+        std::make_shared<GreaterThanFilter<arrow::DoubleType>>("cost", 100);
     std::shared_ptr<Filter> andFilter =
             std::make_shared<AndFilter>("id", leftFilter, rightFilter);
 
@@ -67,10 +70,10 @@ Additionally, a filtering and projection cursor can be composed to fetch certain
 
     // Note: the column cursors must always be obtained from the appropriate table cursor
     auto id_cursor =
-        std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Array>>(
+        std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Type>>(
             fptc.getColumn(std::string("id")));
     auto cost_cursor =
-        std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleArray>>(
+        std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleType>>(
             fptc.getColumn(std::string("cost")));
 
     while (tc.hasMore()) {
@@ -82,12 +85,20 @@ Table cursors can be composed arbitrarily:
     ScanTableCursor tc(table);
 
     std::shared_ptr<Filter> first_filter =
-        std::make_shared<GreaterThanFilter<arrow::Int64Array>>("id", 11);
+        std::make_shared<GreaterThanFilter<arrow::Int64Type>>("id", 11);
     FilterProjectTableCursor first_cursor(tc, first_filter);
 
     std::shared_ptr<Filter> second_filter =
-        std::make_shared<LessThanFilter<arrow::DoubleArray>>("cost", 42);
+        std::make_shared<LessThanFilter<arrow::DoubleType>>("cost", 42);
     FilterProjectTableCursor second_cursor(first_cursor, second_filter);
+
+## Dictionary encoded columns
+
+The query dictionary encoded columns, use the `ScanTableCursor` constructor that tales an array of encodings.
+The encodings apply to the table columns in the order in which they appear int he table.
+For example:
+
+    ScanTableCursor tc(table, { GenericColumnCursor::PLAIN, GenericColumnCursor::DICT });
 
 # Things Not Yet Investigated
 

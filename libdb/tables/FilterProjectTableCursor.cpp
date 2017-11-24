@@ -1,6 +1,7 @@
 
 
 #include "FilterProjectTableCursor.h"
+#include "filters/Filter.h"
 
 FilterProjectTableCursor::FilterProjectTableCursor(TableCursor &source_cursor, std::shared_ptr<Filter> &filter)
         : _source_cursor(source_cursor), _filter(filter)

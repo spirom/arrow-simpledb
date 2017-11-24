@@ -14,6 +14,18 @@ ScanTableCursor::ScanTableCursor(
     reset();
 }
 
+ScanTableCursor::ScanTableCursor(
+        std::shared_ptr<arrow::Table> table
+)
+        : _table(table)
+{
+    for (int i = 0; i < table->num_columns(); i++) {
+        addColumn(table->column(i), GenericColumnCursor::Encoding::PLAIN);
+    }
+    _size = (uint64_t) table->num_rows();
+    reset();
+}
+
 std::shared_ptr<GenericColumnCursor>
 ScanTableCursor::getColumn(std::string colName)
 {
