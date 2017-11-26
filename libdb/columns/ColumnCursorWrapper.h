@@ -5,9 +5,7 @@
 
 #include "tables/ScanTableCursor.h"
 #include "GenericColumnCursor.h"
-
-template <typename T>
-class BaseColumnCursor;
+#include "BaseColumnCursor.h"
 
 class TableCursor;
 
@@ -34,7 +32,7 @@ public:
 
     bool isNull();
 
-    typename T::c_type get();
+    typename BaseColumnCursor<T>::ReturnType get();
 
     void reset();
 

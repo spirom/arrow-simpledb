@@ -43,10 +43,17 @@ bool ChunkedColumnCursor<T>::isNull()
 }
 
 template <typename T>
-typename T::c_type
+typename BaseColumnCursor<T>::ReturnType
 ChunkedColumnCursor<T>::get()
 {
     return _current_chunk->Value(_pos_in_chunk);
+}
+
+template <>
+typename BaseColumnCursor<arrow::StringType>::ReturnType
+ChunkedColumnCursor<arrow::StringType>::get()
+{
+    return _current_chunk->GetString(_pos_in_chunk);
 }
 
 template <typename T>
@@ -57,7 +64,7 @@ ChunkedColumnCursor<T>::reset()
     _chunk = 0;
     _pos_in_chunk = 0;
     _current_chunk =
-            std::static_pointer_cast<arrow::NumericArray<T>>(_column->data()->chunk(_chunk));
+            std::static_pointer_cast<typename  BaseColumnCursor<T>::ArrayType>(_column->data()->chunk(_chunk));
     // TODO: this may fail if the column is empty
 }
 
@@ -87,7 +94,7 @@ ChunkedColumnCursor<T>::advance_chunk() {
         _chunk++;
         _pos_in_chunk = 0;
         _current_chunk =
-                std::static_pointer_cast<arrow::NumericArray<T>>(_column->data()->chunk(_chunk));
+                std::static_pointer_cast<typename  BaseColumnCursor<T>::ArrayType>(_column->data()->chunk(_chunk));
         return true;
     } else {
         return false;
@@ -96,3 +103,4 @@ ChunkedColumnCursor<T>::advance_chunk() {
 
 template class ChunkedColumnCursor<arrow::Int64Type>;
 template class ChunkedColumnCursor<arrow::DoubleType>;
+template class ChunkedColumnCursor<arrow::StringType>;

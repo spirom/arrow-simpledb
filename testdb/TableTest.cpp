@@ -47,6 +47,25 @@ TEST_F(TableTest, SmallSimpleColumns) {
     EXPECT_FALSE(tc.hasMore());
 }
 
+TEST_F(TableTest, SmallSimpleStringColumns) {
+    std::shared_ptr<Table> table;
+    EXPECT_EQ(Status::OK().code(), Tables::createSmallSimpleStringColumns(table).code());
+    EXPECT_EQ(2, table->num_rows());
+    EXPECT_EQ(2, table->num_columns());
+    ScanTableCursor tc(table, { GenericColumnCursor::PLAIN, GenericColumnCursor::PLAIN });
+    auto foo_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::StringType>>(
+            tc.getColumn(std::string("foo")));
+    auto bar_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::StringType>>(
+            tc.getColumn(std::string("bar")));
+    EXPECT_TRUE(tc.hasMore());
+    EXPECT_STREQ("eleven", foo_cursor->get().c_str());
+    EXPECT_STREQ("twenty one", bar_cursor->get().c_str());
+    EXPECT_TRUE(tc.hasMore());
+    EXPECT_STREQ("twelve", foo_cursor->get().c_str());
+    EXPECT_STREQ("twenty two", bar_cursor->get().c_str());
+    EXPECT_FALSE(tc.hasMore());
+}
+
 TEST_F(TableTest, SmallChunkedColumns) {
     std::shared_ptr<Table> table;
     EXPECT_EQ(Status::OK().code(), Tables::createSmallChunkedColumns(table).code());

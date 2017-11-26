@@ -45,7 +45,7 @@ public:
      * Get value at current position.
      * @return
      */
-    typename T::c_type get();
+    typename BaseColumnCursor<T>::ReturnType get();
 
     /**
      * Reset to the first element, if any.
@@ -78,7 +78,7 @@ private:
      * The current chunk of the underlying column
      */
 
-    std::shared_ptr<arrow::NumericArray<T>> _current_dict;
+    std::shared_ptr<typename BaseColumnCursor<T>::ArrayType> _current_dict;
     std::shared_ptr<arrow::NumericArray<arrow::Int8Type>> _current_indices;
 
     /**

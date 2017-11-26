@@ -6,9 +6,38 @@
 
 #include <arrow/table.h>
 
+template <typename T>
+class ColumnTypeTrait {
+
+};
+
+template <>
+class ColumnTypeTrait<arrow::StringType>
+{
+public:
+    typedef typename arrow::StringArray ArrayType;
+    typedef std::string ReturnType;
+};
+
+
+template <>
+class ColumnTypeTrait<arrow::Int64Type>
+{
+public:
+    typedef typename arrow::NumericArray<arrow::Int64Type> ArrayType;
+    typedef typename arrow::Int64Type::c_type ReturnType;
+};
+
+template <>
+class ColumnTypeTrait<arrow::DoubleType>
+{
+public:
+    typedef typename arrow::NumericArray<arrow::DoubleType> ArrayType;
+    typedef typename arrow::DoubleType::c_type ReturnType;
+};
 
 template <typename T>
-class BaseColumnCursor {
+class BaseColumnCursor : public ColumnTypeTrait<T> {
 public:
 
     /**
@@ -33,7 +62,7 @@ public:
      * Get value at current position.
      * @return
      */
-    virtual typename T::c_type get() = 0;
+    virtual typename ColumnTypeTrait<T>::ReturnType get() = 0;
 
     /**
      * Reset to the first element, if any.

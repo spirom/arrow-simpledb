@@ -3,9 +3,10 @@
 #ifndef CHUNKEDCOLUMNCURSOR_H
 #define CHUNKEDCOLUMNCURSOR_H
 
-
 #include <arrow/table.h>
 #include "BaseColumnCursor.h"
+
+
 
 /**
  * A simple column cursor implemented on top of a possibly chunked Arrow column, the hides the
@@ -44,7 +45,7 @@ public:
      * Get value at current position.
      * @return
      */
-    typename T::c_type get();
+    typename BaseColumnCursor<T>::ReturnType get();
 
     /**
      * Reset to the first element, if any.
@@ -76,7 +77,7 @@ private:
     /**
      * The current chunk of the underlying column
      */
-    std::shared_ptr<arrow::NumericArray<T>> _current_chunk;
+    std::shared_ptr<typename BaseColumnCursor<T>::ArrayType> _current_chunk;
 
     /**
      * Offset of current chunk inthe sequence of chunks
