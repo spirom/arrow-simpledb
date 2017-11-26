@@ -1,5 +1,6 @@
 
 #include <iostream>
+#include <tables/DBTable.h>
 #include "Tables.h"
 
 using namespace std;
@@ -382,6 +383,21 @@ Tables::createChunkedDictionaryColumns(std::shared_ptr<arrow::Table>& table)
     std::vector<std::shared_ptr<Column>> columns = {id_col, cost_col};
 
     table.reset(new Table(schema, columns));
+
+    return Status::OK();
+}
+
+arrow::Status
+Tables::createEmptyTable(std::shared_ptr<DBTable>& table) {
+    DBTable *t =  new DBTable(
+            {"id", "cost"},
+            {arrow::int64(), arrow::utf8()},
+            {GenericColumnCursor::DICT, GenericColumnCursor::DICT}
+    );
+
+    table.reset(t);
+
+    table->make();
 
     return Status::OK();
 }
