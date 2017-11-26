@@ -255,6 +255,29 @@ TEST_F(TableTest, SmallDictionaryColumns) {
     EXPECT_FALSE(tc.hasMore());
 }
 
+TEST_F(TableTest, SmallStringDictionaryColumns) {
+    std::shared_ptr<Table> table;
+    EXPECT_EQ(Status::OK().code(), Tables::createSmallStringDictionaryColumns(table).code());
+    EXPECT_EQ(2, table->num_rows());
+    EXPECT_EQ(2, table->num_columns());
+
+    EXPECT_EQ(arrow::Type::STRING, table->column(0)->type()->id());
+    EXPECT_EQ(arrow::Type::STRING, table->column(1)->type()->id());
+
+    ScanTableCursor tc(table, { GenericColumnCursor::DICT, GenericColumnCursor::DICT });
+    auto foo_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::StringType>>(
+            tc.getColumn(std::string("foo")));
+    auto bar_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::StringType>>(
+            tc.getColumn(std::string("bar")));
+    EXPECT_TRUE(tc.hasMore());
+    EXPECT_STREQ("eleven", foo_cursor->get().c_str());
+    EXPECT_STREQ("twenty one", bar_cursor->get().c_str());
+    EXPECT_TRUE(tc.hasMore());
+    EXPECT_STREQ("twelve", foo_cursor->get().c_str());
+    EXPECT_STREQ("twenty two", bar_cursor->get().c_str());
+    EXPECT_FALSE(tc.hasMore());
+}
+
 // TODO: table cursor reset
 
 // TODO: more complex dictionary column
