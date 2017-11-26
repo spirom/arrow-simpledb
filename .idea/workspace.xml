@@ -63,8 +63,8 @@
       <file leaf-file-name="TableTest.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/testdb/TableTest.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="263">
-              <caret line="264" column="33" lean-forward="false" selection-start-line="264" selection-start-column="33" selection-end-line="264" selection-end-column="33" />
+            <state relative-caret-position="2836">
+              <caret line="298" column="17" lean-forward="false" selection-start-line="298" selection-start-column="17" selection-end-line="298" selection-end-column="17" />
               <folding />
             </state>
           </provider>
@@ -120,8 +120,8 @@
       <file leaf-file-name="Tables.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/testdb/Tables.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="396">
-              <caret line="303" column="53" lean-forward="false" selection-start-line="303" selection-start-column="53" selection-end-line="303" selection-end-column="53" />
+            <state relative-caret-position="490">
+              <caret line="355" column="20" lean-forward="false" selection-start-line="355" selection-start-column="20" selection-end-line="355" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -140,8 +140,8 @@
       <file leaf-file-name="Tables.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/testdb/Tables.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="288">
-              <caret line="20" column="42" lean-forward="false" selection-start-line="20" selection-start-column="42" selection-end-line="20" selection-end-column="42" />
+            <state relative-caret-position="306">
+              <caret line="21" column="48" lean-forward="false" selection-start-line="21" selection-start-column="48" selection-end-line="21" selection-end-column="48" />
               <folding />
             </state>
           </provider>
@@ -171,6 +171,7 @@
       <find>get_table_c</find>
       <find>ColumnCursorWrapper</find>
       <find>table</find>
+      <find>Chun</find>
     </findStrings>
     <replaceStrings>
       <replace>_2</replace>
@@ -419,7 +420,7 @@
       <workItem from="1510071514948" duration="31848000" />
       <workItem from="1510424002261" duration="29000" />
       <workItem from="1510424258824" duration="15608000" />
-      <workItem from="1511277467522" duration="30096000" />
+      <workItem from="1511277467522" duration="30998000" />
     </task>
     <task id="LOCAL-00001" summary="Initial">
       <created>1509374480620</created>
@@ -652,16 +653,17 @@
       <option name="project" value="LOCAL" />
       <updated>1511719183714</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="String dictionary columns work">
+      <created>1511728052782</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1511728052782</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="TableTest_SmallSimpleStringColumns - 2017.11.26 at 09h 55m 10s.xml">
-      <configuration name="TableTest.SmallSimpleStringColumns" configurationId="CMakeGoogleTestRunConfigurationType" />
-    </history-entry>
-    <history-entry file="TableTest_SmallSimpleStringColumns - 2017.11.26 at 09h 55m 21s.xml">
-      <configuration name="TableTest.SmallSimpleStringColumns" configurationId="CMakeGoogleTestRunConfigurationType" />
-    </history-entry>
     <history-entry file="TableTest_SmallStringDictionaryColumns - 2017.11.26 at 12h 25m 03s.xml">
       <configuration name="TableTest.SmallStringDictionaryColumns" configurationId="CMakeGoogleTestRunConfigurationType" />
     </history-entry>
@@ -686,9 +688,15 @@
     <history-entry file="testdb - 2017.11.26 at 12h 26m 56s.xml">
       <configuration name="testdb" configurationId="CMakeGoogleTestRunConfigurationType" />
     </history-entry>
+    <history-entry file="testdb - 2017.11.26 at 12h 41m 48s.xml">
+      <configuration name="testdb" configurationId="CMakeGoogleTestRunConfigurationType" />
+    </history-entry>
+    <history-entry file="testdb - 2017.11.26 at 12h 41m 59s.xml">
+      <configuration name="testdb" configurationId="CMakeGoogleTestRunConfigurationType" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="101081000" />
+    <option name="totallyTimeSpent" value="101983000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="476" width="2495" height="1444" extended-state="6" />
@@ -724,7 +732,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Cursor code builds" />
     <MESSAGE value="Column cursor minimally works" />
     <MESSAGE value="Table cursors basically work" />
     <MESSAGE value="Changed the way column types are handled" />
@@ -749,7 +756,8 @@
     <MESSAGE value="Documentation and visibility cleanup" />
     <MESSAGE value="More visibility cleanup" />
     <MESSAGE value="String columns basically work" />
-    <option name="LAST_COMMIT_MESSAGE" value="String columns basically work" />
+    <MESSAGE value="String dictionary columns work" />
+    <option name="LAST_COMMIT_MESSAGE" value="String dictionary columns work" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1190,24 +1198,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/testdb/Tables.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="20" column="42" lean-forward="false" selection-start-line="20" selection-start-column="42" selection-end-line="20" selection-end-column="42" />
+        <state relative-caret-position="306">
+          <caret line="21" column="48" lean-forward="false" selection-start-line="21" selection-start-column="48" selection-end-line="21" selection-end-column="48" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/testdb/Tables.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="303" column="53" lean-forward="false" selection-start-line="303" selection-start-column="53" selection-end-line="303" selection-end-column="53" />
+        <state relative-caret-position="490">
+          <caret line="355" column="20" lean-forward="false" selection-start-line="355" selection-start-column="20" selection-end-line="355" selection-end-column="20" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/testdb/TableTest.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="263">
-          <caret line="264" column="33" lean-forward="false" selection-start-line="264" selection-start-column="33" selection-end-line="264" selection-end-column="33" />
+        <state relative-caret-position="2836">
+          <caret line="298" column="17" lean-forward="false" selection-start-line="298" selection-start-column="17" selection-end-line="298" selection-end-column="17" />
           <folding />
         </state>
       </provider>

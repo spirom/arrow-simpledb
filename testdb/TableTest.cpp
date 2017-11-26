@@ -278,9 +278,32 @@ TEST_F(TableTest, SmallStringDictionaryColumns) {
     EXPECT_FALSE(tc.hasMore());
 }
 
-// TODO: table cursor reset
+TEST_F(TableTest, ChunkedDictionaryColumns) {
+    std::shared_ptr<Table> table;
+    EXPECT_EQ(Status::OK().code(), Tables::createChunkedDictionaryColumns(table).code());
+    EXPECT_EQ(4, table->num_rows());
+    EXPECT_EQ(2, table->num_columns());
+    ScanTableCursor tc(table, { GenericColumnCursor::DICT, GenericColumnCursor::DICT });
+    auto id_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Type>>(
+            tc.getColumn(std::string("id")));
+    auto cost_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::StringType>>(
+            tc.getColumn(std::string("cost")));
+    EXPECT_TRUE(tc.hasMore());
+    EXPECT_EQ(11, id_cursor->get());
+    EXPECT_EQ("twenty one", cost_cursor->get());
+    EXPECT_TRUE(tc.hasMore());
+    EXPECT_EQ(12, id_cursor->get());
+    EXPECT_EQ("twenty two", cost_cursor->get());
+    EXPECT_TRUE(tc.hasMore());
+    EXPECT_EQ(31, id_cursor->get());
+    EXPECT_EQ("forty one", cost_cursor->get());
+    EXPECT_TRUE(tc.hasMore());
+    EXPECT_EQ(32, id_cursor->get());
+    EXPECT_EQ("forty two", cost_cursor->get());
+    EXPECT_FALSE(tc.hasMore());
+}
 
-// TODO: more complex dictionary column
+// TODO: table cursor reset
 
 // TODO: filter on dictionary column (efficiently?)
 

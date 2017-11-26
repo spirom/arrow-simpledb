@@ -17,6 +17,7 @@ using arrow::ArrayVector;
 using arrow::TableBatchReader;
 using arrow::Int64Type;
 using arrow::DictionaryBuilder;
+using arrow::StringDictionaryBuilder;
 
 arrow::Status
 Tables::createSmallSimpleColumns(std::shared_ptr<arrow::Table>& table)
@@ -323,4 +324,64 @@ Tables::createSmallStringDictionaryColumns(std::shared_ptr<arrow::Table>& table)
 
     return Status::OK();
 
+}
+
+arrow::Status
+Tables::createChunkedDictionaryColumns(std::shared_ptr<arrow::Table>& table)
+{
+    arrow::MemoryPool* pool = arrow::default_memory_pool();
+
+    shared_ptr<Field> id_field = arrow::field("id", arrow::int64());
+    shared_ptr<Field> cost_field = arrow::field("cost", arrow::utf8());
+    std::vector<std::shared_ptr<arrow::Field>> schema_vector =
+            {id_field, cost_field};
+    auto schema = std::make_shared<arrow::Schema>(schema_vector);
+
+    // first chunks
+
+    DictionaryBuilder<Int64Type> id_builder_1(pool);
+    StringDictionaryBuilder cost_builder_1(pool);
+
+    ARROW_RETURN_NOT_OK(id_builder_1.Append(11));
+    ARROW_RETURN_NOT_OK(id_builder_1.Append(12));
+
+    ARROW_RETURN_NOT_OK(cost_builder_1.Append("twenty one"));
+    ARROW_RETURN_NOT_OK(cost_builder_1.Append("twenty two"));
+
+    std::shared_ptr<arrow::Array> id_array_1;
+    ARROW_RETURN_NOT_OK(id_builder_1.Finish(&id_array_1));
+    std::shared_ptr<arrow::Array> cost_array_1;
+    ARROW_RETURN_NOT_OK(cost_builder_1.Finish(&cost_array_1));
+
+    // second chunks
+
+    DictionaryBuilder<Int64Type> id_builder_2(pool);
+    StringDictionaryBuilder cost_builder_2(pool);
+
+    ARROW_RETURN_NOT_OK(id_builder_2.Append(31));
+    ARROW_RETURN_NOT_OK(id_builder_2.Append(32));
+    ARROW_RETURN_NOT_OK(cost_builder_2.Append("forty one"));
+    ARROW_RETURN_NOT_OK(cost_builder_2.Append("forty two"));
+
+    std::shared_ptr<arrow::Array> id_array_2;
+    ARROW_RETURN_NOT_OK(id_builder_2.Finish(&id_array_2));
+    std::shared_ptr<arrow::Array> cost_array_2;
+    ARROW_RETURN_NOT_OK(cost_builder_2.Finish(&cost_array_2));
+
+    // make columns
+
+    ArrayVector id_arrays({id_array_1, id_array_2});
+    shared_ptr<ChunkedArray> id_chunked = std::make_shared<ChunkedArray>(id_arrays);
+
+    ArrayVector cost_arrays({cost_array_1, cost_array_2});
+    shared_ptr<ChunkedArray> cost_chunked = std::make_shared<ChunkedArray>(cost_arrays);
+
+    shared_ptr<Column> id_col = std::make_shared<Column>(id_field, id_arrays);
+    shared_ptr<Column> cost_col = std::make_shared<Column>(cost_field, cost_arrays);
+
+    std::vector<std::shared_ptr<Column>> columns = {id_col, cost_col};
+
+    table.reset(new Table(schema, columns));
+
+    return Status::OK();
 }

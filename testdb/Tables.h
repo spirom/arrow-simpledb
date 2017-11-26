@@ -19,6 +19,7 @@ public:
 
     static arrow::Status createSmallDictionaryColumns(std::shared_ptr<arrow::Table>& table);
     static arrow::Status createSmallStringDictionaryColumns(std::shared_ptr<arrow::Table>& table);
+    static arrow::Status createChunkedDictionaryColumns(std::shared_ptr<arrow::Table>& table);
 
 };
 
