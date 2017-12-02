@@ -47,7 +47,9 @@ DBTable::DBTable(
 void
 DBTable::addRow(std::vector<std::shared_ptr<DBGenValue>> values)
 {
-
+    for (size_t i = 0; i < values.size(); i++) {
+        _builders.at(i)->add(values.at(i));
+    }
 }
 
 // TODO: need a way to start a new chunk

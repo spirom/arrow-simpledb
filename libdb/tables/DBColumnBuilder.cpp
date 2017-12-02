@@ -8,11 +8,18 @@ DBColumnBuilder<T>::DBColumnBuilder(std::shared_ptr<arrow::Field> field)
     _field = field;
 }
 
+template < typename T>
+void
+DBColumnBuilder<T>::add(std::shared_ptr<DBGenValue> value) {
+    add(std::dynamic_pointer_cast<DBValue<typename ColumnTypeTrait<T>::ReturnType>>(value)->get());
+}
+
+
 template <typename T>
 void
 DBColumnBuilder<T>::add(typename ColumnTypeTrait<T>::ReturnType element)
 {
-
+    _builder.Append(element);
 }
 
 template <typename T>

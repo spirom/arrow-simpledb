@@ -22,6 +22,19 @@ TEST_F(TableTest, CreateSimple) {
     std::shared_ptr<Table> table = dbTable.getTable();
     EXPECT_EQ(2, table->num_rows());
     EXPECT_EQ(2, table->num_columns());
+
+    std::shared_ptr<TableCursor> tc = dbTable.getScanCursor();
+    auto id_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Type>>(
+            tc->getColumn(std::string("id")));
+    auto cost_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleType>>(
+            tc->getColumn(std::string("cost")));
+    EXPECT_TRUE(tc->hasMore());
+    EXPECT_EQ(11, id_cursor->get());
+    EXPECT_EQ(21.9, cost_cursor->get());
+    EXPECT_TRUE(tc->hasMore());
+    EXPECT_EQ(12, id_cursor->get());
+    EXPECT_EQ(22.9, cost_cursor->get());
+    EXPECT_FALSE(tc->hasMore());
 }
 
 

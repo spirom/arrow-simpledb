@@ -10,15 +10,7 @@
 #include "ScanTableCursor.h"
 #include "DBColumnBuilder.h"
 
-class DBGenValue {};
 
-template <typename T>
-class DBValue : public DBGenValue {
-public:
-    DBValue(T value) : _value(value) {};
-private:
-    T _value;
-};
 
 
 class DBTable {
