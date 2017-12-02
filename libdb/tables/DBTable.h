@@ -30,6 +30,8 @@ public:
 
     static std::shared_ptr<DBGenValue> int64(int64_t i);
     static std::shared_ptr<DBGenValue> float64(double d);
+    static std::shared_ptr<DBGenValue> utf8(std::string s);
+
 
 
 private:

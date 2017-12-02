@@ -11,32 +11,6 @@
 using arrow::Table;
 using arrow::Status;
 
-TEST_F(TableTest, CreateSimple) {
-    DBTable dbTable(
-            { "id", "cost" },
-            { arrow::int64(), arrow::float64() },
-            { GenericColumnCursor::PLAIN, GenericColumnCursor::PLAIN });
-    dbTable.addRow( {DBTable::int64(11), DBTable::float64(21.9)} );
-    dbTable.addRow( {DBTable::int64(12), DBTable::float64(22.9)} );
-    dbTable.make();
-    std::shared_ptr<Table> table = dbTable.getTable();
-    EXPECT_EQ(2, table->num_rows());
-    EXPECT_EQ(2, table->num_columns());
-
-    std::shared_ptr<TableCursor> tc = dbTable.getScanCursor();
-    auto id_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Type>>(
-            tc->getColumn(std::string("id")));
-    auto cost_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleType>>(
-            tc->getColumn(std::string("cost")));
-    EXPECT_TRUE(tc->hasMore());
-    EXPECT_EQ(11, id_cursor->get());
-    EXPECT_EQ(21.9, cost_cursor->get());
-    EXPECT_TRUE(tc->hasMore());
-    EXPECT_EQ(12, id_cursor->get());
-    EXPECT_EQ(22.9, cost_cursor->get());
-    EXPECT_FALSE(tc->hasMore());
-}
-
 
 TEST_F(TableTest, Simple) {
     std::shared_ptr<Table> table;
@@ -57,41 +31,48 @@ TEST_F(TableTest, Cursor) {
 }
 
 TEST_F(TableTest, SmallSimpleColumns) {
-    std::shared_ptr<Table> table;
-    EXPECT_EQ(Status::OK().code(), Tables::createSmallSimpleColumns(table).code());
+    std::shared_ptr<DBTable> dbTable;
+    EXPECT_EQ(Status::OK().code(), Tables::createSmallSimpleColumns(dbTable).code());
+
+    std::shared_ptr<Table> table = dbTable->getTable();
     EXPECT_EQ(2, table->num_rows());
     EXPECT_EQ(2, table->num_columns());
-    ScanTableCursor tc(table, { GenericColumnCursor::PLAIN, GenericColumnCursor::PLAIN });
+
+    std::shared_ptr<TableCursor> tc = dbTable->getScanCursor();
     auto id_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Type>>(
-            tc.getColumn(std::string("id")));
+            tc->getColumn(std::string("id")));
     auto cost_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleType>>(
-            tc.getColumn(std::string("cost")));
-    EXPECT_TRUE(tc.hasMore());
+            tc->getColumn(std::string("cost")));
+    EXPECT_TRUE(tc->hasMore());
     EXPECT_EQ(11, id_cursor->get());
     EXPECT_EQ(21.9, cost_cursor->get());
-    EXPECT_TRUE(tc.hasMore());
+    EXPECT_TRUE(tc->hasMore());
     EXPECT_EQ(12, id_cursor->get());
     EXPECT_EQ(22.9, cost_cursor->get());
-    EXPECT_FALSE(tc.hasMore());
+    EXPECT_FALSE(tc->hasMore());
 }
 
+
 TEST_F(TableTest, SmallSimpleStringColumns) {
-    std::shared_ptr<Table> table;
-    EXPECT_EQ(Status::OK().code(), Tables::createSmallSimpleStringColumns(table).code());
+    std::shared_ptr<DBTable> dbTable;
+    EXPECT_EQ(Status::OK().code(), Tables::createSmallSimpleStringColumns(dbTable).code());
+
+    std::shared_ptr<Table> table = dbTable->getTable();
     EXPECT_EQ(2, table->num_rows());
     EXPECT_EQ(2, table->num_columns());
-    ScanTableCursor tc(table, { GenericColumnCursor::PLAIN, GenericColumnCursor::PLAIN });
+
+    std::shared_ptr<TableCursor> tc = dbTable->getScanCursor();
     auto foo_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::StringType>>(
-            tc.getColumn(std::string("foo")));
+            tc->getColumn(std::string("foo")));
     auto bar_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::StringType>>(
-            tc.getColumn(std::string("bar")));
-    EXPECT_TRUE(tc.hasMore());
+            tc->getColumn(std::string("bar")));
+    EXPECT_TRUE(tc->hasMore());
     EXPECT_STREQ("eleven", foo_cursor->get().c_str());
     EXPECT_STREQ("twenty one", bar_cursor->get().c_str());
-    EXPECT_TRUE(tc.hasMore());
+    EXPECT_TRUE(tc->hasMore());
     EXPECT_STREQ("twelve", foo_cursor->get().c_str());
     EXPECT_STREQ("twenty two", bar_cursor->get().c_str());
-    EXPECT_FALSE(tc.hasMore());
+    EXPECT_FALSE(tc->hasMore());
 }
 
 TEST_F(TableTest, SmallChunkedColumns) {

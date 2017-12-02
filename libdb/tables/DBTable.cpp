@@ -86,3 +86,9 @@ DBTable::float64(double d)
 {
     return std::make_shared<DBValue<double>>(d);
 }
+
+std::shared_ptr<DBGenValue>
+DBTable::utf8(std::string s)
+{
+    return std::make_shared<DBValue<std::string>>(s);
+}
