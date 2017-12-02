@@ -52,7 +52,13 @@ DBTable::addRow(std::vector<std::shared_ptr<DBGenValue>> values)
     }
 }
 
-// TODO: need a way to start a new chunk
+void
+DBTable::endChunk()
+{
+    for (auto builder : _builders) {
+        builder->endChunk();
+    }
+}
 
 void
 DBTable::make() {

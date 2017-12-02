@@ -1,5 +1,6 @@
 
 
+#include <iostream>
 #include "DBColumnBuilder.h"
 
 template <typename T>
@@ -23,12 +24,24 @@ DBColumnBuilder<T>::add(typename ColumnTypeTrait<T>::ReturnType element)
 }
 
 template <typename T>
+void
+DBColumnBuilder<T>::endChunk()
+{
+    if (_builder.length() != 0) {
+        std::shared_ptr<arrow::Array> array;
+        _builder.Finish(&array);
+        _chunks.push_back(array);
+    }
+}
+
+
+template <typename T>
 std::shared_ptr<arrow::Column>
 DBColumnBuilder<T>::getColumn()
 {
-    std::shared_ptr<arrow::Array> array;
-    _builder.Finish(&array);
-    return std::make_shared<arrow::Column>(_field, array);
+    endChunk(); // just in case it wasn't explicitly called
+    // std::cout << "Finishing [" << _chunks.size() << "]" << std::endl;
+    return std::make_shared<arrow::Column>(_field, _chunks);
 }
 
 template class DBColumnBuilder<arrow::Int64Type>;

@@ -7,6 +7,7 @@ template <typename T>
 ChunkedColumnCursor<T>::ChunkedColumnCursor(std::shared_ptr<arrow::Column> column)
         : _column(std::move(column))
 {
+    // std::cout << "Cursor: [" << _column->data()->num_chunks() << "]" << std::endl;
     reset();
 }
 
@@ -60,6 +61,7 @@ template <typename T>
 void
 ChunkedColumnCursor<T>::reset()
 {
+
     _pos = 0;
     _chunk = 0;
     _pos_in_chunk = 0;

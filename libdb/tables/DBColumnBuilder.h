@@ -30,9 +30,11 @@ class DBGenColumnBuilder {
 
 public:
 
-    virtual std::shared_ptr<arrow::Column> getColumn() = 0;
-
     virtual void add(std::shared_ptr<DBGenValue> value) = 0;
+
+    virtual void endChunk() = 0;
+
+    virtual std::shared_ptr<arrow::Column> getColumn() = 0;
 
     virtual ~DBGenColumnBuilder() = default;
 };
@@ -44,7 +46,9 @@ public:
 
     explicit DBColumnBuilder( std::shared_ptr<arrow::Field> field);
 
-    virtual void add(std::shared_ptr<DBGenValue> value);
+    virtual void add(std::shared_ptr<DBGenValue> value) override;
+
+    void endChunk() override;
 
     std::shared_ptr<arrow::Column> getColumn() override;
 
@@ -55,6 +59,8 @@ protected:
 private:
 
     typename ColumnTypeTrait<T>::BuilderType _builder;
+
+    arrow::ArrayVector _chunks;
 
     std::shared_ptr<arrow::Field> _field;
 };

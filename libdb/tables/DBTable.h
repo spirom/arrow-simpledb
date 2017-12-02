@@ -20,6 +20,7 @@ public:
             std::vector<std::shared_ptr<arrow::DataType>> types,
             std::vector<GenericColumnCursor::Encoding> encodings);
 
+    void endChunk();
     void make();
 
     std::shared_ptr<ScanTableCursor> getScanCursor();
