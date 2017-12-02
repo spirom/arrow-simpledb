@@ -2,6 +2,7 @@
 #include <filters/GreaterThanFilter.h>
 #include <filters/AndFilter.h>
 #include <filters/LessThanFilter.h>
+#include <tables/DBTable.h>
 #include "arrow/api.h"
 
 #include "TableTest.h"
@@ -9,6 +10,20 @@
 
 using arrow::Table;
 using arrow::Status;
+
+TEST_F(TableTest, CreateSimple) {
+    DBTable dbTable(
+            { "id", "cost" },
+            { arrow::int64(), arrow::float64() },
+            { GenericColumnCursor::PLAIN, GenericColumnCursor::PLAIN });
+    dbTable.addRow( {DBTable::int64(11), DBTable::float64(21.9)} );
+    dbTable.addRow( {DBTable::int64(12), DBTable::float64(22.9)} );
+    dbTable.make();
+    std::shared_ptr<Table> table = dbTable.getTable();
+    EXPECT_EQ(2, table->num_rows());
+    EXPECT_EQ(2, table->num_columns());
+}
+
 
 TEST_F(TableTest, Simple) {
     std::shared_ptr<Table> table;

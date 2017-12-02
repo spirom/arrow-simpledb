@@ -1,13 +1,14 @@
 
 
-#ifndef ARROW_SIMPLEDB_DBTABLE_H
-#define ARROW_SIMPLEDB_DBTABLE_H
+#ifndef DB_TABLE_H
+#define DB_TABLE_H
 
 
 #include <columns/GenericColumnCursor.h>
 #include <vector>
 #include <arrow/api.h>
 #include "ScanTableCursor.h"
+#include "DBColumnBuilder.h"
 
 class DBGenValue {};
 
@@ -33,7 +34,10 @@ public:
 
     std::shared_ptr<arrow::Table> getTable();
 
-    void addRow(std::vector<std::shared_ptr<DBGenValue>> &values);
+    void addRow(std::vector<std::shared_ptr<DBGenValue>> values);
+
+    static std::shared_ptr<DBGenValue> int64(int64_t i);
+    static std::shared_ptr<DBGenValue> float64(double d);
 
 
 private:
@@ -41,7 +45,9 @@ private:
     std::shared_ptr<arrow::Table> _table;
     std::vector<GenericColumnCursor::Encoding> _encodings;
     std::vector<std::shared_ptr<arrow::Column>> _columns;
+
+    std::vector<std::shared_ptr<DBGenColumnBuilder>> _builders;
 };
 
 
-#endif //ARROW_SIMPLEDB_DBTABLE_H
+#endif // DB_TABLE_H
