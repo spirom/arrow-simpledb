@@ -15,5 +15,4 @@ set(ARROW_LINK_DIRS ${ARROW_ROOT}/cpp/release/release)
 
 ADD_SUBDIRECTORY(libdb)
 ADD_SUBDIRECTORY(testdb)
-ADD_SUBDIRECTORY(main)
 
