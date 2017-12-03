@@ -5,7 +5,8 @@
 a convenient set of C++ APIs (among others) for working with that representation.
 
 This project explores how an extremely simple database query engine might be implemented on top of Arrow,
-and thus how the complexities of Arrow's table and column representation (such as chunked columns) may be
+and thus how the complexities of Arrow's table and column representation (such as chunked columns
+and dictionary encodings) may be
 abstracted away so that most of the query engine is oblivious to them. Of course, an important goal is to
 preserve Arrow's performance advantages.
 
@@ -16,13 +17,63 @@ and a learning tool for developers of database internals.
 A fairly typical implementation model is used for operators: composable iterators
 (here called table cursors) are used to process queries against tables.
 
-The core wrapping mechanism can be seen in the files
+The core mechanism for abstracting away Arrow's data structures can be seen in the files
 [libdb/columns/ChunkedColumnCursor.h](libdb/columns/ChunkedColumnCursor.h)
 and
 [libdb/columns/ChunkedColumnCursor.cpp](libdb/columns/ChunkedColumnCursor.cpp),
 where the multiple chunks that comprise a column are hidden behind a uniform interface, including a `seek()` method.
 
-# Queries Over Arrow Tables
+Another abstraction mechanism for easily populating tables with data can be seen in
+[libdb/tables/DBTable.h](libdb/tables/DBTable.h)
+and [libdb/tables/DBTable.cpp](libdb/tables/DBTable.cpp)
+
+# Creating and Populating Tables
+
+The `DBTable` class encapsulates an Arrow table together with additional metadata, such as column encodings.
+The following example creates two columns: `id` of type `int64` and `cost` of type float64 (double).
+
+    DBTable *pTable = new DBTable(
+                {"id", "cost"},
+                {arrow::int64(), arrow::float64()},
+                {GenericColumnCursor::PLAIN, GenericColumnCursor::PLAIN}
+            );
+
+    table.reset(pTable);
+
+    table->addRow({DBTable::int64(11), DBTable::float64(21.9)});
+    table->addRow({DBTable::int64(12), DBTable::float64(22.9)});
+
+    table->make();
+
+The call to `make()` prepares the table for use.
+Specify `GenericColumnCursor::DICT` to make a the corresponding column dictionary encoded (not supported for double.)
+
+Optional calls to `endChunk()` causes the underlying columns to be broken into multiple chunks. Each such call closes
+the current chunk for each column and begins a new one. In the following example, each column has two chunks of
+two values each.
+
+    DBTable *pTable = new DBTable(
+            {"id", "cost"},
+            {arrow::int64(), arrow::float64()},
+            {GenericColumnCursor::PLAIN, GenericColumnCursor::PLAIN}
+    );
+
+    table.reset(pTable);
+
+    table->addRow({DBTable::int64(11), DBTable::float64(21.9)});
+    table->addRow({DBTable::int64(12), DBTable::float64(22.9)});
+
+    table->endChunk();
+
+    table->addRow({DBTable::int64(31), DBTable::float64(41.9)});
+    table->addRow({DBTable::int64(32), DBTable::float64(42.9)});
+
+    table->make();
+
+    return Status::OK();
+
+
+# Querying Tables
 
 The unit tests show how simple queries can be executed against tables created through Arrow APIs.
 Queries are constructed by composing implementations of the `TableCursor` virtual class: currently just
@@ -31,22 +82,19 @@ outermost `TableCursor` to obtain a `GenericColumnCursor`.
 
 For example, a scan cursor can be used to simply scan a table:
 
-    std::shared_ptr<Table> table = ... ; // create an Arrow table
-    ScanTableCursor tc(table); // define a cursor to scan the entire table
+    std::shared_ptr<TableCursor> tc = dbTable->getScanCursor();
 
     // get pointers to two columns named "id" and "cost"
     auto id_cursor =
         std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Type>>(
-                tc.getColumn(std::string("id")));
+                tc->getColumn(std::string("id")));
     auto cost_cursor =
         std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleType>>(
-                tc.getColumn(std::string("cost")));
+                tc->getColumn(std::string("cost")));
 
     // iterate through the table and print it
-    while (tc.hasMore()) { // advances cursor -- must be called before first element
-        std::print << "Row = " << tc.getPosition() <<
-            ", id = " << id_cursor->get() <<
-            ", cost = " << cost_cursor.get() <<
+    while (tc->hasMore()) { // advances cursor -- must be called before first element
+        std::print << "id = " << id_cursor->get() << ", cost = " << cost_cursor.get() <<
             std::endl;
         //
     }
@@ -57,7 +105,7 @@ when the query is executed.
 
 Additionally, a filtering and projection cursor can be composed to fetch certain rows:
 
-    ScanTableCursor tc(table);
+    std::shared_ptr<TableCursor> tc = dbTable->getScanCursor();
 
     std::shared_ptr<Filter> leftFilter =
         std::make_shared<GreaterThanFilter<arrow::Int64Type>>("id", 31);
@@ -66,7 +114,7 @@ Additionally, a filtering and projection cursor can be composed to fetch certain
     std::shared_ptr<Filter> andFilter =
             std::make_shared<AndFilter>("id", leftFilter, rightFilter);
 
-    FilterProjectTableCursor fptc(tc, andFilter);
+    FilterProjectTableCursor fptc(*tc, andFilter);
 
     // Note: the column cursors must always be obtained from the appropriate table cursor
     auto id_cursor =
@@ -76,39 +124,37 @@ Additionally, a filtering and projection cursor can be composed to fetch certain
         std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleType>>(
             fptc.getColumn(std::string("cost")));
 
-    while (tc.hasMore()) {
+    while (fptc.hasMore()) {
         // ...
     }
 
 Table cursors can be composed arbitrarily:
 
-    ScanTableCursor tc(table);
+    std::shared_ptr<TableCursor> tc = dbTable->getScanCursor();
 
     std::shared_ptr<Filter> first_filter =
         std::make_shared<GreaterThanFilter<arrow::Int64Type>>("id", 11);
-    FilterProjectTableCursor first_cursor(tc, first_filter);
+    FilterProjectTableCursor first_cursor(*tc, first_filter);
 
     std::shared_ptr<Filter> second_filter =
         std::make_shared<LessThanFilter<arrow::DoubleType>>("cost", 42);
     FilterProjectTableCursor second_cursor(first_cursor, second_filter);
 
-## Dictionary encoded columns
+## More Examples
 
-The query dictionary encoded columns, use the `ScanTableCursor` constructor that tales an array of encodings.
-The encodings apply to the table columns in the order in which they appear int he table.
-For example:
-
-    ScanTableCursor tc(table, { GenericColumnCursor::PLAIN, GenericColumnCursor::DICT });
+See the unit tests in [testdb/TableTest.cpp](testdb/TableTest.cpp) for more examples of how to use the query
+framework, and the test setup code in [testdb/Tables.cpp](testdb/Tables.cpp) for more examples of creating and
+populating tables.
 
 # Things Not Yet Investigated
 
-* A cleaner way to create tables
-* Encodings (dictionary, ...)
 * Data representation
   * Nulls
   * Non-relational data
-* A full range of column types (currently just int64 and double)
-* Vectorized execution
+* A full range of column types (currently just int64, double and string)
+* The table creation and query framework currently uses some Arrow datatypes in its API -- that may not be a good idea.
+* Memory pools are not used very thoughtfully.
+* Vectorized execution -- in fact the framework currently mnakes heavy use of virtual methods at considerable cost
 * Parallelism
 
 # Dependencies

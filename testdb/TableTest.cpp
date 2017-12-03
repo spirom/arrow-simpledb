@@ -348,6 +348,8 @@ TEST_F(TableTest, ChunkedDictionaryColumns) {
 
 // TODO: table cursor reset
 
+// TODO: add to a table after the call to make
+
 // TODO: filter on dictionary column (efficiently?)
 
 // TODO: test empty column
