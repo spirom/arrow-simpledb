@@ -18,19 +18,20 @@ DBTable::DBTable(
     for (uint64_t i = 0; i < names.size(); i++) {
         std::shared_ptr<arrow::DataType> tp = types.at(i);
         std::shared_ptr<Field> field = arrow::field(names.at(i), tp);
+        GenericColumnCursor::Encoding encoding = encodings.at(i);
         schema_vector.push_back(field);
 
         switch (tp->id()) {
             case arrow::Type::INT64: {
-                _builders.push_back(std::make_shared<DBColumnBuilder<arrow::Int64Type>>(field));
+                _builders.push_back(std::make_shared<DBColumnBuilder<arrow::Int64Type>>(field, encoding));
                 break;
             }
             case arrow::Type::DOUBLE: {
-                _builders.push_back(std::make_shared<DBColumnBuilder<arrow::DoubleType>>(field));
+                _builders.push_back(std::make_shared<DBColumnBuilder<arrow::DoubleType>>(field, encoding));
                 break;
             }
             case arrow::Type::STRING: {
-                _builders.push_back(std::make_shared<DBColumnBuilder<arrow::StringType>>(field));
+                _builders.push_back(std::make_shared<DBColumnBuilder<arrow::StringType>>(field, encoding));
                 break;
             }
             default:

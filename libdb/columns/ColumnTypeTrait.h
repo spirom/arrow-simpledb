@@ -39,6 +39,7 @@ public:
     typedef typename arrow::DoubleType::c_type ReturnType;
     typedef arrow::DoubleBuilder BuilderType;
     // TODO: what if there _is_ no corresponding dictionary type ???
+    typedef arrow::DoubleBuilder DictionaryBuilderType;
 };
 
 #endif // COLUMN_TYPE_TRAIT_H

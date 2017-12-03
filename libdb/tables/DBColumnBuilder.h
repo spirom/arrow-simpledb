@@ -4,6 +4,7 @@
 #define DB_COLUMN_BUILDER_H
 
 #include <columns/ColumnTypeTrait.h>
+#include <arrow/api.h>
 
 class DBGenValue {
 
@@ -44,9 +45,9 @@ class DBColumnBuilder : public ColumnTypeTrait<T>, public DBGenColumnBuilder {
 
 public:
 
-    explicit DBColumnBuilder( std::shared_ptr<arrow::Field> field);
+    explicit DBColumnBuilder( std::shared_ptr<arrow::Field> field, GenericColumnCursor::Encoding encoding);
 
-    virtual void add(std::shared_ptr<DBGenValue> value) override;
+    void add(std::shared_ptr<DBGenValue> value) override;
 
     void endChunk() override;
 
@@ -58,7 +59,12 @@ protected:
 
 private:
 
-    typename ColumnTypeTrait<T>::BuilderType _builder;
+    bool _haveData;
+
+    GenericColumnCursor::Encoding _encoding;
+
+    std::unique_ptr<typename ColumnTypeTrait<T>::BuilderType> _builder;
+    std::unique_ptr<typename ColumnTypeTrait<T>::DictionaryBuilderType> _dictBuilder;
 
     arrow::ArrayVector _chunks;
 
