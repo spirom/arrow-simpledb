@@ -61,6 +61,7 @@ ScanTableCursor::addColumn(std::shared_ptr<arrow::Column> column, GenericColumnC
 bool
 ScanTableCursor::hasMore()
 {
+    if (_size == 0) return false;
     if (_initial_state) {
         _initial_state = false;
         _position = 0;

@@ -12,6 +12,8 @@ class DBTable;
 
 class Tables {
 public:
+    static arrow::Status createNoRows(std::shared_ptr<DBTable>& table);
+
     static arrow::Status createSmallSimpleColumns(std::shared_ptr<DBTable>& table);
     static arrow::Status createSmallSimpleStringColumns(std::shared_ptr<DBTable>& table);
 

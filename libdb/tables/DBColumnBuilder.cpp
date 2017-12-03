@@ -41,7 +41,9 @@ template <typename T>
 void
 DBColumnBuilder<T>::endChunk()
 {
-    if (_haveData) {
+    // Arrow doesn't like to create columns with no chunks so if we don't have any at all
+    // we create an empty one
+    if (_haveData || _chunks.size() == 0) {
         if (_encoding == GenericColumnCursor::Encoding::DICT) {
             std::shared_ptr<arrow::Array> array;
             _dictBuilder->Finish(&array);

@@ -346,13 +346,107 @@ TEST_F(TableTest, ChunkedDictionaryColumns) {
     EXPECT_FALSE(tc->hasMore());
 }
 
-// TODO: table cursor reset
+TEST_F(TableTest, ResetCursor) {
+    std::shared_ptr<DBTable> dbTable;
+    EXPECT_EQ(Status::OK().code(), Tables::createSmallChunkedColumns(dbTable).code());
 
-// TODO: add to a table after the call to make
+    std::shared_ptr<Table> table = dbTable->getTable();
+    EXPECT_EQ(4, table->num_rows());
+    EXPECT_EQ(2, table->num_columns());
+
+    std::shared_ptr<TableCursor> tc = dbTable->getScanCursor();
+    auto id_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Type>>(
+            tc->getColumn(std::string("id")));
+    auto cost_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleType>>(
+            tc->getColumn(std::string("cost")));
+    EXPECT_TRUE(tc->hasMore());
+    EXPECT_EQ(11, id_cursor->get());
+    EXPECT_EQ(21.9, cost_cursor->get());
+
+    tc->reset();
+
+    EXPECT_TRUE(tc->hasMore());
+    EXPECT_EQ(11, id_cursor->get());
+    EXPECT_EQ(21.9, cost_cursor->get());
+    EXPECT_TRUE(tc->hasMore());
+    EXPECT_EQ(12, id_cursor->get());
+    EXPECT_EQ(22.9, cost_cursor->get());
+    EXPECT_TRUE(tc->hasMore());
+    EXPECT_EQ(31, id_cursor->get());
+    EXPECT_EQ(41.9, cost_cursor->get());
+    EXPECT_TRUE(tc->hasMore());
+    EXPECT_EQ(32, id_cursor->get());
+    EXPECT_EQ(42.9, cost_cursor->get());
+    EXPECT_FALSE(tc->hasMore());
+
+    tc->reset();
+
+    EXPECT_TRUE(tc->hasMore());
+    EXPECT_EQ(11, id_cursor->get());
+    EXPECT_EQ(21.9, cost_cursor->get());
+
+}
+
+TEST_F(TableTest, AddAfterMake) {
+    std::shared_ptr<DBTable> dbTable;
+    EXPECT_EQ(Status::OK().code(), Tables::createSmallChunkedColumns(dbTable).code());
+
+    std::shared_ptr<Table> table = dbTable->getTable();
+    EXPECT_EQ(4, table->num_rows());
+    EXPECT_EQ(2, table->num_columns());
+
+    dbTable->addRow({DBTable::int64(51), DBTable::float64(61.9)});
+    dbTable->addRow({DBTable::int64(52), DBTable::float64(62.9)});
+
+    dbTable->make();
+
+    table = dbTable->getTable();
+    EXPECT_EQ(6, table->num_rows());
+    EXPECT_EQ(2, table->num_columns());
+
+    std::shared_ptr<TableCursor> tc = dbTable->getScanCursor();
+    auto id_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Type>>(
+            tc->getColumn(std::string("id")));
+    auto cost_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleType>>(
+            tc->getColumn(std::string("cost")));
+    EXPECT_TRUE(tc->hasMore());
+    EXPECT_EQ(11, id_cursor->get());
+    EXPECT_EQ(21.9, cost_cursor->get());
+    EXPECT_TRUE(tc->hasMore());
+    EXPECT_EQ(12, id_cursor->get());
+    EXPECT_EQ(22.9, cost_cursor->get());
+    EXPECT_TRUE(tc->hasMore());
+    EXPECT_EQ(31, id_cursor->get());
+    EXPECT_EQ(41.9, cost_cursor->get());
+    EXPECT_TRUE(tc->hasMore());
+    EXPECT_EQ(32, id_cursor->get());
+    EXPECT_EQ(42.9, cost_cursor->get());
+    EXPECT_TRUE(tc->hasMore());
+    EXPECT_EQ(51, id_cursor->get());
+    EXPECT_EQ(61.9, cost_cursor->get());
+    EXPECT_TRUE(tc->hasMore());
+    EXPECT_EQ(52, id_cursor->get());
+    EXPECT_EQ(62.9, cost_cursor->get());
+    EXPECT_FALSE(tc->hasMore());
+}
+
+TEST_F(TableTest, NoRows) {
+    std::shared_ptr<DBTable> dbTable;
+    EXPECT_EQ(Status::OK().code(), Tables::createNoRows(dbTable).code());
+
+    std::shared_ptr<Table> table = dbTable->getTable();
+    EXPECT_EQ(0, table->num_rows());
+    EXPECT_EQ(2, table->num_columns());
+
+    std::shared_ptr<TableCursor> tc = dbTable->getScanCursor();
+    auto id_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Type>>(
+            tc->getColumn(std::string("id")));
+    auto cost_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleType>>(
+            tc->getColumn(std::string("cost")));
+    EXPECT_FALSE(tc->hasMore());
+}
 
 // TODO: filter on dictionary column (efficiently?)
-
-// TODO: test empty column
 
 // TODO: test mismatched column lengths
 

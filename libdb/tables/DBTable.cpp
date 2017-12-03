@@ -63,6 +63,7 @@ DBTable::endChunk()
 
 void
 DBTable::make() {
+    _columns.clear();
     for (auto builder : _builders) {
         _columns.push_back(builder->getColumn());
     }

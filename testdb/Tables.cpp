@@ -21,6 +21,22 @@ using arrow::DictionaryBuilder;
 using arrow::StringDictionaryBuilder;
 
 arrow::Status
+Tables::createNoRows(std::shared_ptr<DBTable>& table) {
+
+    DBTable *pTable = new DBTable(
+            {"id", "cost"},
+            {arrow::int64(), arrow::float64()},
+            {GenericColumnCursor::PLAIN, GenericColumnCursor::PLAIN}
+    );
+
+    table.reset(pTable);
+
+    table->make();
+
+    return Status::OK();
+}
+
+arrow::Status
 Tables::createSmallSimpleColumns(std::shared_ptr<DBTable>& table) {
 
     DBTable *pTable = new DBTable(
