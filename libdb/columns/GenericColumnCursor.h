@@ -9,6 +9,12 @@
 
 class TableCursor;
 
+/**
+ * Access to columns, controlled by a TableCursor. Obtain one of these by
+ * calling getColumn on your outermost TableCursor, and use that TableCursor's hasMore()
+ * method to iterate. TO get data out of one of these, cast it to the right kind of
+ * ColumnCursorWrapper and call get().
+ */
 class GenericColumnCursor {
 public:
     enum Encoding { PLAIN = 0, DICT };

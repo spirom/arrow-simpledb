@@ -14,7 +14,7 @@ class GenericColumnCursor;
 class TableTest;
 
 /**
- * Table cursor implementation for scanning a table.
+ * Table cursor implementation for scanning a table. Get this by calling getScanCursor() on a DBTable.
  */
 class ScanTableCursor : public TableCursor {
     friend class TableTest;
@@ -37,11 +37,11 @@ public:
             std::shared_ptr<arrow::Table> table
     );
 
-    std::shared_ptr<GenericColumnCursor> getColumn(std::string colName);
+    std::shared_ptr<GenericColumnCursor> getColumn(std::string colName) override;
 
-    bool hasMore();
+    bool hasMore() override;
 
-    void reset();
+    void reset() override;
 
 
 

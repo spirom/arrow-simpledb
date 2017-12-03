@@ -7,6 +7,10 @@
 
 class Filter;
 
+/**
+ * Cursor for filtering and projecting a table. Compose with some other cursor.
+ * Compose filters from classes like GreaterTHanFilter, LessThanFilter and AndFilter.
+ */
 class FilterProjectTableCursor : public TableCursor {
 public:
     explicit FilterProjectTableCursor(TableCursor& source_cursor, std::shared_ptr<Filter> &filter);
@@ -16,8 +20,6 @@ public:
     bool hasMore() override;
 
     void reset() override;
-
-
 
 protected:
     uint64_t getPosition() override;

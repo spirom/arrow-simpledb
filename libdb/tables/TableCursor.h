@@ -37,6 +37,8 @@ public:
      */
     virtual void reset() = 0;
 
+    virtual ~TableCursor() = default;
+
 protected:
     virtual uint64_t getPosition() = 0;
 };
