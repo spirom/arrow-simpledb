@@ -30,7 +30,7 @@ and [libdb/tables/DBTable.cpp](libdb/tables/DBTable.cpp)
 # Creating and Populating Tables
 
 The `DBTable` class encapsulates an Arrow table together with additional metadata, such as column encodings.
-The following example creates two columns: `id` of type `int64` and `cost` of type float64 (double).
+The following example creates two columns: `id` of type `int64` and `cost` of type `float64` (double).
 
     DBTable *pTable = new DBTable(
                 {"id", "cost"},
