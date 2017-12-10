@@ -371,8 +371,8 @@ TEST_F(TableTest, AddAfterMake) {
     EXPECT_EQ(4, table->num_rows());
     EXPECT_EQ(2, table->num_columns());
 
-    dbTable->addRow({DBTable::long_val(51), DBTable::double_val(61.9)});
-    dbTable->addRow({DBTable::long_val(52), DBTable::double_val(62.9)});
+    dbTable->addRow({db::long_val(51), db::double_val(61.9)});
+    dbTable->addRow({db::long_val(52), db::double_val(62.9)});
 
     dbTable->make();
 

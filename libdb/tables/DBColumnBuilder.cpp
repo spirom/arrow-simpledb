@@ -21,8 +21,8 @@ DBColumnBuilder<T>::DBColumnBuilder(std::shared_ptr<arrow::Field> field,
 
 template < typename T>
 void
-DBColumnBuilder<T>::add(std::shared_ptr<DBGenValue> value) {
-    add(std::dynamic_pointer_cast<DBValue<typename T::ElementType>>(value)->get());
+DBColumnBuilder<T>::add(std::shared_ptr<db::GenValue> value) {
+    add(std::dynamic_pointer_cast<db::Value<typename T::ElementType>>(value)->get());
 }
 
 

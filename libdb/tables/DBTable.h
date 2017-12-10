@@ -57,29 +57,7 @@ public:
      * Add a row of values -- specified in same order as columns in constructor.
      * @param values
      */
-    void addRow(std::vector<std::shared_ptr<DBGenValue>> values);
-
-    /**
-     * Create int64 value suitable for passing into addRow().
-     * @param i
-     * @return
-     */
-    static std::shared_ptr<DBGenValue> long_val(int64_t i);
-
-    /**
-     * Create float64 value suitable for passing into addRow().
-     * @param d
-     * @return
-     */
-    static std::shared_ptr<DBGenValue> double_val(double d);
-
-    /**
-     * Create string value suitable for passing into addRow().
-     * @param s
-     * @return
-     */
-    static std::shared_ptr<DBGenValue> string_val(std::string s);
-
+    void addRow(std::vector<std::shared_ptr<db::GenValue>> values);
 
 
 private:

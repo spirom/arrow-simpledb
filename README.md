@@ -37,13 +37,11 @@ and [libdb/tables/DBTable.cpp](libdb/tables/DBTable.cpp)
 The `DBTable` class encapsulates an Arrow table together with additional metadata, such as column encodings.
 The following example creates two columns: `id` of type `long` and `cost` of type `double`.
 
-    DBTable *pTable = new DBTable(
+    DBTable *table = new DBTable(
                 {"id", "cost"},
-                {db::long(), db::double()},
+                {db::long_type(), db::double_type()},
                 {db::ColumnEncoding::PLAIN, db::ColumnEncoding::PLAIN}
             );
-
-    table.reset(pTable);
 
     table->addRow({DBTable::long_val(11), DBTable::double_val(21.9)});
     table->addRow({DBTable::long_val(12), DBTable::double_val(22.9)});
@@ -57,13 +55,11 @@ Optional calls to `endChunk()` causes the underlying columns to be broken into m
 the current chunk for each column and begins a new one. In the following example, each column has two chunks of
 two values each.
 
-    DBTable *pTable = new DBTable(
+    DBTable *table = new DBTable(
             {"id", "cost"},
-            {db::long(), db::double()},
+            {db::long_type(), db::double_type()},
             {db::ColumnEncoding::PLAIN, db::ColumnEncoding::PLAIN}
     );
-
-    table.reset(pTable);
 
     table->addRow({DBTable::long_val(11), DBTable::double_val(21.9)});
     table->addRow({DBTable::long_val(12), DBTable::double_val(22.9)});
@@ -74,8 +70,6 @@ two values each.
     table->addRow({DBTable::long_val(32), DBTable::double_val(42.9)});
 
     table->make();
-
-    return Status::OK();
 
 
 # Querying Tables

@@ -5,32 +5,11 @@
 
 #include <arrow/api.h>
 
-class DBGenValue {
-
-public:
-
-    virtual ~DBGenValue() = default;
-
-};
-
-template <typename T>
-class DBValue : public DBGenValue {
-
-public:
-
-    explicit DBValue(T value) : _value(value) {};
-
-    T get() { return _value; }
-
-private:
-    T _value;
-};
-
 class DBGenColumnBuilder {
 
 public:
 
-    virtual void add(std::shared_ptr<DBGenValue> value) = 0;
+    virtual void add(std::shared_ptr<db::GenValue> value) = 0;
 
     virtual void endChunk() = 0;
 
@@ -46,7 +25,7 @@ public:
 
     explicit DBColumnBuilder( std::shared_ptr<arrow::Field> field, db::ColumnEncoding encoding);
 
-    void add(std::shared_ptr<DBGenValue> value) override;
+    void add(std::shared_ptr<db::GenValue> value) override;
 
     void endChunk() override;
 

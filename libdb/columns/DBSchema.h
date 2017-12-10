@@ -99,6 +99,49 @@ namespace db {
      */
     std::shared_ptr<DataType> double_type();
 
+
+    class GenValue {
+
+    public:
+
+        virtual ~GenValue() = default;
+
+    };
+
+    template <typename T>
+    class Value : public GenValue {
+
+    public:
+
+        explicit Value(T value) : _value(value) {};
+
+        T get() { return _value; }
+
+    private:
+        T _value;
+    };
+
+    /**
+     * Create int64 value suitable for passing into addRow().
+     * @param i
+     * @return
+     */
+    std::shared_ptr<GenValue> long_val(int64_t i);
+
+    /**
+     * Create float64 value suitable for passing into addRow().
+     * @param d
+     * @return
+     */
+    std::shared_ptr<GenValue> double_val(double d);
+
+    /**
+     * Create string value suitable for passing into addRow().
+     * @param s
+     * @return
+     */
+    std::shared_ptr<GenValue> string_val(std::string s);
+
 };
 
 

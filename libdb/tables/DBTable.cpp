@@ -46,7 +46,7 @@ DBTable::DBTable(
 }
 
 void
-DBTable::addRow(std::vector<std::shared_ptr<DBGenValue>> values)
+DBTable::addRow(std::vector<std::shared_ptr<db::GenValue>> values)
 {
     for (size_t i = 0; i < values.size(); i++) {
         _builders.at(i)->add(values.at(i));
@@ -83,20 +83,3 @@ DBTable::getTable()
     return _table;
 }
 
-std::shared_ptr<DBGenValue>
-DBTable::long_val(int64_t i)
-{
-    return std::make_shared<DBValue<int64_t>>(i);
-}
-
-std::shared_ptr<DBGenValue>
-DBTable::double_val(double d)
-{
-    return std::make_shared<DBValue<double>>(d);
-}
-
-std::shared_ptr<DBGenValue>
-DBTable::string_val(std::string s)
-{
-    return std::make_shared<DBValue<std::string>>(s);
-}
