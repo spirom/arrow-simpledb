@@ -5,6 +5,8 @@
 #include <columns/DBSchema.h>
 #include "DBColumnBuilder.h"
 
+using namespace db;
+
 template <typename T>
 DBColumnBuilder<T>::DBColumnBuilder(std::shared_ptr<arrow::Field> field,
                                     db::ColumnEncoding encoding)

@@ -3,6 +3,8 @@
 
 #include "GreaterThanFilter.h"
 
+namespace db {
+
 template <typename T>
 GreaterThanFilter<T>::GreaterThanFilter(std::string column_name, typename T::ElementType value)
         : _column_name(column_name), _value(value)
@@ -29,5 +31,7 @@ GreaterThanFilter<T>::evaluate()
     return _cursor->get() > _value;
 }
 
-template class GreaterThanFilter<db::LongType>;
-template class GreaterThanFilter<db::DoubleType>;
+};
+
+template class db::GreaterThanFilter<db::LongType>;
+template class db::GreaterThanFilter<db::DoubleType>;

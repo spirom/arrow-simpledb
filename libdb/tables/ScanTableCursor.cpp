@@ -1,6 +1,8 @@
 
 #include "ScanTableCursor.h"
 
+using namespace db;
+
 ScanTableCursor::ScanTableCursor(
         std::shared_ptr<arrow::Table> table,
         std::vector<db::ColumnEncoding> encodings

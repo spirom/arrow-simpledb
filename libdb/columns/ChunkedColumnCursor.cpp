@@ -4,25 +4,25 @@
 #include "ChunkedColumnCursor.h"
 #include "DBSchema.h"
 
-template <typename T>
+
+namespace db {
+
+template<typename T>
 ChunkedColumnCursor<T>::ChunkedColumnCursor(std::shared_ptr<arrow::Column> column)
-        : _column(std::move(column))
-{
+        : _column(std::move(column)) {
     // std::cout << "Cursor: [" << _column->data()->num_chunks() << "]" << std::endl;
     reset();
 }
 
-template <typename T>
+template<typename T>
 bool
-ChunkedColumnCursor<T>::hasMore()
-{
+ChunkedColumnCursor<T>::hasMore() {
     return (_pos + 1) < _column->length();
 }
 
-template <typename T>
+template<typename T>
 bool
-ChunkedColumnCursor<T>::next()
-{
+ChunkedColumnCursor<T>::next() {
     if ((_pos + 1) < _column->length()) {
         _pos++;
         _pos_in_chunk++;
@@ -38,30 +38,27 @@ ChunkedColumnCursor<T>::next()
     }
 }
 
-template <typename T>
-bool ChunkedColumnCursor<T>::isNull()
-{
+template<typename T>
+bool
+ChunkedColumnCursor<T>::isNull() {
     return false; // TODO: handle nulls
 }
 
-template <typename T>
+template<typename T>
 typename T::ElementType
-ChunkedColumnCursor<T>::get()
-{
+ChunkedColumnCursor<T>::get() {
     return _current_chunk->Value(_pos_in_chunk);
 }
 
-template <>
+template<>
 typename db::StringType::ElementType
-ChunkedColumnCursor<db::StringType>::get()
-{
+ChunkedColumnCursor<db::StringType>::get() {
     return _current_chunk->GetString(_pos_in_chunk);
 }
 
-template <typename T>
+template<typename T>
 void
-ChunkedColumnCursor<T>::reset()
-{
+ChunkedColumnCursor<T>::reset() {
 
     _pos = 0;
     _chunk = 0;
@@ -71,14 +68,13 @@ ChunkedColumnCursor<T>::reset()
     // TODO: this may fail if the column is empty
 }
 
-template <typename T>
+template<typename T>
 bool
-ChunkedColumnCursor<T>::seek(uint64_t to)
-{
+ChunkedColumnCursor<T>::seek(uint64_t to) {
     // the key idea here is to avoid touching the memory of the intervening chunks completely
     int64_t distance = to - _pos;
     while (_pos_in_chunk + distance >= _current_chunk->length()) {
-        int64_t advancing =_current_chunk->length() - _pos_in_chunk;
+        int64_t advancing = _current_chunk->length() - _pos_in_chunk;
         distance -= advancing;
         if (!advance_chunk()) return false;
         _pos += advancing;
@@ -90,7 +86,7 @@ ChunkedColumnCursor<T>::seek(uint64_t to)
     return true;
 }
 
-template <typename T>
+template<typename T>
 bool
 ChunkedColumnCursor<T>::advance_chunk() {
     if ((_chunk + 1) < _column->data()->num_chunks()) {
@@ -104,6 +100,8 @@ ChunkedColumnCursor<T>::advance_chunk() {
     }
 }
 
-template class ChunkedColumnCursor<db::LongType>;
-template class ChunkedColumnCursor<db::DoubleType>;
-template class ChunkedColumnCursor<db::StringType>;
+};
+
+template class db::ChunkedColumnCursor<db::LongType>;
+template class db::ChunkedColumnCursor<db::DoubleType>;
+template class db::ChunkedColumnCursor<db::StringType>;

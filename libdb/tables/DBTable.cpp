@@ -5,6 +5,8 @@
 using arrow::Table;
 using arrow::Field;
 
+using namespace db;
+
 DBTable::DBTable(
         std::vector<std::string> names,
         std::vector<std::shared_ptr<db::DataType>> types,

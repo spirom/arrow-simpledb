@@ -6,7 +6,7 @@
 #include "columns/ChunkedColumnCursor.h"
 #include "columns/ChunkedDictColumnCursor.h"
 
-
+using namespace db;
 
 template <typename T>
 ColumnCursorWrapper<T>::ColumnCursorWrapper(

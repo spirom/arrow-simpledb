@@ -5,6 +5,8 @@
 #include "filters/Filter.h"
 #include "columns/ColumnCursorWrapper.h"
 
+using namespace db;
+
 FilterProjectTableCursor::FilterProjectTableCursor(TableCursor &source_cursor, std::shared_ptr<Filter> &filter)
         : _source_cursor(source_cursor), _filter(filter)
 {

@@ -5,48 +5,52 @@
 
 #include <arrow/api.h>
 
-class DBGenColumnBuilder {
+namespace db {
 
-public:
+    class DBGenColumnBuilder {
 
-    virtual void add(std::shared_ptr<db::GenValue> value) = 0;
+    public:
 
-    virtual void endChunk() = 0;
+        virtual void add(std::shared_ptr<db::GenValue> value) = 0;
 
-    virtual std::shared_ptr<arrow::Column> getColumn() = 0;
+        virtual void endChunk() = 0;
 
-    virtual ~DBGenColumnBuilder() = default;
-};
+        virtual std::shared_ptr<arrow::Column> getColumn() = 0;
 
-template <typename T>
-class DBColumnBuilder : public DBGenColumnBuilder {
+        virtual ~DBGenColumnBuilder() = default;
+    };
 
-public:
+    template<typename T>
+    class DBColumnBuilder : public DBGenColumnBuilder {
 
-    explicit DBColumnBuilder( std::shared_ptr<arrow::Field> field, db::ColumnEncoding encoding);
+    public:
 
-    void add(std::shared_ptr<db::GenValue> value) override;
+        explicit DBColumnBuilder(std::shared_ptr<arrow::Field> field, db::ColumnEncoding encoding);
 
-    void endChunk() override;
+        void add(std::shared_ptr<db::GenValue> value) override;
 
-    std::shared_ptr<arrow::Column> getColumn() override;
+        void endChunk() override;
 
-protected:
+        std::shared_ptr<arrow::Column> getColumn() override;
 
-    void add(typename T::ElementType element);
+    protected:
 
-private:
+        void add(typename T::ElementType element);
 
-    bool _haveData;
+    private:
 
-    db::ColumnEncoding _encoding;
+        bool _haveData;
 
-    std::unique_ptr<typename T::BuilderType> _builder;
-    std::unique_ptr<typename T::DictionaryBuilderType> _dictBuilder;
+        db::ColumnEncoding _encoding;
 
-    arrow::ArrayVector _chunks;
+        std::unique_ptr<typename T::BuilderType> _builder;
+        std::unique_ptr<typename T::DictionaryBuilderType> _dictBuilder;
 
-    std::shared_ptr<arrow::Field> _field;
+        arrow::ArrayVector _chunks;
+
+        std::shared_ptr<arrow::Field> _field;
+    };
+
 };
 
 

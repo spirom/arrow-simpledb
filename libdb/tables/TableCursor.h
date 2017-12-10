@@ -10,58 +10,64 @@
 #include <arrow/api.h>
 #include <columns/DBSchema.h>
 
-class GenericColumnCursor;
-class FilterProjectTableCursor;
+namespace db {
 
-template <typename T>
-class ColumnCursorWrapper;
+    class GenericColumnCursor;
+
+    class FilterProjectTableCursor;
+
+    template<typename T>
+    class ColumnCursorWrapper;
 
 /**
  * Common base of all table cursors, exposing row iteration and access to columns.
  */
-class TableCursor {
+    class TableCursor {
 
-    friend class GenericColumnCursor;
-    friend class FilterProjectTableCursor;
-public:
+        friend class GenericColumnCursor;
 
-    /**
-     * Get access to the specified String type column, always synchronized with this cursor's position.
-     * @param colName
-     * @return
-     */
-    virtual std::shared_ptr<ColumnCursorWrapper<db::StringType>> getStringColumn(std::string colName) = 0;
+        friend class FilterProjectTableCursor;
 
-    /**
-     * Get access to the specified Long type column, always synchronized with this cursor's position.
-     * @param colName
-     * @return
-     */
-    virtual std::shared_ptr<ColumnCursorWrapper<db::LongType>> getLongColumn(std::string colName) = 0;
+    public:
 
-    /**
-     * Get access to the specified Double type column, always synchronized with this cursor's position.
-     * @param colName
-     * @return
-     */
-    virtual std::shared_ptr<ColumnCursorWrapper<db::DoubleType>> getDoubleColumn(std::string colName) = 0;
+        /**
+         * Get access to the specified String type column, always synchronized with this cursor's position.
+         * @param colName
+         * @return
+         */
+        virtual std::shared_ptr<ColumnCursorWrapper<db::StringType>> getStringColumn(std::string colName) = 0;
 
-    /**
-     * True if there are more rows.
-     * @return
-     */
-    virtual bool hasMore() = 0;
+        /**
+         * Get access to the specified Long type column, always synchronized with this cursor's position.
+         * @param colName
+         * @return
+         */
+        virtual std::shared_ptr<ColumnCursorWrapper<db::LongType>> getLongColumn(std::string colName) = 0;
 
-    /**
-     * Reaset to start and ready to iterate again.
-     */
-    virtual void reset() = 0;
+        /**
+         * Get access to the specified Double type column, always synchronized with this cursor's position.
+         * @param colName
+         * @return
+         */
+        virtual std::shared_ptr<ColumnCursorWrapper<db::DoubleType>> getDoubleColumn(std::string colName) = 0;
 
-    virtual ~TableCursor() = default;
+        /**
+         * True if there are more rows.
+         * @return
+         */
+        virtual bool hasMore() = 0;
 
-protected:
-    virtual uint64_t getPosition() = 0;
+        /**
+         * Reaset to start and ready to iterate again.
+         */
+        virtual void reset() = 0;
+
+        virtual ~TableCursor() = default;
+
+    protected:
+        virtual uint64_t getPosition() = 0;
+    };
+
 };
-
 
 #endif // TABLE_CURSOR_H

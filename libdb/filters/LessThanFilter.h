@@ -8,24 +8,27 @@
 #include "tables/TableCursor.h"
 #include "columns/ColumnCursorWrapper.h"
 
-template <typename T>
-class LessThanFilter  : public Filter {
-public:
+namespace db {
 
-    LessThanFilter(std::string column_name, typename T::ElementType value);
+    template<typename T>
+    class LessThanFilter : public Filter {
+    public:
 
-    void initialize(TableCursor &table_cursor) override;
+        LessThanFilter(std::string column_name, typename T::ElementType value);
 
-    bool evaluate() override;
+        void initialize(TableCursor &table_cursor) override;
 
-private:
+        bool evaluate() override;
 
-    std::string _column_name;
+    private:
 
-    double _value;
+        std::string _column_name;
 
-    std::shared_ptr <ColumnCursorWrapper<T>> _cursor;
+        double _value;
+
+        std::shared_ptr<ColumnCursorWrapper<T>> _cursor;
+    };
+
 };
-
 
 #endif // LESSTHANFILTER_H

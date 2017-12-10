@@ -11,9 +11,9 @@ using arrow::Column;
 using arrow::Field;
 
 arrow::Status
-Tables::createNoRows(std::shared_ptr<DBTable>& table) {
+Tables::createNoRows(std::shared_ptr<db::DBTable>& table) {
 
-    DBTable *pTable = new DBTable(
+    db::DBTable *pTable = new db::DBTable(
             {"id", "cost"},
             {db::long_type(), db::double_type()},
             {db::ColumnEncoding::PLAIN, db::ColumnEncoding::PLAIN}
@@ -27,9 +27,9 @@ Tables::createNoRows(std::shared_ptr<DBTable>& table) {
 }
 
 arrow::Status
-Tables::createSmallSimpleColumns(std::shared_ptr<DBTable>& table) {
+Tables::createSmallSimpleColumns(std::shared_ptr<db::DBTable>& table) {
 
-    DBTable *pTable = new DBTable(
+    db::DBTable *pTable = new db::DBTable(
                 {"id", "cost"},
                 {db::long_type(), db::double_type()},
                 {db::ColumnEncoding::PLAIN, db::ColumnEncoding::PLAIN}
@@ -46,9 +46,9 @@ Tables::createSmallSimpleColumns(std::shared_ptr<DBTable>& table) {
 }
 
 arrow::Status
-Tables::createSmallSimpleStringColumns(std::shared_ptr<DBTable>& table)
+Tables::createSmallSimpleStringColumns(std::shared_ptr<db::DBTable>& table)
 {
-    DBTable *pTable = new DBTable(
+    db::DBTable *pTable = new db::DBTable(
             {"foo", "bar"},
             {db::string_type(), db::string_type()},
             {db::ColumnEncoding::PLAIN, db::ColumnEncoding::PLAIN}
@@ -65,9 +65,9 @@ Tables::createSmallSimpleStringColumns(std::shared_ptr<DBTable>& table)
 }
 
 arrow::Status
-Tables::createSmallChunkedColumns(std::shared_ptr<DBTable>& table)
+Tables::createSmallChunkedColumns(std::shared_ptr<db::DBTable>& table)
 {
-    DBTable *pTable = new DBTable(
+    db::DBTable *pTable = new db::DBTable(
             {"id", "cost"},
             {db::long_type(), db::double_type()},
             {db::ColumnEncoding::PLAIN, db::ColumnEncoding::PLAIN}
@@ -89,9 +89,9 @@ Tables::createSmallChunkedColumns(std::shared_ptr<DBTable>& table)
 }
 
 arrow::Status
-Tables::createSimple(std::shared_ptr<DBTable>& table)
+Tables::createSimple(std::shared_ptr<db::DBTable>& table)
 {
-    DBTable *pTable = new DBTable(
+    db::DBTable *pTable = new db::DBTable(
             {"id", "cost"},
             {db::long_type(), db::double_type()},
             {db::ColumnEncoding::PLAIN, db::ColumnEncoding::PLAIN}
@@ -115,9 +115,9 @@ Tables::createSimple(std::shared_ptr<DBTable>& table)
 }
 
 arrow::Status
-Tables::createSmallDictionaryColumns(std::shared_ptr<DBTable>& table)
+Tables::createSmallDictionaryColumns(std::shared_ptr<db::DBTable>& table)
 {
-    DBTable *pTable = new DBTable(
+    db::DBTable *pTable = new db::DBTable(
             {"id", "cost"},
             {db::long_type(), db::long_type()},
             {db::ColumnEncoding::DICT, db::ColumnEncoding::DICT}
@@ -153,9 +153,9 @@ Tables::createSmallDictionaryColumns(std::shared_ptr<DBTable>& table)
 }
 
 arrow::Status
-Tables::createSmallStringDictionaryColumns(std::shared_ptr<DBTable>& table)
+Tables::createSmallStringDictionaryColumns(std::shared_ptr<db::DBTable>& table)
 {
-    DBTable *pTable = new DBTable(
+    db::DBTable *pTable = new db::DBTable(
             {"foo", "bar"},
             {db::string_type(), db::string_type()},
             {db::ColumnEncoding::DICT, db::ColumnEncoding::DICT}
@@ -172,9 +172,9 @@ Tables::createSmallStringDictionaryColumns(std::shared_ptr<DBTable>& table)
 }
 
 arrow::Status
-Tables::createChunkedDictionaryColumns(std::shared_ptr<DBTable>& table)
+Tables::createChunkedDictionaryColumns(std::shared_ptr<db::DBTable>& table)
 {
-    DBTable *pTable = new DBTable(
+    db::DBTable *pTable = new db::DBTable(
             {"id", "cost"},
             {db::long_type(), db::string_type()},
             {db::ColumnEncoding::DICT, db::ColumnEncoding::DICT}

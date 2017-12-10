@@ -4,6 +4,8 @@
 
 #include "tables/TableCursor.h"
 
+using namespace db;
+
 GenericColumnCursor::GenericColumnCursor(TableCursor &table_cursor)
         : _table_cursor(table_cursor)
 {

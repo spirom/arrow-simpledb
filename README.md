@@ -29,7 +29,7 @@ and [libdb/tables/DBTable.cpp](libdb/tables/DBTable.cpp)
 
 # C++ Headers
 
-    // THe following also pulls int he crucial "columns/DBSchema.h"
+    // The following also pulls int he crucial "columns/DBSchema.h"
     #include "tables/DBTable.h"
 
 # Creating and Populating Tables
@@ -37,14 +37,14 @@ and [libdb/tables/DBTable.cpp](libdb/tables/DBTable.cpp)
 The `DBTable` class encapsulates an Arrow table together with additional metadata, such as column encodings.
 The following example creates two columns: `id` of type `long` and `cost` of type `double`.
 
-    DBTable *table = new DBTable(
+    db::DBTable *table = new db::DBTable(
                 {"id", "cost"},
                 {db::long_type(), db::double_type()},
                 {db::ColumnEncoding::PLAIN, db::ColumnEncoding::PLAIN}
             );
 
-    table->addRow({DBTable::long_val(11), DBTable::double_val(21.9)});
-    table->addRow({DBTable::long_val(12), DBTable::double_val(22.9)});
+    table->addRow({db::long_val(11), db::double_val(21.9)});
+    table->addRow({db::long_val(12), db::double_val(22.9)});
 
     table->make();
 
@@ -55,19 +55,19 @@ Optional calls to `endChunk()` causes the underlying columns to be broken into m
 the current chunk for each column and begins a new one. In the following example, each column has two chunks of
 two values each.
 
-    DBTable *table = new DBTable(
+    db::DBTable *table = new db::DBTable(
             {"id", "cost"},
             {db::long_type(), db::double_type()},
             {db::ColumnEncoding::PLAIN, db::ColumnEncoding::PLAIN}
     );
 
-    table->addRow({DBTable::long_val(11), DBTable::double_val(21.9)});
-    table->addRow({DBTable::long_val(12), DBTable::double_val(22.9)});
+    table->addRow({db::long_val(11), db::double_val(21.9)});
+    table->addRow({db::long_val(12), db::double_val(22.9)});
 
     table->endChunk();
 
-    table->addRow({DBTable::long_val(31), DBTable::double_val(41.9)});
-    table->addRow({DBTable::long_val(32), DBTable::double_val(42.9)});
+    table->addRow({db::long_val(31), db::double_val(41.9)});
+    table->addRow({db::long_val(32), db::double_val(42.9)});
 
     table->make();
 
@@ -81,7 +81,7 @@ outermost `TableCursor` to obtain a `GenericColumnCursor`.
 
 For example, a scan cursor can be used to simply scan a table:
 
-    std::shared_ptr<TableCursor> tc = dbTable->getScanCursor();
+    std::shared_ptr<db::TableCursor> tc = table->getScanCursor();
 
     // get pointers to two columns named "id" and "cost"
     auto id_cursor = tc->getLongColumn(std::string("id"));
@@ -100,16 +100,16 @@ when the query is executed.
 
 Additionally, a filtering and projection cursor can be composed to fetch certain rows:
 
-    std::shared_ptr<TableCursor> tc = dbTable->getScanCursor();
+    std::shared_ptr<db::TableCursor> tc = table->getScanCursor();
 
-    std::shared_ptr<Filter> leftFilter =
-        std::make_shared<GreaterThanFilter<db::LongType>>("id", 31);
-    std::shared_ptr<Filter> rightFilter =
-        std::make_shared<GreaterThanFilter<db::DoubleType>>("cost", 100);
-    std::shared_ptr<Filter> andFilter =
-            std::make_shared<AndFilter>("id", leftFilter, rightFilter);
+    std::shared_ptr<db::Filter> leftFilter =
+        std::make_shared<db::GreaterThanFilter<db::LongType>>("id", 31);
+    std::shared_ptr<db::Filter> rightFilter =
+        std::make_shared<db::GreaterThanFilter<db::DoubleType>>("cost", 100);
+    std::shared_ptr<db::Filter> andFilter =
+            std::make_shared<db::AndFilter>("id", leftFilter, rightFilter);
 
-    FilterProjectTableCursor fptc(*tc, andFilter);
+    db::FilterProjectTableCursor fptc(*tc, andFilter);
 
     // Note: the column cursors must always be obtained from the appropriate table cursor
     auto id_cursor = fptc.getLongColumn(std::string("id"));
@@ -121,15 +121,15 @@ Additionally, a filtering and projection cursor can be composed to fetch certain
 
 Table cursors can be composed arbitrarily:
 
-    std::shared_ptr<TableCursor> tc = dbTable->getScanCursor();
+    std::shared_ptr<db::TableCursor> tc = dbTable->getScanCursor();
 
-    std::shared_ptr<Filter> first_filter =
-        std::make_shared<GreaterThanFilter<db::LongType>>("id", 11);
-    FilterProjectTableCursor first_cursor(*tc, first_filter);
+    std::shared_ptr<db::Filter> first_filter =
+        std::make_shared<db::GreaterThanFilter<db::LongType>>("id", 11);
+    db::FilterProjectTableCursor first_cursor(*tc, first_filter);
 
-    std::shared_ptr<Filter> second_filter =
-        std::make_shared<LessThanFilter<db::DoubleType>>("cost", 42);
-    FilterProjectTableCursor second_cursor(first_cursor, second_filter);
+    std::shared_ptr<db::Filter> second_filter =
+        std::make_shared<db::LessThanFilter<db::DoubleType>>("cost", 42);
+    db::FilterProjectTableCursor second_cursor(first_cursor, second_filter);
 
 ## More Examples
 
@@ -143,8 +143,7 @@ populating tables.
   * Nulls
   * Non-relational data
 * A full range of column types (currently just int64, double and string)
-* The table creation and query framework currently uses some Arrow datatypes in its API -- that may not be a good idea.
-* Memory pools are not used very thoughtfully.
+* Memory pools are not used at all thoughtfully.
 * Vectorized execution -- in fact the framework currently mnakes heavy use of virtual methods at considerable cost
 * Parallelism
 

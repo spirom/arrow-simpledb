@@ -3,17 +3,21 @@
 #ifndef FILTER_H
 #define FILTER_H
 
-class TableCursor;
+namespace db {
 
-class Filter {
+    class TableCursor;
 
-public:
+    class Filter {
 
-    virtual void initialize(TableCursor& table_cursor) = 0;
+    public:
 
-    virtual bool evaluate() = 0;
+        virtual void initialize(TableCursor &table_cursor) = 0;
 
-    virtual ~Filter() = default;
+        virtual bool evaluate() = 0;
+
+        virtual ~Filter() = default;
+    };
+
 };
 
 #endif // FILTER_H

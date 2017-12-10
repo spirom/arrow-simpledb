@@ -3,6 +3,8 @@
 
 #include "AndFilter.h"
 
+using namespace db;
+
 AndFilter::AndFilter(std::string column_name, std::shared_ptr<Filter> left, std::shared_ptr<Filter> right)
         : _column_name(column_name), _left(left), _right(right)
 {

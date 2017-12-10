@@ -7,24 +7,24 @@
 using arrow::Int64Type;
 using arrow::Int8Type;
 
-template <typename T>
+
+namespace db {
+
+template<typename T>
 ChunkedDictColumnCursor<T>::ChunkedDictColumnCursor(std::shared_ptr<arrow::Column> column)
-        : _column(column)
-{
+        : _column(column) {
     reset();
 }
 
-template <typename T>
+template<typename T>
 bool
-ChunkedDictColumnCursor<T>::hasMore()
-{
+ChunkedDictColumnCursor<T>::hasMore() {
     return (_pos + 1) < _column->length();
 }
 
-template <typename T>
+template<typename T>
 bool
-ChunkedDictColumnCursor<T>::next()
-{
+ChunkedDictColumnCursor<T>::next() {
     if ((_pos + 1) < _column->length()) {
         _pos++;
         _pos_in_chunk++;
@@ -40,32 +40,28 @@ ChunkedDictColumnCursor<T>::next()
     }
 }
 
-template <typename T>
-bool ChunkedDictColumnCursor<T>::isNull()
-{
+template<typename T>
+bool ChunkedDictColumnCursor<T>::isNull() {
     return false; // TODO: handle nulls
 }
 
-template <typename T>
+template<typename T>
 typename T::ElementType
-ChunkedDictColumnCursor<T>::get()
-{
+ChunkedDictColumnCursor<T>::get() {
     int index = _current_indices->Value(_pos_in_chunk);
     return _current_dict->Value(index);
 }
 
-template <>
+template<>
 typename db::StringType::ElementType
-ChunkedDictColumnCursor<db::StringType>::get()
-{
+ChunkedDictColumnCursor<db::StringType>::get() {
     int index = _current_indices->Value(_pos_in_chunk);
     return _current_dict->GetString(index);
 }
 
-template <typename T>
+template<typename T>
 void
-ChunkedDictColumnCursor<T>::populate_pointers()
-{
+ChunkedDictColumnCursor<T>::populate_pointers() {
     std::shared_ptr<arrow::DictionaryArray> dict_array =
             std::dynamic_pointer_cast<arrow::DictionaryArray>(_column->data()->chunk(_chunk));
     _current_indices =
@@ -74,10 +70,9 @@ ChunkedDictColumnCursor<T>::populate_pointers()
             std::dynamic_pointer_cast<typename T::ArrayType>(dict_array->dictionary());
 }
 
-template <typename T>
+template<typename T>
 void
-ChunkedDictColumnCursor<T>::reset()
-{
+ChunkedDictColumnCursor<T>::reset() {
     _pos = 0;
     _chunk = 0;
     _pos_in_chunk = 0;
@@ -85,14 +80,13 @@ ChunkedDictColumnCursor<T>::reset()
     // TODO: this may fail if the column is empty
 }
 
-template <typename T>
+template<typename T>
 bool
-ChunkedDictColumnCursor<T>::seek(uint64_t to)
-{
+ChunkedDictColumnCursor<T>::seek(uint64_t to) {
     // the key idea here is to avoid touching the memory of the intervening chunks completely
     int64_t distance = to - _pos;
     while (_pos_in_chunk + distance >= _current_indices->length()) {
-        int64_t advancing =_current_dict->length() - _pos_in_chunk;
+        int64_t advancing = _current_dict->length() - _pos_in_chunk;
         distance -= advancing;
         if (!advance_chunk()) return false;
         _pos += advancing;
@@ -104,7 +98,7 @@ ChunkedDictColumnCursor<T>::seek(uint64_t to)
     return true;
 }
 
-template <typename T>
+template<typename T>
 bool
 ChunkedDictColumnCursor<T>::advance_chunk() {
     if ((_chunk + 1) < _column->data()->num_chunks()) {
@@ -117,6 +111,8 @@ ChunkedDictColumnCursor<T>::advance_chunk() {
     }
 }
 
-template class ChunkedDictColumnCursor<db::LongType>;
-template class ChunkedDictColumnCursor<db::DoubleType>;
-template class ChunkedDictColumnCursor<db::StringType>;
+};
+
+template class db::ChunkedDictColumnCursor<db::LongType>;
+template class db::ChunkedDictColumnCursor<db::DoubleType>;
+template class db::ChunkedDictColumnCursor<db::StringType>;

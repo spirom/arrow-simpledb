@@ -6,34 +6,38 @@
 #include "TableCursor.h"
 #include <columns/DBSchema.h>
 
-class Filter;
+namespace db {
+
+    class Filter;
 
 /**
  * Cursor for filtering and projecting a table. Compose with some other cursor.
  * Compose filters from classes like GreaterTHanFilter, LessThanFilter and AndFilter.
  */
-class FilterProjectTableCursor : public TableCursor {
-public:
-    explicit FilterProjectTableCursor(TableCursor& source_cursor, std::shared_ptr<Filter> &filter);
+    class FilterProjectTableCursor : public TableCursor {
+    public:
+        explicit FilterProjectTableCursor(TableCursor &source_cursor, std::shared_ptr<Filter> &filter);
 
-    std::shared_ptr<ColumnCursorWrapper<db::StringType>> getStringColumn(std::string colName) override;
+        std::shared_ptr<ColumnCursorWrapper<db::StringType>> getStringColumn(std::string colName) override;
 
-    std::shared_ptr<ColumnCursorWrapper<db::LongType>> getLongColumn(std::string colName) override;
+        std::shared_ptr<ColumnCursorWrapper<db::LongType>> getLongColumn(std::string colName) override;
 
-    std::shared_ptr<ColumnCursorWrapper<db::DoubleType>> getDoubleColumn(std::string colName) override;
+        std::shared_ptr<ColumnCursorWrapper<db::DoubleType>> getDoubleColumn(std::string colName) override;
 
-    bool hasMore() override;
+        bool hasMore() override;
 
-    void reset() override;
+        void reset() override;
 
-protected:
-    uint64_t getPosition() override;
+    protected:
+        uint64_t getPosition() override;
 
-    bool satisfiesFilter();
+        bool satisfiesFilter();
 
-private:
-    TableCursor& _source_cursor;
-    std::shared_ptr<Filter> _filter;
+    private:
+        TableCursor &_source_cursor;
+        std::shared_ptr<Filter> _filter;
+
+    };
 
 };
 

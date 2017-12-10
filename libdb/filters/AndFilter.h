@@ -7,22 +7,26 @@
 #include "filters/Filter.h"
 #include "tables/TableCursor.h"
 
-class AndFilter : public Filter {
-public:
+namespace db {
 
-    AndFilter(std::string column_name, std::shared_ptr<Filter> left, std::shared_ptr<Filter> right);
+    class AndFilter : public Filter {
+    public:
 
-    void initialize(TableCursor& table_cursor) override;
+        AndFilter(std::string column_name, std::shared_ptr<Filter> left, std::shared_ptr<Filter> right);
 
-    bool evaluate() override;
+        void initialize(TableCursor &table_cursor) override;
 
-private:
+        bool evaluate() override;
 
-    std::string _column_name;
+    private:
 
-    std::shared_ptr<Filter> _left;
+        std::string _column_name;
 
-    std::shared_ptr<Filter> _right;
+        std::shared_ptr<Filter> _left;
+
+        std::shared_ptr<Filter> _right;
+
+    };
 
 };
 
