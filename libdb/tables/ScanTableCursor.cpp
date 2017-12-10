@@ -26,25 +26,25 @@ ScanTableCursor::ScanTableCursor(
     reset();
 }
 
-std::shared_ptr<ColumnCursorWrapper<arrow::StringType>>
+std::shared_ptr<ColumnCursorWrapper<db::StringType>>
 ScanTableCursor::getStringColumn(std::string colName)
 {
     if (_cursors.count(colName) == 0) return nullptr;
-    return std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::StringType>>(_cursors[colName]);
+    return std::dynamic_pointer_cast<ColumnCursorWrapper<db::StringType>>(_cursors[colName]);
 }
 
-std::shared_ptr<ColumnCursorWrapper<arrow::Int64Type>>
+std::shared_ptr<ColumnCursorWrapper<db::LongType>>
 ScanTableCursor::getLongColumn(std::string colName)
 {
     if (_cursors.count(colName) == 0) return nullptr;
-    return std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Type>>(_cursors[colName]);
+    return std::dynamic_pointer_cast<ColumnCursorWrapper<db::LongType>>(_cursors[colName]);
 }
 
-std::shared_ptr<ColumnCursorWrapper<arrow::DoubleType>>
+std::shared_ptr<ColumnCursorWrapper<db::DoubleType>>
 ScanTableCursor::getDoubleColumn(std::string colName)
 {
     if (_cursors.count(colName) == 0) return nullptr;
-    return std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleType>>(_cursors[colName]);
+    return std::dynamic_pointer_cast<ColumnCursorWrapper<db::DoubleType>>(_cursors[colName]);
 }
 
 bool
@@ -53,17 +53,17 @@ ScanTableCursor::addColumn(std::shared_ptr<arrow::Column> column, GenericColumnC
     switch (column->type()->id()) {
         case arrow::Type::INT64: {
             _cursors[column->name()] =
-                    std::make_shared<ColumnCursorWrapper<arrow::Int64Type>>(column, encoding, *this);
+                    std::make_shared<ColumnCursorWrapper<db::LongType>>(column, encoding, *this);
             return true;
         }
         case arrow::Type::DOUBLE: {
             _cursors[column->name()] =
-                    std::make_shared<ColumnCursorWrapper<arrow::DoubleType>>(column, encoding, *this);
+                    std::make_shared<ColumnCursorWrapper<db::DoubleType>>(column, encoding, *this);
             return true;
         }
         case arrow::Type::STRING: {
             _cursors[column->name()] =
-                    std::make_shared<ColumnCursorWrapper<arrow::StringType>>(column, encoding, *this);
+                    std::make_shared<ColumnCursorWrapper<db::StringType>>(column, encoding, *this);
             return true;
         }
         default:

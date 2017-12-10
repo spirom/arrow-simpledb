@@ -45,7 +45,7 @@ public:
      * Get value at current position.
      * @return
      */
-    typename BaseColumnCursor<T>::ReturnType get();
+    typename T::ReturnType get();
 
     /**
      * Reset to the first element, if any.
@@ -77,7 +77,7 @@ private:
     /**
      * The current chunk of the underlying column
      */
-    std::shared_ptr<typename BaseColumnCursor<T>::ArrayType> _current_chunk;
+    std::shared_ptr<typename T::ArrayType> _current_chunk;
 
     /**
      * Offset of current chunk inthe sequence of chunks

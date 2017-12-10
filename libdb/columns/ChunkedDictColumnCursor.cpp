@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include "ChunkedDictColumnCursor.h"
+#include "DBSchema.h"
 
 using arrow::Int64Type;
 using arrow::Int8Type;
@@ -46,7 +47,7 @@ bool ChunkedDictColumnCursor<T>::isNull()
 }
 
 template <typename T>
-typename BaseColumnCursor<T>::ReturnType
+typename T::ReturnType
 ChunkedDictColumnCursor<T>::get()
 {
     int index = _current_indices->Value(_pos_in_chunk);
@@ -54,8 +55,8 @@ ChunkedDictColumnCursor<T>::get()
 }
 
 template <>
-typename BaseColumnCursor<arrow::StringType>::ReturnType
-ChunkedDictColumnCursor<arrow::StringType>::get()
+typename db::StringType::ReturnType
+ChunkedDictColumnCursor<db::StringType>::get()
 {
     int index = _current_indices->Value(_pos_in_chunk);
     return _current_dict->GetString(index);
@@ -70,7 +71,7 @@ ChunkedDictColumnCursor<T>::populate_pointers()
     _current_indices =
             std::dynamic_pointer_cast<arrow::NumericArray<Int8Type>>(dict_array->indices());
     _current_dict =
-            std::dynamic_pointer_cast<typename BaseColumnCursor<T>::ArrayType>(dict_array->dictionary());
+            std::dynamic_pointer_cast<typename T::ArrayType>(dict_array->dictionary());
 }
 
 template <typename T>
@@ -116,6 +117,6 @@ ChunkedDictColumnCursor<T>::advance_chunk() {
     }
 }
 
-template class ChunkedDictColumnCursor<arrow::Int64Type>;
-template class ChunkedDictColumnCursor<arrow::DoubleType>;
-template class ChunkedDictColumnCursor<arrow::StringType>;
+template class ChunkedDictColumnCursor<db::LongType>;
+template class ChunkedDictColumnCursor<db::DoubleType>;
+template class ChunkedDictColumnCursor<db::StringType>;

@@ -8,6 +8,7 @@
 #include <memory>
 
 #include <arrow/api.h>
+#include <columns/DBSchema.h>
 
 class GenericColumnCursor;
 class FilterProjectTableCursor;
@@ -29,21 +30,21 @@ public:
      * @param colName
      * @return
      */
-    virtual std::shared_ptr<ColumnCursorWrapper<arrow::StringType>> getStringColumn(std::string colName) = 0;
+    virtual std::shared_ptr<ColumnCursorWrapper<db::StringType>> getStringColumn(std::string colName) = 0;
 
     /**
      * Get access to the specified Long type column, always synchronized with this cursor's position.
      * @param colName
      * @return
      */
-    virtual std::shared_ptr<ColumnCursorWrapper<arrow::Int64Type>> getLongColumn(std::string colName) = 0;
+    virtual std::shared_ptr<ColumnCursorWrapper<db::LongType>> getLongColumn(std::string colName) = 0;
 
     /**
      * Get access to the specified Double type column, always synchronized with this cursor's position.
      * @param colName
      * @return
      */
-    virtual std::shared_ptr<ColumnCursorWrapper<arrow::DoubleType>> getDoubleColumn(std::string colName) = 0;
+    virtual std::shared_ptr<ColumnCursorWrapper<db::DoubleType>> getDoubleColumn(std::string colName) = 0;
 
     /**
      * True if there are more rows.

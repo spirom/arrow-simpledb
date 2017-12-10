@@ -3,10 +3,8 @@
 #ifndef BASECOLUMNCURSOR_H
 #define BASECOLUMNCURSOR_H
 
-#include "ColumnTypeTrait.h"
-
 template <typename T>
-class BaseColumnCursor : public ColumnTypeTrait<T> {
+class BaseColumnCursor {
 public:
 
     /**
@@ -31,7 +29,7 @@ public:
      * Get value at current position.
      * @return
      */
-    virtual typename ColumnTypeTrait<T>::ReturnType get() = 0;
+    virtual typename T::ReturnType get() = 0;
 
     /**
      * Reset to the first element, if any.
@@ -45,7 +43,7 @@ public:
      */
     virtual bool seek(uint64_t to) = 0;
 
-    virtual ~BaseColumnCursor() {}
+    virtual ~BaseColumnCursor() = default;
 
 };
 

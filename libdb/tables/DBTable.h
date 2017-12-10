@@ -7,6 +7,7 @@
 #include <columns/GenericColumnCursor.h>
 #include <vector>
 #include <arrow/api.h>
+#include <columns/DBSchema.h>
 #include "ScanTableCursor.h"
 #include "DBColumnBuilder.h"
 
@@ -26,7 +27,7 @@ public:
      */
     explicit DBTable(
             std::vector<std::string> names,
-            std::vector<std::shared_ptr<arrow::DataType>> types,
+            std::vector<std::shared_ptr<db::DataType>> types,
             std::vector<GenericColumnCursor::Encoding> encodings);
 
     /**
@@ -63,21 +64,21 @@ public:
      * @param i
      * @return
      */
-    static std::shared_ptr<DBGenValue> int64(int64_t i);
+    static std::shared_ptr<DBGenValue> long_val(int64_t i);
 
     /**
      * Create float64 value suitable for passing into addRow().
      * @param d
      * @return
      */
-    static std::shared_ptr<DBGenValue> float64(double d);
+    static std::shared_ptr<DBGenValue> double_val(double d);
 
     /**
      * Create string value suitable for passing into addRow().
      * @param s
      * @return
      */
-    static std::shared_ptr<DBGenValue> utf8(std::string s);
+    static std::shared_ptr<DBGenValue> string_val(std::string s);
 
 
 

@@ -7,7 +7,7 @@ using arrow::Field;
 
 DBTable::DBTable(
         std::vector<std::string> names,
-        std::vector<std::shared_ptr<arrow::DataType>> types,
+        std::vector<std::shared_ptr<db::DataType>> types,
         std::vector<GenericColumnCursor::Encoding> encodings)
 {
 
@@ -16,22 +16,22 @@ DBTable::DBTable(
     std::vector<std::shared_ptr<arrow::Field>> schema_vector;
 
     for (uint64_t i = 0; i < names.size(); i++) {
-        std::shared_ptr<arrow::DataType> tp = types.at(i);
-        std::shared_ptr<Field> field = arrow::field(names.at(i), tp);
+        std::shared_ptr<db::DataType> tp = types.at(i);
+        std::shared_ptr<Field> field = arrow::field(names.at(i), tp->getArrowType());
         GenericColumnCursor::Encoding encoding = encodings.at(i);
         schema_vector.push_back(field);
 
         switch (tp->id()) {
-            case arrow::Type::INT64: {
-                _builders.push_back(std::make_shared<DBColumnBuilder<arrow::Int64Type>>(field, encoding));
+            case db::ColumnType::LONG_TYPE: {
+                _builders.push_back(std::make_shared<DBColumnBuilder<db::LongType>>(field, encoding));
                 break;
             }
-            case arrow::Type::DOUBLE: {
-                _builders.push_back(std::make_shared<DBColumnBuilder<arrow::DoubleType>>(field, encoding));
+            case db::ColumnType::DOUBLE_TYPE: {
+                _builders.push_back(std::make_shared<DBColumnBuilder<db::DoubleType>>(field, encoding));
                 break;
             }
-            case arrow::Type::STRING: {
-                _builders.push_back(std::make_shared<DBColumnBuilder<arrow::StringType>>(field, encoding));
+            case db::ColumnType::STRING_TYPE: {
+                _builders.push_back(std::make_shared<DBColumnBuilder<db::StringType>>(field, encoding));
                 break;
             }
             default:
@@ -84,19 +84,19 @@ DBTable::getTable()
 }
 
 std::shared_ptr<DBGenValue>
-DBTable::int64(int64_t i)
+DBTable::long_val(int64_t i)
 {
     return std::make_shared<DBValue<int64_t>>(i);
 }
 
 std::shared_ptr<DBGenValue>
-DBTable::float64(double d)
+DBTable::double_val(double d)
 {
     return std::make_shared<DBValue<double>>(d);
 }
 
 std::shared_ptr<DBGenValue>
-DBTable::utf8(std::string s)
+DBTable::string_val(std::string s)
 {
     return std::make_shared<DBValue<std::string>>(s);
 }

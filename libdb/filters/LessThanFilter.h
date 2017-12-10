@@ -12,7 +12,7 @@ template <typename T>
 class LessThanFilter  : public Filter {
 public:
 
-    LessThanFilter(std::string column_name, typename T::c_type value);
+    LessThanFilter(std::string column_name, typename T::ReturnType value);
 
     void initialize(TableCursor &table_cursor) override;
 

@@ -13,7 +13,7 @@ public:
 
     virtual bool evaluate() = 0;
 
-    virtual ~Filter() {}
+    virtual ~Filter() = default;
 };
 
 #endif // FILTER_H

@@ -5,27 +5,17 @@
 
 using namespace std;
 
-using arrow::DoubleBuilder;
-using arrow::Int64Builder;
-using arrow::ListBuilder;
 using arrow::Status;
-using arrow::RecordBatch;
 using arrow::Table;
 using arrow::Column;
 using arrow::Field;
-using arrow::ChunkedArray;
-using arrow::ArrayVector;
-using arrow::TableBatchReader;
-using arrow::Int64Type;
-using arrow::DictionaryBuilder;
-using arrow::StringDictionaryBuilder;
 
 arrow::Status
 Tables::createNoRows(std::shared_ptr<DBTable>& table) {
 
     DBTable *pTable = new DBTable(
             {"id", "cost"},
-            {arrow::int64(), arrow::float64()},
+            {db::long_type(), db::double_type()},
             {GenericColumnCursor::PLAIN, GenericColumnCursor::PLAIN}
     );
 
@@ -41,14 +31,14 @@ Tables::createSmallSimpleColumns(std::shared_ptr<DBTable>& table) {
 
     DBTable *pTable = new DBTable(
                 {"id", "cost"},
-                {arrow::int64(), arrow::float64()},
+                {db::long_type(), db::double_type()},
                 {GenericColumnCursor::PLAIN, GenericColumnCursor::PLAIN}
             );
 
     table.reset(pTable);
 
-    table->addRow({DBTable::int64(11), DBTable::float64(21.9)});
-    table->addRow({DBTable::int64(12), DBTable::float64(22.9)});
+    table->addRow({DBTable::long_val(11), DBTable::double_val(21.9)});
+    table->addRow({DBTable::long_val(12), DBTable::double_val(22.9)});
 
     table->make();
 
@@ -60,14 +50,14 @@ Tables::createSmallSimpleStringColumns(std::shared_ptr<DBTable>& table)
 {
     DBTable *pTable = new DBTable(
             {"foo", "bar"},
-            {arrow::utf8(), arrow::utf8()},
+            {db::string_type(), db::string_type()},
             {GenericColumnCursor::PLAIN, GenericColumnCursor::PLAIN}
     );
 
     table.reset(pTable);
 
-    table->addRow({DBTable::utf8("eleven"), DBTable::utf8("twenty one")});
-    table->addRow({DBTable::utf8("twelve"), DBTable::utf8("twenty two")});
+    table->addRow({DBTable::string_val("eleven"), DBTable::string_val("twenty one")});
+    table->addRow({DBTable::string_val("twelve"), DBTable::string_val("twenty two")});
 
     table->make();
 
@@ -79,19 +69,19 @@ Tables::createSmallChunkedColumns(std::shared_ptr<DBTable>& table)
 {
     DBTable *pTable = new DBTable(
             {"id", "cost"},
-            {arrow::int64(), arrow::float64()},
+            {db::long_type(), db::double_type()},
             {GenericColumnCursor::PLAIN, GenericColumnCursor::PLAIN}
     );
 
     table.reset(pTable);
 
-    table->addRow({DBTable::int64(11), DBTable::float64(21.9)});
-    table->addRow({DBTable::int64(12), DBTable::float64(22.9)});
+    table->addRow({DBTable::long_val(11), DBTable::double_val(21.9)});
+    table->addRow({DBTable::long_val(12), DBTable::double_val(22.9)});
 
     table->endChunk();
 
-    table->addRow({DBTable::int64(31), DBTable::float64(41.9)});
-    table->addRow({DBTable::int64(32), DBTable::float64(42.9)});
+    table->addRow({DBTable::long_val(31), DBTable::double_val(41.9)});
+    table->addRow({DBTable::long_val(32), DBTable::double_val(42.9)});
 
     table->make();
 
@@ -103,20 +93,20 @@ Tables::createSimple(std::shared_ptr<DBTable>& table)
 {
     DBTable *pTable = new DBTable(
             {"id", "cost"},
-            {arrow::int64(), arrow::float64()},
+            {db::long_type(), db::double_type()},
             {GenericColumnCursor::PLAIN, GenericColumnCursor::PLAIN}
     );
 
     table.reset(pTable);
 
     for (int64_t i = 0; i < 100; i++) {
-        table->addRow({DBTable::int64(i), DBTable::float64(0.5 * i)});
+        table->addRow({DBTable::long_val(i), DBTable::double_val(0.5 * i)});
     }
 
     table->endChunk();
 
     for (int64_t i = 0; i < 100; i++) {
-        table->addRow({DBTable::int64(i), DBTable::float64(0.5 * i)});
+        table->addRow({DBTable::long_val(i), DBTable::double_val(0.5 * i)});
     }
 
     table->make();
@@ -129,16 +119,16 @@ Tables::createSmallDictionaryColumns(std::shared_ptr<DBTable>& table)
 {
     DBTable *pTable = new DBTable(
             {"id", "cost"},
-            {arrow::int64(), arrow::int64()},
+            {db::long_type(), db::long_type()},
             {GenericColumnCursor::DICT, GenericColumnCursor::DICT}
     );
 
     table.reset(pTable);
 
-    table->addRow({DBTable::int64(11), DBTable::int64(23)});
-    table->addRow({DBTable::int64(12), DBTable::int64(23)});
-    table->addRow({DBTable::int64(11), DBTable::int64(25)});
-    table->addRow({DBTable::int64(12), DBTable::int64(25)});
+    table->addRow({DBTable::long_val(11), DBTable::long_val(23)});
+    table->addRow({DBTable::long_val(12), DBTable::long_val(23)});
+    table->addRow({DBTable::long_val(11), DBTable::long_val(25)});
+    table->addRow({DBTable::long_val(12), DBTable::long_val(25)});
 
     table->make();
 
@@ -167,14 +157,14 @@ Tables::createSmallStringDictionaryColumns(std::shared_ptr<DBTable>& table)
 {
     DBTable *pTable = new DBTable(
             {"foo", "bar"},
-            {arrow::utf8(), arrow::utf8()},
+            {db::string_type(), db::string_type()},
             {GenericColumnCursor::DICT, GenericColumnCursor::DICT}
     );
 
     table.reset(pTable);
 
-    table->addRow({DBTable::utf8("eleven"), DBTable::utf8("twenty one")});
-    table->addRow({DBTable::utf8("twelve"), DBTable::utf8("twenty two")});
+    table->addRow({DBTable::string_val("eleven"), DBTable::string_val("twenty one")});
+    table->addRow({DBTable::string_val("twelve"), DBTable::string_val("twenty two")});
 
     table->make();
 
@@ -186,19 +176,19 @@ Tables::createChunkedDictionaryColumns(std::shared_ptr<DBTable>& table)
 {
     DBTable *pTable = new DBTable(
             {"id", "cost"},
-            {arrow::int64(), arrow::utf8()},
+            {db::long_type(), db::string_type()},
             {GenericColumnCursor::DICT, GenericColumnCursor::DICT}
     );
 
     table.reset(pTable);
 
-    table->addRow({DBTable::int64(11), DBTable::utf8("twenty one")});
-    table->addRow({DBTable::int64(12), DBTable::utf8("twenty two")});
+    table->addRow({DBTable::long_val(11), DBTable::string_val("twenty one")});
+    table->addRow({DBTable::long_val(12), DBTable::string_val("twenty two")});
 
     table->endChunk();
 
-    table->addRow({DBTable::int64(31), DBTable::utf8("forty one")});
-    table->addRow({DBTable::int64(32), DBTable::utf8("forty two")});
+    table->addRow({DBTable::long_val(31), DBTable::string_val("forty one")});
+    table->addRow({DBTable::long_val(32), DBTable::string_val("forty two")});
 
     table->make();
 

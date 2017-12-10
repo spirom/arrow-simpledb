@@ -8,6 +8,7 @@
 #include "columns/ColumnCursorWrapper.h"
 #include "columns/GenericColumnCursor.h"
 #include "TableCursor.h"
+#include <columns/DBSchema.h>
 
 
 class GenericColumnCursor;
@@ -37,17 +38,15 @@ public:
             std::shared_ptr<arrow::Table> table
     );
 
-    std::shared_ptr<ColumnCursorWrapper<arrow::StringType>> getStringColumn(std::string colName) override;
+    std::shared_ptr<ColumnCursorWrapper<db::StringType>> getStringColumn(std::string colName) override;
 
-    std::shared_ptr<ColumnCursorWrapper<arrow::Int64Type>> getLongColumn(std::string colName) override;
+    std::shared_ptr<ColumnCursorWrapper<db::LongType>> getLongColumn(std::string colName) override;
 
-    std::shared_ptr<ColumnCursorWrapper<arrow::DoubleType>> getDoubleColumn(std::string colName) override;
+    std::shared_ptr<ColumnCursorWrapper<db::DoubleType>> getDoubleColumn(std::string colName) override;
 
     bool hasMore() override;
 
     void reset() override;
-
-
 
 protected:
     bool addColumn(std::shared_ptr<arrow::Column> column, GenericColumnCursor::Encoding encoding);

@@ -1,5 +1,6 @@
 
 
+#include <columns/DBSchema.h>
 #include "FilterProjectTableCursor.h"
 #include "filters/Filter.h"
 #include "columns/ColumnCursorWrapper.h"
@@ -11,22 +12,22 @@ FilterProjectTableCursor::FilterProjectTableCursor(TableCursor &source_cursor, s
     filter->initialize(*this);
 }
 
-std::shared_ptr<ColumnCursorWrapper<arrow::StringType>>
+std::shared_ptr<ColumnCursorWrapper<db::StringType>>
 FilterProjectTableCursor::getStringColumn(std::string colName)
 {
-    return std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::StringType>>(_source_cursor.getStringColumn(colName));
+    return std::dynamic_pointer_cast<ColumnCursorWrapper<db::StringType>>(_source_cursor.getStringColumn(colName));
 }
 
-std::shared_ptr<ColumnCursorWrapper<arrow::Int64Type>>
+std::shared_ptr<ColumnCursorWrapper<db::LongType>>
 FilterProjectTableCursor::getLongColumn(std::string colName)
 {
-    return std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Type>>(_source_cursor.getLongColumn(colName));
+    return std::dynamic_pointer_cast<ColumnCursorWrapper<db::LongType>>(_source_cursor.getLongColumn(colName));
 }
 
-std::shared_ptr<ColumnCursorWrapper<arrow::DoubleType>>
+std::shared_ptr<ColumnCursorWrapper<db::DoubleType>>
 FilterProjectTableCursor::getDoubleColumn(std::string colName)
 {
-    return std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleType>>(_source_cursor.getDoubleColumn(colName));
+    return std::dynamic_pointer_cast<ColumnCursorWrapper<db::DoubleType>>(_source_cursor.getDoubleColumn(colName));
 }
 
 bool

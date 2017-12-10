@@ -32,7 +32,7 @@ public:
 
     bool isNull();
 
-    typename BaseColumnCursor<T>::ReturnType get();
+    typename T::ReturnType get();
 
     void reset();
 

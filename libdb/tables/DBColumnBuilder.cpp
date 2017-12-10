@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <columns/GenericColumnCursor.h>
+#include <columns/DBSchema.h>
 #include "DBColumnBuilder.h"
 
 template <typename T>
@@ -10,9 +11,9 @@ DBColumnBuilder<T>::DBColumnBuilder(std::shared_ptr<arrow::Field> field,
 {
     _encoding = encoding;
     if (encoding == GenericColumnCursor::Encoding::DICT) {
-        _dictBuilder.reset(new typename ColumnTypeTrait<T>::DictionaryBuilderType(arrow::default_memory_pool()));
+        _dictBuilder.reset(new typename T::DictionaryBuilderType(arrow::default_memory_pool()));
     } else {
-        _builder.reset(new typename ColumnTypeTrait<T>::BuilderType());
+        _builder.reset(new typename T::BuilderType());
     }
     _haveData = false;
     _field = field;
@@ -21,13 +22,13 @@ DBColumnBuilder<T>::DBColumnBuilder(std::shared_ptr<arrow::Field> field,
 template < typename T>
 void
 DBColumnBuilder<T>::add(std::shared_ptr<DBGenValue> value) {
-    add(std::dynamic_pointer_cast<DBValue<typename ColumnTypeTrait<T>::ReturnType>>(value)->get());
+    add(std::dynamic_pointer_cast<DBValue<typename T::ReturnType>>(value)->get());
 }
 
 
 template <typename T>
 void
-DBColumnBuilder<T>::add(typename ColumnTypeTrait<T>::ReturnType element)
+DBColumnBuilder<T>::add(typename T::ReturnType element)
 {
     _haveData = true;
     if (_encoding == GenericColumnCursor::Encoding::DICT) {
@@ -67,6 +68,6 @@ DBColumnBuilder<T>::getColumn()
     return std::make_shared<arrow::Column>(_field, _chunks);
 }
 
-template class DBColumnBuilder<arrow::Int64Type>;
-template class DBColumnBuilder<arrow::DoubleType>;
-template class DBColumnBuilder<arrow::StringType>;
+template class DBColumnBuilder<db::LongType>;
+template class DBColumnBuilder<db::DoubleType>;
+template class DBColumnBuilder<db::StringType>;

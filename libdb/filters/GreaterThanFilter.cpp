@@ -4,7 +4,7 @@
 #include "GreaterThanFilter.h"
 
 template <typename T>
-GreaterThanFilter<T>::GreaterThanFilter(std::string column_name, typename T::c_type value)
+GreaterThanFilter<T>::GreaterThanFilter(std::string column_name, typename T::ReturnType value)
         : _column_name(column_name), _value(value)
 {
 
@@ -12,13 +12,13 @@ GreaterThanFilter<T>::GreaterThanFilter(std::string column_name, typename T::c_t
 
 template <>
 void
-GreaterThanFilter<arrow::Int64Type>::initialize(TableCursor& table_cursor) {
+GreaterThanFilter<db::LongType>::initialize(TableCursor& table_cursor) {
     _cursor = table_cursor.getLongColumn(_column_name);
 }
 
 template <>
 void
-GreaterThanFilter<arrow::DoubleType>::initialize(TableCursor& table_cursor) {
+GreaterThanFilter<db::DoubleType>::initialize(TableCursor& table_cursor) {
     _cursor = table_cursor.getDoubleColumn(_column_name);
 }
 
@@ -29,5 +29,5 @@ GreaterThanFilter<T>::evaluate()
     return _cursor->get() > _value;
 }
 
-template class GreaterThanFilter<arrow::Int64Type>;
-template class GreaterThanFilter<arrow::DoubleType>;
+template class GreaterThanFilter<db::LongType>;
+template class GreaterThanFilter<db::DoubleType>;

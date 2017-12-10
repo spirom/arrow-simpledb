@@ -12,7 +12,7 @@ template <typename T>
 class GreaterThanFilter : public Filter {
 public:
 
-    GreaterThanFilter(std::string column_name, typename T::c_type value);
+    GreaterThanFilter(std::string column_name, typename T::ReturnType value);
 
     void initialize(TableCursor& table_cursor) override;
 

@@ -30,18 +30,18 @@ and [libdb/tables/DBTable.cpp](libdb/tables/DBTable.cpp)
 # Creating and Populating Tables
 
 The `DBTable` class encapsulates an Arrow table together with additional metadata, such as column encodings.
-The following example creates two columns: `id` of type `int64` and `cost` of type `float64` (double).
+The following example creates two columns: `id` of type `long` and `cost` of type `double`.
 
     DBTable *pTable = new DBTable(
                 {"id", "cost"},
-                {arrow::int64(), arrow::float64()},
+                {db::long(), db::double()},
                 {GenericColumnCursor::PLAIN, GenericColumnCursor::PLAIN}
             );
 
     table.reset(pTable);
 
-    table->addRow({DBTable::int64(11), DBTable::float64(21.9)});
-    table->addRow({DBTable::int64(12), DBTable::float64(22.9)});
+    table->addRow({DBTable::long_val(11), DBTable::double_val(21.9)});
+    table->addRow({DBTable::long_val(12), DBTable::double_val(22.9)});
 
     table->make();
 
@@ -54,19 +54,19 @@ two values each.
 
     DBTable *pTable = new DBTable(
             {"id", "cost"},
-            {arrow::int64(), arrow::float64()},
+            {db::long(), db::double()},
             {GenericColumnCursor::PLAIN, GenericColumnCursor::PLAIN}
     );
 
     table.reset(pTable);
 
-    table->addRow({DBTable::int64(11), DBTable::float64(21.9)});
-    table->addRow({DBTable::int64(12), DBTable::float64(22.9)});
+    table->addRow({DBTable::long_val(11), DBTable::double_val(21.9)});
+    table->addRow({DBTable::long_val(12), DBTable::double_val(22.9)});
 
     table->endChunk();
 
-    table->addRow({DBTable::int64(31), DBTable::float64(41.9)});
-    table->addRow({DBTable::int64(32), DBTable::float64(42.9)});
+    table->addRow({DBTable::long_val(31), DBTable::double_val(41.9)});
+    table->addRow({DBTable::long_val(32), DBTable::double_val(42.9)});
 
     table->make();
 

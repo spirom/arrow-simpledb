@@ -5,6 +5,8 @@
 #include <tables/DBTable.h>
 #include "arrow/api.h"
 
+#include <columns/DBSchema.h>
+
 #include "TableTest.h"
 #include "Tables.h"
 
@@ -131,7 +133,7 @@ TEST_F(TableTest, SimpleFilter) {
 
     std::shared_ptr<TableCursor> tc = dbTable->getScanCursor();
 
-    std::shared_ptr<Filter> filter = std::make_shared<GreaterThanFilter<arrow::Int64Type>>("id", 31);
+    std::shared_ptr<Filter> filter = std::make_shared<GreaterThanFilter<db::LongType>>("id", 31);
     FilterProjectTableCursor fptc(*tc, filter);
 
     auto id_cursor = fptc.getLongColumn(std::string("id"));
@@ -153,8 +155,8 @@ TEST_F(TableTest, ConjunctiveFilter) {
 
     std::shared_ptr<TableCursor> tc = dbTable->getScanCursor();
 
-    std::shared_ptr<Filter> leftFilter = std::make_shared<GreaterThanFilter<arrow::Int64Type>>("id", 11);
-    std::shared_ptr<Filter> rightFilter = std::make_shared<LessThanFilter<arrow::DoubleType>>("cost", 42);
+    std::shared_ptr<Filter> leftFilter = std::make_shared<GreaterThanFilter<db::LongType>>("id", 11);
+    std::shared_ptr<Filter> rightFilter = std::make_shared<LessThanFilter<db::DoubleType>>("cost", 42);
     std::shared_ptr<Filter> andFilter =
             std::make_shared<AndFilter>("id", leftFilter, rightFilter);
 
@@ -181,8 +183,8 @@ TEST_F(TableTest, NeverTrueFilter) {
 
     std::shared_ptr<TableCursor> tc = dbTable->getScanCursor();
 
-    std::shared_ptr<Filter> leftFilter = std::make_shared<GreaterThanFilter<arrow::Int64Type>>("id", 31);
-    std::shared_ptr<Filter> rightFilter = std::make_shared<LessThanFilter<arrow::DoubleType>>("cost", 22);
+    std::shared_ptr<Filter> leftFilter = std::make_shared<GreaterThanFilter<db::LongType>>("id", 31);
+    std::shared_ptr<Filter> rightFilter = std::make_shared<LessThanFilter<db::DoubleType>>("cost", 22);
     std::shared_ptr<Filter> andFilter =
             std::make_shared<AndFilter>("id", leftFilter, rightFilter);
 
@@ -203,8 +205,8 @@ TEST_F(TableTest, TwoTypesSameFilter) {
 
     std::shared_ptr<TableCursor> tc = dbTable->getScanCursor();
 
-    std::shared_ptr<Filter> leftFilter = std::make_shared<GreaterThanFilter<arrow::Int64Type>>("id", 31);
-    std::shared_ptr<Filter> rightFilter = std::make_shared<GreaterThanFilter<arrow::DoubleType>>("cost", 100);
+    std::shared_ptr<Filter> leftFilter = std::make_shared<GreaterThanFilter<db::LongType>>("id", 31);
+    std::shared_ptr<Filter> rightFilter = std::make_shared<GreaterThanFilter<db::DoubleType>>("cost", 100);
     std::shared_ptr<Filter> andFilter =
             std::make_shared<AndFilter>("id", leftFilter, rightFilter);
 
@@ -225,10 +227,10 @@ TEST_F(TableTest, FilterComposition) {
 
     std::shared_ptr<TableCursor> tc = dbTable->getScanCursor();
 
-    std::shared_ptr<Filter> first_filter = std::make_shared<GreaterThanFilter<arrow::Int64Type>>("id", 11);
+    std::shared_ptr<Filter> first_filter = std::make_shared<GreaterThanFilter<db::LongType>>("id", 11);
     FilterProjectTableCursor first_cursor(*tc, first_filter);
 
-    std::shared_ptr<Filter> second_filter = std::make_shared<LessThanFilter<arrow::DoubleType>>("cost", 42);
+    std::shared_ptr<Filter> second_filter = std::make_shared<LessThanFilter<db::DoubleType>>("cost", 42);
     FilterProjectTableCursor second_cursor(first_cursor, second_filter);
 
     auto id_cursor = second_cursor.getLongColumn(std::string("id"));
@@ -369,8 +371,8 @@ TEST_F(TableTest, AddAfterMake) {
     EXPECT_EQ(4, table->num_rows());
     EXPECT_EQ(2, table->num_columns());
 
-    dbTable->addRow({DBTable::int64(51), DBTable::float64(61.9)});
-    dbTable->addRow({DBTable::int64(52), DBTable::float64(62.9)});
+    dbTable->addRow({DBTable::long_val(51), DBTable::double_val(61.9)});
+    dbTable->addRow({DBTable::long_val(52), DBTable::double_val(62.9)});
 
     dbTable->make();
 

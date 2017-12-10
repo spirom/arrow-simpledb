@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include "ChunkedColumnCursor.h"
+#include "DBSchema.h"
 
 template <typename T>
 ChunkedColumnCursor<T>::ChunkedColumnCursor(std::shared_ptr<arrow::Column> column)
@@ -44,15 +45,15 @@ bool ChunkedColumnCursor<T>::isNull()
 }
 
 template <typename T>
-typename BaseColumnCursor<T>::ReturnType
+typename T::ReturnType
 ChunkedColumnCursor<T>::get()
 {
     return _current_chunk->Value(_pos_in_chunk);
 }
 
 template <>
-typename BaseColumnCursor<arrow::StringType>::ReturnType
-ChunkedColumnCursor<arrow::StringType>::get()
+typename db::StringType::ReturnType
+ChunkedColumnCursor<db::StringType>::get()
 {
     return _current_chunk->GetString(_pos_in_chunk);
 }
@@ -66,7 +67,7 @@ ChunkedColumnCursor<T>::reset()
     _chunk = 0;
     _pos_in_chunk = 0;
     _current_chunk =
-            std::static_pointer_cast<typename  BaseColumnCursor<T>::ArrayType>(_column->data()->chunk(_chunk));
+            std::static_pointer_cast<typename T::ArrayType>(_column->data()->chunk(_chunk));
     // TODO: this may fail if the column is empty
 }
 
@@ -96,13 +97,13 @@ ChunkedColumnCursor<T>::advance_chunk() {
         _chunk++;
         _pos_in_chunk = 0;
         _current_chunk =
-                std::static_pointer_cast<typename  BaseColumnCursor<T>::ArrayType>(_column->data()->chunk(_chunk));
+                std::static_pointer_cast<typename T::ArrayType>(_column->data()->chunk(_chunk));
         return true;
     } else {
         return false;
     }
 }
 
-template class ChunkedColumnCursor<arrow::Int64Type>;
-template class ChunkedColumnCursor<arrow::DoubleType>;
-template class ChunkedColumnCursor<arrow::StringType>;
+template class ChunkedColumnCursor<db::LongType>;
+template class ChunkedColumnCursor<db::DoubleType>;
+template class ChunkedColumnCursor<db::StringType>;

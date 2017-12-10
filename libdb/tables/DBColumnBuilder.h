@@ -3,7 +3,6 @@
 #ifndef DB_COLUMN_BUILDER_H
 #define DB_COLUMN_BUILDER_H
 
-#include <columns/ColumnTypeTrait.h>
 #include <arrow/api.h>
 
 class DBGenValue {
@@ -19,7 +18,7 @@ class DBValue : public DBGenValue {
 
 public:
 
-    DBValue(T value) : _value(value) {};
+    explicit DBValue(T value) : _value(value) {};
 
     T get() { return _value; }
 
@@ -41,7 +40,7 @@ public:
 };
 
 template <typename T>
-class DBColumnBuilder : public ColumnTypeTrait<T>, public DBGenColumnBuilder {
+class DBColumnBuilder : public DBGenColumnBuilder {
 
 public:
 
@@ -55,7 +54,7 @@ public:
 
 protected:
 
-    void add(typename ColumnTypeTrait<T>::ReturnType element);
+    void add(typename T::ReturnType element);
 
 private:
 
@@ -63,8 +62,8 @@ private:
 
     GenericColumnCursor::Encoding _encoding;
 
-    std::unique_ptr<typename ColumnTypeTrait<T>::BuilderType> _builder;
-    std::unique_ptr<typename ColumnTypeTrait<T>::DictionaryBuilderType> _dictBuilder;
+    std::unique_ptr<typename T::BuilderType> _builder;
+    std::unique_ptr<typename T::DictionaryBuilderType> _dictBuilder;
 
     arrow::ArrayVector _chunks;
 

@@ -18,7 +18,7 @@ set(SOURCE_FILES
         tables/ScanTableCursor.cpp
         columns/ColumnCursorWrapper.cpp columns/GenericColumnCursor.cpp tables/TableCursor.cpp
         tables/FilterProjectTableCursor.cpp
-        filters/Filter.h filters/GreaterThanFilter.cpp filters/GreaterThanFilter.h filters/LessThanFilter.cpp filters/LessThanFilter.h filters/AndFilter.cpp filters/AndFilter.h tables/DBTable.cpp tables/DBTable.h tables/DBColumnBuilder.cpp tables/DBColumnBuilder.h columns/ColumnTypeTrait.h)
+        filters/Filter.h filters/GreaterThanFilter.cpp filters/GreaterThanFilter.h filters/LessThanFilter.cpp filters/LessThanFilter.h filters/AndFilter.cpp filters/AndFilter.h tables/DBTable.cpp tables/DBTable.h tables/DBColumnBuilder.cpp tables/DBColumnBuilder.h columns/DBSchema.h columns/DBSchema.cpp)
 add_library(libdb STATIC ${SOURCE_FILES})
 
 target_link_libraries(libdb ${ARROW_LIBS} ${CMAKE_THREAD_LIBS_INIT})
