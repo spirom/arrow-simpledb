@@ -11,11 +11,16 @@ LessThanFilter<T>::LessThanFilter(std::string column_name, typename T::c_type va
 
 }
 
-template <typename T>
+template <>
 void
-LessThanFilter<T>::initialize(TableCursor& table_cursor) {
-    _cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<T>>(
-            table_cursor.getColumn(_column_name));
+LessThanFilter<arrow::Int64Type>::initialize(TableCursor& table_cursor) {
+    _cursor = table_cursor.getLongColumn(_column_name);
+}
+
+template <>
+void
+LessThanFilter<arrow::DoubleType>::initialize(TableCursor& table_cursor) {
+    _cursor = table_cursor.getDoubleColumn(_column_name);
 }
 
 template <typename T>

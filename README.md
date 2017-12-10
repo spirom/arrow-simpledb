@@ -85,12 +85,8 @@ For example, a scan cursor can be used to simply scan a table:
     std::shared_ptr<TableCursor> tc = dbTable->getScanCursor();
 
     // get pointers to two columns named "id" and "cost"
-    auto id_cursor =
-        std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Type>>(
-                tc->getColumn(std::string("id")));
-    auto cost_cursor =
-        std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleType>>(
-                tc->getColumn(std::string("cost")));
+    auto id_cursor = tc->getLongColumn(std::string("id"));
+    auto cost_cursor = tc->getDoubleColumn(std::string("cost"));
 
     // iterate through the table and print it
     while (tc->hasMore()) { // advances cursor -- must be called before first element
@@ -117,12 +113,8 @@ Additionally, a filtering and projection cursor can be composed to fetch certain
     FilterProjectTableCursor fptc(*tc, andFilter);
 
     // Note: the column cursors must always be obtained from the appropriate table cursor
-    auto id_cursor =
-        std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Type>>(
-            fptc.getColumn(std::string("id")));
-    auto cost_cursor =
-        std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleType>>(
-            fptc.getColumn(std::string("cost")));
+    auto id_cursor = fptc.getLongColumn(std::string("id"));
+    auto cost_cursor = fptc.getDoubleColumn(std::string("cost"));
 
     while (fptc.hasMore()) {
         // ...

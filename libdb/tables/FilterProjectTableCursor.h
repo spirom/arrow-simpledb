@@ -15,7 +15,11 @@ class FilterProjectTableCursor : public TableCursor {
 public:
     explicit FilterProjectTableCursor(TableCursor& source_cursor, std::shared_ptr<Filter> &filter);
 
-    std::shared_ptr<GenericColumnCursor> getColumn(std::string colName) override;
+    std::shared_ptr<ColumnCursorWrapper<arrow::StringType>> getStringColumn(std::string colName) override;
+
+    std::shared_ptr<ColumnCursorWrapper<arrow::Int64Type>> getLongColumn(std::string colName) override;
+
+    std::shared_ptr<ColumnCursorWrapper<arrow::DoubleType>> getDoubleColumn(std::string colName) override;
 
     bool hasMore() override;
 

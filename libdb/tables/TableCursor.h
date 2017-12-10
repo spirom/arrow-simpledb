@@ -7,8 +7,13 @@
 #include <cstdint>
 #include <memory>
 
+#include <arrow/api.h>
+
 class GenericColumnCursor;
 class FilterProjectTableCursor;
+
+template <typename T>
+class ColumnCursorWrapper;
 
 /**
  * Common base of all table cursors, exposing row iteration and access to columns.
@@ -20,11 +25,25 @@ class TableCursor {
 public:
 
     /**
-     * Get access to the specified column, always synchronized with this cursor's position.
+     * Get access to the specified String type column, always synchronized with this cursor's position.
      * @param colName
      * @return
      */
-    virtual std::shared_ptr<GenericColumnCursor> getColumn(std::string colName) = 0;
+    virtual std::shared_ptr<ColumnCursorWrapper<arrow::StringType>> getStringColumn(std::string colName) = 0;
+
+    /**
+     * Get access to the specified Long type column, always synchronized with this cursor's position.
+     * @param colName
+     * @return
+     */
+    virtual std::shared_ptr<ColumnCursorWrapper<arrow::Int64Type>> getLongColumn(std::string colName) = 0;
+
+    /**
+     * Get access to the specified Double type column, always synchronized with this cursor's position.
+     * @param colName
+     * @return
+     */
+    virtual std::shared_ptr<ColumnCursorWrapper<arrow::DoubleType>> getDoubleColumn(std::string colName) = 0;
 
     /**
      * True if there are more rows.

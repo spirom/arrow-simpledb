@@ -44,10 +44,8 @@ TEST_F(TableTest, SmallSimpleColumns) {
     EXPECT_EQ(2, table->num_columns());
 
     std::shared_ptr<TableCursor> tc = dbTable->getScanCursor();
-    auto id_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Type>>(
-            tc->getColumn(std::string("id")));
-    auto cost_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleType>>(
-            tc->getColumn(std::string("cost")));
+    auto id_cursor = tc->getLongColumn(std::string("id"));
+    auto cost_cursor = tc->getDoubleColumn(std::string("cost"));
     EXPECT_TRUE(tc->hasMore());
     EXPECT_EQ(11, id_cursor->get());
     EXPECT_EQ(21.9, cost_cursor->get());
@@ -67,10 +65,8 @@ TEST_F(TableTest, SmallSimpleStringColumns) {
     EXPECT_EQ(2, table->num_columns());
 
     std::shared_ptr<TableCursor> tc = dbTable->getScanCursor();
-    auto foo_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::StringType>>(
-            tc->getColumn(std::string("foo")));
-    auto bar_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::StringType>>(
-            tc->getColumn(std::string("bar")));
+    auto foo_cursor = tc->getStringColumn(std::string("foo"));
+    auto bar_cursor = tc->getStringColumn(std::string("bar"));
     EXPECT_TRUE(tc->hasMore());
     EXPECT_STREQ("eleven", foo_cursor->get().c_str());
     EXPECT_STREQ("twenty one", bar_cursor->get().c_str());
@@ -89,10 +85,8 @@ TEST_F(TableTest, SmallChunkedColumns) {
     EXPECT_EQ(2, table->num_columns());
 
     std::shared_ptr<TableCursor> tc = dbTable->getScanCursor();
-    auto id_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Type>>(
-            tc->getColumn(std::string("id")));
-    auto cost_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleType>>(
-            tc->getColumn(std::string("cost")));
+    auto id_cursor = tc->getLongColumn(std::string("id"));
+    auto cost_cursor = tc->getDoubleColumn(std::string("cost"));
     EXPECT_TRUE(tc->hasMore());
     EXPECT_EQ(11, id_cursor->get());
     EXPECT_EQ(21.9, cost_cursor->get());
@@ -113,10 +107,8 @@ TEST_F(TableTest, ComplexColumns) {
     EXPECT_EQ(Status::OK().code(), Tables::createSimple(dbTable).code());
 
     std::shared_ptr<TableCursor> tc = dbTable->getScanCursor();
-    auto id_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Type>>(
-            tc->getColumn(std::string("id")));
-    auto cost_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleType>>(
-            tc->getColumn(std::string("cost")));
+    auto id_cursor = tc->getLongColumn(std::string("id"));
+    auto cost_cursor = tc->getDoubleColumn(std::string("cost"));
 
     uint64_t count = 0;
 
@@ -142,10 +134,8 @@ TEST_F(TableTest, SimpleFilter) {
     std::shared_ptr<Filter> filter = std::make_shared<GreaterThanFilter<arrow::Int64Type>>("id", 31);
     FilterProjectTableCursor fptc(*tc, filter);
 
-    auto id_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Type>>(
-            fptc.getColumn(std::string("id")));
-    auto cost_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleType>>(
-            fptc.getColumn(std::string("cost")));
+    auto id_cursor = fptc.getLongColumn(std::string("id"));
+    auto cost_cursor = fptc.getDoubleColumn(std::string("cost"));
     EXPECT_TRUE(fptc.hasMore());
 
     EXPECT_EQ(32, id_cursor->get());
@@ -170,10 +160,8 @@ TEST_F(TableTest, ConjunctiveFilter) {
 
     FilterProjectTableCursor fptc(*tc, andFilter);
 
-    auto id_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Type>>(
-            fptc.getColumn(std::string("id")));
-    auto cost_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleType>>(
-            fptc.getColumn(std::string("cost")));
+    auto id_cursor = fptc.getLongColumn(std::string("id"));
+    auto cost_cursor = fptc.getDoubleColumn(std::string("cost"));
     EXPECT_TRUE(fptc.hasMore());
     EXPECT_EQ(12, id_cursor->get());
     EXPECT_EQ(22.9, cost_cursor->get());
@@ -200,10 +188,8 @@ TEST_F(TableTest, NeverTrueFilter) {
 
     FilterProjectTableCursor fptc(*tc, andFilter);
 
-    auto id_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Type>>(
-            fptc.getColumn(std::string("id")));
-    auto cost_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleType>>(
-            fptc.getColumn(std::string("cost")));
+    auto id_cursor = fptc.getLongColumn(std::string("id"));
+    auto cost_cursor = fptc.getDoubleColumn(std::string("cost"));
     EXPECT_FALSE(fptc.hasMore());
 }
 
@@ -224,10 +210,8 @@ TEST_F(TableTest, TwoTypesSameFilter) {
 
     FilterProjectTableCursor fptc(*tc, andFilter);
 
-    auto id_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Type>>(
-            fptc.getColumn(std::string("id")));
-    auto cost_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleType>>(
-            fptc.getColumn(std::string("cost")));
+    auto id_cursor = fptc.getLongColumn(std::string("id"));
+    auto cost_cursor = fptc.getDoubleColumn(std::string("cost"));
     EXPECT_FALSE(fptc.hasMore());
 }
 
@@ -247,10 +231,8 @@ TEST_F(TableTest, FilterComposition) {
     std::shared_ptr<Filter> second_filter = std::make_shared<LessThanFilter<arrow::DoubleType>>("cost", 42);
     FilterProjectTableCursor second_cursor(first_cursor, second_filter);
 
-    auto id_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Type>>(
-            second_cursor.getColumn(std::string("id")));
-    auto cost_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleType>>(
-            second_cursor.getColumn(std::string("cost")));
+    auto id_cursor = second_cursor.getLongColumn(std::string("id"));
+    auto cost_cursor = second_cursor.getDoubleColumn(std::string("cost"));
     EXPECT_TRUE(second_cursor.hasMore());
     EXPECT_EQ(12, id_cursor->get());
     EXPECT_EQ(22.9, cost_cursor->get());
@@ -273,10 +255,8 @@ TEST_F(TableTest, SmallDictionaryColumns) {
     EXPECT_EQ(arrow::Type::INT64, table->column(1)->type()->id());
 
     std::shared_ptr<TableCursor> tc = dbTable->getScanCursor();
-    auto id_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Type>>(
-            tc->getColumn(std::string("id")));
-    auto cost_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Type>>(
-            tc->getColumn(std::string("cost")));
+    auto id_cursor = tc->getLongColumn(std::string("id"));
+    auto cost_cursor = tc->getLongColumn(std::string("cost"));
     EXPECT_TRUE(tc->hasMore());
     EXPECT_EQ(11, id_cursor->get());
     EXPECT_EQ(23, cost_cursor->get());
@@ -304,10 +284,8 @@ TEST_F(TableTest, SmallStringDictionaryColumns) {
     EXPECT_EQ(arrow::Type::STRING, table->column(1)->type()->id());
 
     std::shared_ptr<TableCursor> tc = dbTable->getScanCursor();
-    auto foo_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::StringType>>(
-            tc->getColumn(std::string("foo")));
-    auto bar_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::StringType>>(
-            tc->getColumn(std::string("bar")));
+    auto foo_cursor = tc->getStringColumn(std::string("foo"));
+    auto bar_cursor = tc->getStringColumn(std::string("bar"));
     EXPECT_TRUE(tc->hasMore());
     EXPECT_STREQ("eleven", foo_cursor->get().c_str());
     EXPECT_STREQ("twenty one", bar_cursor->get().c_str());
@@ -327,10 +305,8 @@ TEST_F(TableTest, ChunkedDictionaryColumns) {
     EXPECT_EQ(4, table->num_rows());
     EXPECT_EQ(2, table->num_columns());
     std::shared_ptr<TableCursor> tc = dbTable->getScanCursor();
-    auto id_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Type>>(
-            tc->getColumn(std::string("id")));
-    auto cost_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::StringType>>(
-            tc->getColumn(std::string("cost")));
+    auto id_cursor = tc->getLongColumn(std::string("id"));
+    auto cost_cursor = tc->getStringColumn(std::string("cost"));
     EXPECT_TRUE(tc->hasMore());
     EXPECT_EQ(11, id_cursor->get());
     EXPECT_EQ("twenty one", cost_cursor->get());
@@ -355,10 +331,8 @@ TEST_F(TableTest, ResetCursor) {
     EXPECT_EQ(2, table->num_columns());
 
     std::shared_ptr<TableCursor> tc = dbTable->getScanCursor();
-    auto id_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Type>>(
-            tc->getColumn(std::string("id")));
-    auto cost_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleType>>(
-            tc->getColumn(std::string("cost")));
+    auto id_cursor = tc->getLongColumn(std::string("id"));
+    auto cost_cursor = tc->getDoubleColumn(std::string("cost"));
     EXPECT_TRUE(tc->hasMore());
     EXPECT_EQ(11, id_cursor->get());
     EXPECT_EQ(21.9, cost_cursor->get());
@@ -405,10 +379,8 @@ TEST_F(TableTest, AddAfterMake) {
     EXPECT_EQ(2, table->num_columns());
 
     std::shared_ptr<TableCursor> tc = dbTable->getScanCursor();
-    auto id_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Type>>(
-            tc->getColumn(std::string("id")));
-    auto cost_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleType>>(
-            tc->getColumn(std::string("cost")));
+    auto id_cursor = tc->getLongColumn(std::string("id"));
+    auto cost_cursor = tc->getDoubleColumn(std::string("cost"));
     EXPECT_TRUE(tc->hasMore());
     EXPECT_EQ(11, id_cursor->get());
     EXPECT_EQ(21.9, cost_cursor->get());
@@ -439,10 +411,8 @@ TEST_F(TableTest, NoRows) {
     EXPECT_EQ(2, table->num_columns());
 
     std::shared_ptr<TableCursor> tc = dbTable->getScanCursor();
-    auto id_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Type>>(
-            tc->getColumn(std::string("id")));
-    auto cost_cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleType>>(
-            tc->getColumn(std::string("cost")));
+    auto id_cursor = tc->getLongColumn(std::string("id"));
+    auto cost_cursor = tc->getDoubleColumn(std::string("cost"));
     EXPECT_FALSE(tc->hasMore());
 }
 

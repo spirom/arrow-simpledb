@@ -26,11 +26,25 @@ ScanTableCursor::ScanTableCursor(
     reset();
 }
 
-std::shared_ptr<GenericColumnCursor>
-ScanTableCursor::getColumn(std::string colName)
+std::shared_ptr<ColumnCursorWrapper<arrow::StringType>>
+ScanTableCursor::getStringColumn(std::string colName)
 {
     if (_cursors.count(colName) == 0) return nullptr;
-    return _cursors[colName];
+    return std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::StringType>>(_cursors[colName]);
+}
+
+std::shared_ptr<ColumnCursorWrapper<arrow::Int64Type>>
+ScanTableCursor::getLongColumn(std::string colName)
+{
+    if (_cursors.count(colName) == 0) return nullptr;
+    return std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::Int64Type>>(_cursors[colName]);
+}
+
+std::shared_ptr<ColumnCursorWrapper<arrow::DoubleType>>
+ScanTableCursor::getDoubleColumn(std::string colName)
+{
+    if (_cursors.count(colName) == 0) return nullptr;
+    return std::dynamic_pointer_cast<ColumnCursorWrapper<arrow::DoubleType>>(_cursors[colName]);
 }
 
 bool

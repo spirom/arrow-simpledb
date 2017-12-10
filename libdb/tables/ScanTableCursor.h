@@ -37,7 +37,11 @@ public:
             std::shared_ptr<arrow::Table> table
     );
 
-    std::shared_ptr<GenericColumnCursor> getColumn(std::string colName) override;
+    std::shared_ptr<ColumnCursorWrapper<arrow::StringType>> getStringColumn(std::string colName) override;
+
+    std::shared_ptr<ColumnCursorWrapper<arrow::Int64Type>> getLongColumn(std::string colName) override;
+
+    std::shared_ptr<ColumnCursorWrapper<arrow::DoubleType>> getDoubleColumn(std::string colName) override;
 
     bool hasMore() override;
 

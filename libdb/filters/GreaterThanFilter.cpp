@@ -10,11 +10,16 @@ GreaterThanFilter<T>::GreaterThanFilter(std::string column_name, typename T::c_t
 
 }
 
-template <typename T>
+template <>
 void
-GreaterThanFilter<T>::initialize(TableCursor& table_cursor) {
-    _cursor = std::dynamic_pointer_cast<ColumnCursorWrapper<T>>(
-            table_cursor.getColumn(_column_name));
+GreaterThanFilter<arrow::Int64Type>::initialize(TableCursor& table_cursor) {
+    _cursor = table_cursor.getLongColumn(_column_name);
+}
+
+template <>
+void
+GreaterThanFilter<arrow::DoubleType>::initialize(TableCursor& table_cursor) {
+    _cursor = table_cursor.getDoubleColumn(_column_name);
 }
 
 template <typename T>
