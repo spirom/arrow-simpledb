@@ -47,7 +47,7 @@ bool ChunkedDictColumnCursor<T>::isNull()
 }
 
 template <typename T>
-typename T::ReturnType
+typename T::ElementType
 ChunkedDictColumnCursor<T>::get()
 {
     int index = _current_indices->Value(_pos_in_chunk);
@@ -55,7 +55,7 @@ ChunkedDictColumnCursor<T>::get()
 }
 
 template <>
-typename db::StringType::ReturnType
+typename db::StringType::ElementType
 ChunkedDictColumnCursor<db::StringType>::get()
 {
     int index = _current_indices->Value(_pos_in_chunk);

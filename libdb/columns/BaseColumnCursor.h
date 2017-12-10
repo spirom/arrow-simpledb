@@ -29,7 +29,7 @@ public:
      * Get value at current position.
      * @return
      */
-    virtual typename T::ReturnType get() = 0;
+    virtual typename T::ElementType get() = 0;
 
     /**
      * Reset to the first element, if any.

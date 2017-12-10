@@ -45,7 +45,7 @@ public:
      * Get value at current position.
      * @return
      */
-    typename T::ReturnType get();
+    typename T::ElementType get();
 
     /**
      * Reset to the first element, if any.

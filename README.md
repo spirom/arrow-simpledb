@@ -27,6 +27,11 @@ Another abstraction mechanism for easily populating tables with data can be seen
 [libdb/tables/DBTable.h](libdb/tables/DBTable.h)
 and [libdb/tables/DBTable.cpp](libdb/tables/DBTable.cpp)
 
+# C++ Headers
+
+    // THe following also pulls int he crucial "columns/DBSchema.h"
+    #include "tables/DBTable.h"
+
 # Creating and Populating Tables
 
 The `DBTable` class encapsulates an Arrow table together with additional metadata, such as column encodings.
@@ -35,7 +40,7 @@ The following example creates two columns: `id` of type `long` and `cost` of typ
     DBTable *pTable = new DBTable(
                 {"id", "cost"},
                 {db::long(), db::double()},
-                {GenericColumnCursor::PLAIN, GenericColumnCursor::PLAIN}
+                {db::ColumnEncoding::PLAIN, db::ColumnEncoding::PLAIN}
             );
 
     table.reset(pTable);
@@ -46,7 +51,7 @@ The following example creates two columns: `id` of type `long` and `cost` of typ
     table->make();
 
 The call to `make()` prepares the table for use.
-Specify `GenericColumnCursor::DICT` to make a the corresponding column dictionary encoded (not supported for double.)
+Specify `db::ColumnEncoding::DICT` to make a the corresponding column dictionary encoded (not supported for double.)
 
 Optional calls to `endChunk()` causes the underlying columns to be broken into multiple chunks. Each such call closes
 the current chunk for each column and begins a new one. In the following example, each column has two chunks of
@@ -55,7 +60,7 @@ two values each.
     DBTable *pTable = new DBTable(
             {"id", "cost"},
             {db::long(), db::double()},
-            {GenericColumnCursor::PLAIN, GenericColumnCursor::PLAIN}
+            {db::ColumnEncoding::PLAIN, db::ColumnEncoding::PLAIN}
     );
 
     table.reset(pTable);
@@ -104,9 +109,9 @@ Additionally, a filtering and projection cursor can be composed to fetch certain
     std::shared_ptr<TableCursor> tc = dbTable->getScanCursor();
 
     std::shared_ptr<Filter> leftFilter =
-        std::make_shared<GreaterThanFilter<arrow::Int64Type>>("id", 31);
+        std::make_shared<GreaterThanFilter<db::LongType>>("id", 31);
     std::shared_ptr<Filter> rightFilter =
-        std::make_shared<GreaterThanFilter<arrow::DoubleType>>("cost", 100);
+        std::make_shared<GreaterThanFilter<db::DoubleType>>("cost", 100);
     std::shared_ptr<Filter> andFilter =
             std::make_shared<AndFilter>("id", leftFilter, rightFilter);
 
@@ -125,11 +130,11 @@ Table cursors can be composed arbitrarily:
     std::shared_ptr<TableCursor> tc = dbTable->getScanCursor();
 
     std::shared_ptr<Filter> first_filter =
-        std::make_shared<GreaterThanFilter<arrow::Int64Type>>("id", 11);
+        std::make_shared<GreaterThanFilter<db::LongType>>("id", 11);
     FilterProjectTableCursor first_cursor(*tc, first_filter);
 
     std::shared_ptr<Filter> second_filter =
-        std::make_shared<LessThanFilter<arrow::DoubleType>>("cost", 42);
+        std::make_shared<LessThanFilter<db::DoubleType>>("cost", 42);
     FilterProjectTableCursor second_cursor(first_cursor, second_filter);
 
 ## More Examples

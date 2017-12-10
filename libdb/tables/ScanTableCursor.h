@@ -27,7 +27,7 @@ public:
      */
     explicit ScanTableCursor(
             std::shared_ptr<arrow::Table> table,
-            std::vector<GenericColumnCursor::Encoding> encodings
+            std::vector<db::ColumnEncoding> encodings
     );
 
     /**
@@ -49,7 +49,7 @@ public:
     void reset() override;
 
 protected:
-    bool addColumn(std::shared_ptr<arrow::Column> column, GenericColumnCursor::Encoding encoding);
+    bool addColumn(std::shared_ptr<arrow::Column> column, db::ColumnEncoding encoding);
 
     uint64_t getPosition();
 

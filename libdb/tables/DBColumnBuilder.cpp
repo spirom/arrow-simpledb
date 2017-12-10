@@ -7,10 +7,10 @@
 
 template <typename T>
 DBColumnBuilder<T>::DBColumnBuilder(std::shared_ptr<arrow::Field> field,
-                                    GenericColumnCursor::Encoding encoding)
+                                    db::ColumnEncoding encoding)
 {
     _encoding = encoding;
-    if (encoding == GenericColumnCursor::Encoding::DICT) {
+    if (encoding == db::ColumnEncoding::DICT) {
         _dictBuilder.reset(new typename T::DictionaryBuilderType(arrow::default_memory_pool()));
     } else {
         _builder.reset(new typename T::BuilderType());
@@ -22,16 +22,16 @@ DBColumnBuilder<T>::DBColumnBuilder(std::shared_ptr<arrow::Field> field,
 template < typename T>
 void
 DBColumnBuilder<T>::add(std::shared_ptr<DBGenValue> value) {
-    add(std::dynamic_pointer_cast<DBValue<typename T::ReturnType>>(value)->get());
+    add(std::dynamic_pointer_cast<DBValue<typename T::ElementType>>(value)->get());
 }
 
 
 template <typename T>
 void
-DBColumnBuilder<T>::add(typename T::ReturnType element)
+DBColumnBuilder<T>::add(typename T::ElementType element)
 {
     _haveData = true;
-    if (_encoding == GenericColumnCursor::Encoding::DICT) {
+    if (_encoding == db::ColumnEncoding::DICT) {
         _dictBuilder->Append(element);
     } else {
         _builder->Append(element);
@@ -45,7 +45,7 @@ DBColumnBuilder<T>::endChunk()
     // Arrow doesn't like to create columns with no chunks so if we don't have any at all
     // we create an empty one
     if (_haveData || _chunks.size() == 0) {
-        if (_encoding == GenericColumnCursor::Encoding::DICT) {
+        if (_encoding == db::ColumnEncoding::DICT) {
             std::shared_ptr<arrow::Array> array;
             _dictBuilder->Finish(&array);
             _chunks.push_back(array);

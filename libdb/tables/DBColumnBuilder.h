@@ -44,7 +44,7 @@ class DBColumnBuilder : public DBGenColumnBuilder {
 
 public:
 
-    explicit DBColumnBuilder( std::shared_ptr<arrow::Field> field, GenericColumnCursor::Encoding encoding);
+    explicit DBColumnBuilder( std::shared_ptr<arrow::Field> field, db::ColumnEncoding encoding);
 
     void add(std::shared_ptr<DBGenValue> value) override;
 
@@ -54,13 +54,13 @@ public:
 
 protected:
 
-    void add(typename T::ReturnType element);
+    void add(typename T::ElementType element);
 
 private:
 
     bool _haveData;
 
-    GenericColumnCursor::Encoding _encoding;
+    db::ColumnEncoding _encoding;
 
     std::unique_ptr<typename T::BuilderType> _builder;
     std::unique_ptr<typename T::DictionaryBuilderType> _dictBuilder;

@@ -4,7 +4,7 @@
 #include "GreaterThanFilter.h"
 
 template <typename T>
-GreaterThanFilter<T>::GreaterThanFilter(std::string column_name, typename T::ReturnType value)
+GreaterThanFilter<T>::GreaterThanFilter(std::string column_name, typename T::ElementType value)
         : _column_name(column_name), _value(value)
 {
 

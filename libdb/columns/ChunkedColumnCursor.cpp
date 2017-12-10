@@ -45,14 +45,14 @@ bool ChunkedColumnCursor<T>::isNull()
 }
 
 template <typename T>
-typename T::ReturnType
+typename T::ElementType
 ChunkedColumnCursor<T>::get()
 {
     return _current_chunk->Value(_pos_in_chunk);
 }
 
 template <>
-typename db::StringType::ReturnType
+typename db::StringType::ElementType
 ChunkedColumnCursor<db::StringType>::get()
 {
     return _current_chunk->GetString(_pos_in_chunk);

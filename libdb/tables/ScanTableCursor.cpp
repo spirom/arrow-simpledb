@@ -3,7 +3,7 @@
 
 ScanTableCursor::ScanTableCursor(
         std::shared_ptr<arrow::Table> table,
-        std::vector<GenericColumnCursor::Encoding> encodings
+        std::vector<db::ColumnEncoding> encodings
     )
 : _table(table)
 {
@@ -20,7 +20,7 @@ ScanTableCursor::ScanTableCursor(
         : _table(table)
 {
     for (int i = 0; i < table->num_columns(); i++) {
-        addColumn(table->column(i), GenericColumnCursor::Encoding::PLAIN);
+        addColumn(table->column(i), db::ColumnEncoding::PLAIN);
     }
     _size = (uint64_t) table->num_rows();
     reset();
@@ -48,7 +48,7 @@ ScanTableCursor::getDoubleColumn(std::string colName)
 }
 
 bool
-ScanTableCursor::addColumn(std::shared_ptr<arrow::Column> column, GenericColumnCursor::Encoding encoding)
+ScanTableCursor::addColumn(std::shared_ptr<arrow::Column> column, db::ColumnEncoding encoding)
 {
     switch (column->type()->id()) {
         case arrow::Type::INT64: {

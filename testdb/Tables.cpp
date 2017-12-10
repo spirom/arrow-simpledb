@@ -16,7 +16,7 @@ Tables::createNoRows(std::shared_ptr<DBTable>& table) {
     DBTable *pTable = new DBTable(
             {"id", "cost"},
             {db::long_type(), db::double_type()},
-            {GenericColumnCursor::PLAIN, GenericColumnCursor::PLAIN}
+            {db::ColumnEncoding::PLAIN, db::ColumnEncoding::PLAIN}
     );
 
     table.reset(pTable);
@@ -32,7 +32,7 @@ Tables::createSmallSimpleColumns(std::shared_ptr<DBTable>& table) {
     DBTable *pTable = new DBTable(
                 {"id", "cost"},
                 {db::long_type(), db::double_type()},
-                {GenericColumnCursor::PLAIN, GenericColumnCursor::PLAIN}
+                {db::ColumnEncoding::PLAIN, db::ColumnEncoding::PLAIN}
             );
 
     table.reset(pTable);
@@ -51,7 +51,7 @@ Tables::createSmallSimpleStringColumns(std::shared_ptr<DBTable>& table)
     DBTable *pTable = new DBTable(
             {"foo", "bar"},
             {db::string_type(), db::string_type()},
-            {GenericColumnCursor::PLAIN, GenericColumnCursor::PLAIN}
+            {db::ColumnEncoding::PLAIN, db::ColumnEncoding::PLAIN}
     );
 
     table.reset(pTable);
@@ -70,7 +70,7 @@ Tables::createSmallChunkedColumns(std::shared_ptr<DBTable>& table)
     DBTable *pTable = new DBTable(
             {"id", "cost"},
             {db::long_type(), db::double_type()},
-            {GenericColumnCursor::PLAIN, GenericColumnCursor::PLAIN}
+            {db::ColumnEncoding::PLAIN, db::ColumnEncoding::PLAIN}
     );
 
     table.reset(pTable);
@@ -94,7 +94,7 @@ Tables::createSimple(std::shared_ptr<DBTable>& table)
     DBTable *pTable = new DBTable(
             {"id", "cost"},
             {db::long_type(), db::double_type()},
-            {GenericColumnCursor::PLAIN, GenericColumnCursor::PLAIN}
+            {db::ColumnEncoding::PLAIN, db::ColumnEncoding::PLAIN}
     );
 
     table.reset(pTable);
@@ -120,7 +120,7 @@ Tables::createSmallDictionaryColumns(std::shared_ptr<DBTable>& table)
     DBTable *pTable = new DBTable(
             {"id", "cost"},
             {db::long_type(), db::long_type()},
-            {GenericColumnCursor::DICT, GenericColumnCursor::DICT}
+            {db::ColumnEncoding::DICT, db::ColumnEncoding::DICT}
     );
 
     table.reset(pTable);
@@ -158,7 +158,7 @@ Tables::createSmallStringDictionaryColumns(std::shared_ptr<DBTable>& table)
     DBTable *pTable = new DBTable(
             {"foo", "bar"},
             {db::string_type(), db::string_type()},
-            {GenericColumnCursor::DICT, GenericColumnCursor::DICT}
+            {db::ColumnEncoding::DICT, db::ColumnEncoding::DICT}
     );
 
     table.reset(pTable);
@@ -177,7 +177,7 @@ Tables::createChunkedDictionaryColumns(std::shared_ptr<DBTable>& table)
     DBTable *pTable = new DBTable(
             {"id", "cost"},
             {db::long_type(), db::string_type()},
-            {GenericColumnCursor::DICT, GenericColumnCursor::DICT}
+            {db::ColumnEncoding::DICT, db::ColumnEncoding::DICT}
     );
 
     table.reset(pTable);

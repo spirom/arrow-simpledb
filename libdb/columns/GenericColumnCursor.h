@@ -17,7 +17,6 @@ class TableCursor;
  */
 class GenericColumnCursor {
 public:
-    enum Encoding { PLAIN = 0, DICT };
     virtual ~GenericColumnCursor() = default;
     virtual void reset() = 0;
 protected:

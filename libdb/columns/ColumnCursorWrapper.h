@@ -6,6 +6,7 @@
 #include "tables/ScanTableCursor.h"
 #include "GenericColumnCursor.h"
 #include "BaseColumnCursor.h"
+#include "columns/DBSchema.h"
 
 class TableCursor;
 
@@ -22,7 +23,7 @@ public:
 
     explicit ColumnCursorWrapper(
             std::shared_ptr<arrow::Column> column,
-            Encoding encoding,
+            db::ColumnEncoding encoding,
             TableCursor &table_cursor);
 
 
@@ -32,7 +33,7 @@ public:
 
     bool isNull();
 
-    typename T::ReturnType get();
+    typename T::ElementType get();
 
     void reset();
 

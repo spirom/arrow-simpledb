@@ -28,7 +28,7 @@ public:
     explicit DBTable(
             std::vector<std::string> names,
             std::vector<std::shared_ptr<db::DataType>> types,
-            std::vector<GenericColumnCursor::Encoding> encodings);
+            std::vector<db::ColumnEncoding> encodings);
 
     /**
      * Start a new chunk for each column.
@@ -96,7 +96,7 @@ private:
     /**
      * Column encodings
      */
-    std::vector<GenericColumnCursor::Encoding> _encodings;
+    std::vector<db::ColumnEncoding> _encodings;
 
     /**
      * Arrow columns

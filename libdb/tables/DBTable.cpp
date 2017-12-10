@@ -8,7 +8,7 @@ using arrow::Field;
 DBTable::DBTable(
         std::vector<std::string> names,
         std::vector<std::shared_ptr<db::DataType>> types,
-        std::vector<GenericColumnCursor::Encoding> encodings)
+        std::vector<db::ColumnEncoding> encodings)
 {
 
     _encodings = encodings;
@@ -18,7 +18,7 @@ DBTable::DBTable(
     for (uint64_t i = 0; i < names.size(); i++) {
         std::shared_ptr<db::DataType> tp = types.at(i);
         std::shared_ptr<Field> field = arrow::field(names.at(i), tp->getArrowType());
-        GenericColumnCursor::Encoding encoding = encodings.at(i);
+        db::ColumnEncoding encoding = encodings.at(i);
         schema_vector.push_back(field);
 
         switch (tp->id()) {
