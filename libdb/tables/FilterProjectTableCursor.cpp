@@ -32,6 +32,12 @@ FilterProjectTableCursor::getDoubleColumn(std::string colName)
     return std::dynamic_pointer_cast<ColumnCursorWrapper<db::DoubleType>>(_source_cursor.getDoubleColumn(colName));
 }
 
+std::shared_ptr<GenericColumnCursor>
+FilterProjectTableCursor::getColumn(std::string colName)
+{
+    return _source_cursor.getColumn(colName);
+}
+
 bool
 FilterProjectTableCursor::hasMore()
 {

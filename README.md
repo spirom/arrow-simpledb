@@ -131,6 +131,16 @@ Table cursors can be composed arbitrarily:
         std::make_shared<db::LessThanFilter<db::DoubleType>>("cost", 42);
     db::FilterProjectTableCursor second_cursor(first_cursor, second_filter);
 
+## Null values
+
+Support for nulls is based ont he native support in Arrow. Create data with nulls by
+calling `db::null_val()` as follows:
+
+    table->addRow({db::long_val(11), db::null_val()});
+
+Then call `isNull()` on a column cursor to check before attempting to obtain a non-null value.
+
+
 ## More Examples
 
 See the unit tests in [testdb/TableTest.cpp](testdb/TableTest.cpp) for more examples of how to use the query
@@ -139,11 +149,12 @@ populating tables.
 
 # Things Not Yet Investigated
 
+* Memory pools are not used at all thoughtfully
+* Filtering is not pushed down into dictionaries
 * Data representation
-  * Nulls
-  * Non-relational data
+  * Non-relational data cannot yet be represented
 * A full range of column types (currently just int64, double and string)
-* Memory pools are not used at all thoughtfully.
+* Performance and scale
 * Vectorized execution -- in fact the framework currently mnakes heavy use of virtual methods at considerable cost
 * Parallelism
 

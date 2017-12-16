@@ -18,6 +18,10 @@ namespace db {
         virtual std::shared_ptr<arrow::Column> getColumn() = 0;
 
         virtual ~DBGenColumnBuilder() = default;
+
+    private:
+
+        virtual void addNull() = 0;
     };
 
     template<typename T>
@@ -36,6 +40,8 @@ namespace db {
     protected:
 
         void add(typename T::ElementType element);
+
+        void addNull() override;
 
     private:
 

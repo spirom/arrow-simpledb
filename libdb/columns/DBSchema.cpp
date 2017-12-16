@@ -36,3 +36,9 @@ db::string_val(std::string s)
 {
     return std::make_shared<::db::Value<std::string>>(s);
 }
+
+std::shared_ptr<db::GenValue>
+db::null_val()
+{
+    return std::make_shared<::db::NullValue>();
+}

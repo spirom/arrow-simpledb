@@ -1,6 +1,4 @@
-//
-// Created by spiro on 11/7/17.
-//
+
 
 #include "ColumnCursorWrapper.h"
 #include "columns/ChunkedColumnCursor.h"

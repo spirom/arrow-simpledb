@@ -41,7 +41,7 @@ ChunkedColumnCursor<T>::next() {
 template<typename T>
 bool
 ChunkedColumnCursor<T>::isNull() {
-    return false; // TODO: handle nulls
+    return _current_chunk->IsNull(_pos_in_chunk);
 }
 
 template<typename T>

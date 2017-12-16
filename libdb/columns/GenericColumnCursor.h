@@ -1,9 +1,7 @@
-//
-// Created by spiro on 11/7/17.
-//
 
-#ifndef GENERICCOLUMNCURSOR_H
-#define GENERICCOLUMNCURSOR_H
+
+#ifndef GENERIC_COLUMN_CURSOR_H
+#define GENERIC_COLUMN_CURSOR_H
 
 #include <cstdint>
 
@@ -21,6 +19,8 @@ namespace db {
     public:
         virtual ~GenericColumnCursor() = default;
 
+        virtual bool isNull() = 0;
+
         virtual void reset() = 0;
 
     protected:
@@ -35,4 +35,4 @@ namespace db {
 };
 
 
-#endif // GENERICCOLUMNCURSOR_H
+#endif // GENERIC_COLUMN_CURSOR_H

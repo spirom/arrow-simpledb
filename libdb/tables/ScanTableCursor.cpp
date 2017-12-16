@@ -49,6 +49,13 @@ ScanTableCursor::getDoubleColumn(std::string colName)
     return std::dynamic_pointer_cast<ColumnCursorWrapper<db::DoubleType>>(_cursors[colName]);
 }
 
+std::shared_ptr<GenericColumnCursor>
+ScanTableCursor::getColumn(std::string colName)
+{
+    if (_cursors.count(colName) == 0) return nullptr;
+    return _cursors[colName];
+}
+
 bool
 ScanTableCursor::addColumn(std::shared_ptr<arrow::Column> column, db::ColumnEncoding encoding)
 {

@@ -47,6 +47,8 @@ namespace db {
 
         std::shared_ptr<ColumnCursorWrapper<db::DoubleType>> getDoubleColumn(std::string colName) override;
 
+        std::shared_ptr<GenericColumnCursor> getColumn(std::string colName) override;
+
         bool hasMore() override;
 
         void reset() override;

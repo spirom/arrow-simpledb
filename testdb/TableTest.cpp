@@ -6,6 +6,8 @@
 #include "arrow/api.h"
 
 #include <columns/DBSchema.h>
+#include <filters/IsNullFilter.h>
+#include <filters/NotFilter.h>
 
 #include "TableTest.h"
 #include "Tables.h"
@@ -158,7 +160,7 @@ TEST_F(TableTest, ConjunctiveFilter) {
     std::shared_ptr<db::Filter> leftFilter = std::make_shared<db::GreaterThanFilter<db::LongType>>("id", 11);
     std::shared_ptr<db::Filter> rightFilter = std::make_shared<db::LessThanFilter<db::DoubleType>>("cost", 42);
     std::shared_ptr<db::Filter> andFilter =
-            std::make_shared<db::AndFilter>("id", leftFilter, rightFilter);
+            std::make_shared<db::AndFilter>(leftFilter, rightFilter);
 
     db::FilterProjectTableCursor fptc(*tc, andFilter);
 
@@ -186,7 +188,7 @@ TEST_F(TableTest, NeverTrueFilter) {
     std::shared_ptr<db::Filter> leftFilter = std::make_shared<db::GreaterThanFilter<db::LongType>>("id", 31);
     std::shared_ptr<db::Filter> rightFilter = std::make_shared<db::LessThanFilter<db::DoubleType>>("cost", 22);
     std::shared_ptr<db::Filter> andFilter =
-            std::make_shared<db::AndFilter>("id", leftFilter, rightFilter);
+            std::make_shared<db::AndFilter>(leftFilter, rightFilter);
 
     db::FilterProjectTableCursor fptc(*tc, andFilter);
 
@@ -208,7 +210,7 @@ TEST_F(TableTest, TwoTypesSameFilter) {
     std::shared_ptr<db::Filter> leftFilter = std::make_shared<db::GreaterThanFilter<db::LongType>>("id", 31);
     std::shared_ptr<db::Filter> rightFilter = std::make_shared<db::GreaterThanFilter<db::DoubleType>>("cost", 100);
     std::shared_ptr<db::Filter> andFilter =
-            std::make_shared<db::AndFilter>("id", leftFilter, rightFilter);
+            std::make_shared<db::AndFilter>(leftFilter, rightFilter);
 
     db::FilterProjectTableCursor fptc(*tc, andFilter);
 
@@ -417,6 +419,99 @@ TEST_F(TableTest, NoRows) {
     auto cost_cursor = tc->getDoubleColumn(std::string("cost"));
     EXPECT_FALSE(tc->hasMore());
 }
+
+TEST_F(TableTest, Nulls) {
+    std::shared_ptr<db::DBTable> dbTable;
+    EXPECT_EQ(Status::OK().code(), Tables::createSmallChunkedColumnsWithNulls(dbTable).code());
+
+    std::shared_ptr<Table> table = dbTable->getTable();
+    EXPECT_EQ(4, table->num_rows());
+    EXPECT_EQ(2, table->num_columns());
+
+    std::shared_ptr<db::TableCursor> tc = dbTable->getScanCursor();
+    auto id_cursor = tc->getLongColumn(std::string("id"));
+    auto cost_cursor = tc->getDoubleColumn(std::string("cost"));
+    EXPECT_TRUE(tc->hasMore());
+    EXPECT_FALSE(id_cursor->isNull());
+    EXPECT_EQ(11, id_cursor->get());
+    EXPECT_TRUE(cost_cursor->isNull());
+    EXPECT_TRUE(tc->hasMore());
+    EXPECT_FALSE(id_cursor->isNull());
+    EXPECT_EQ(12, id_cursor->get());
+    EXPECT_FALSE(cost_cursor->isNull());
+    EXPECT_EQ(22.9, cost_cursor->get());
+    EXPECT_TRUE(tc->hasMore());
+    EXPECT_TRUE(id_cursor->isNull());
+    EXPECT_FALSE(cost_cursor->isNull());
+    EXPECT_EQ(41.9, cost_cursor->get());
+    EXPECT_TRUE(tc->hasMore());
+    EXPECT_TRUE(id_cursor->isNull());
+    EXPECT_TRUE(cost_cursor->isNull());
+    EXPECT_FALSE(tc->hasMore());
+}
+
+TEST_F(TableTest, StringDictNulls) {
+    std::shared_ptr<db::DBTable> dbTable;
+    EXPECT_EQ(Status::OK().code(), Tables::createChunkedDictionaryColumnsWithNulls(dbTable).code());
+
+    std::shared_ptr<Table> table = dbTable->getTable();
+    EXPECT_EQ(4, table->num_rows());
+    EXPECT_EQ(2, table->num_columns());
+
+    std::shared_ptr<db::TableCursor> tc = dbTable->getScanCursor();
+    auto id_cursor = tc->getLongColumn(std::string("id"));
+    auto cost_cursor = tc->getStringColumn(std::string("cost"));
+    EXPECT_TRUE(tc->hasMore());
+    EXPECT_FALSE(id_cursor->isNull());
+    EXPECT_EQ(11, id_cursor->get());
+    EXPECT_TRUE(cost_cursor->isNull());
+    EXPECT_TRUE(tc->hasMore());
+    EXPECT_FALSE(id_cursor->isNull());
+    EXPECT_EQ(12, id_cursor->get());
+    EXPECT_FALSE(cost_cursor->isNull());
+    EXPECT_EQ("twenty two", cost_cursor->get());
+    EXPECT_TRUE(tc->hasMore());
+    EXPECT_TRUE(id_cursor->isNull());
+    EXPECT_FALSE(cost_cursor->isNull());
+    EXPECT_EQ("forty one", cost_cursor->get());
+    EXPECT_TRUE(tc->hasMore());
+    EXPECT_TRUE(id_cursor->isNull());
+    EXPECT_FALSE(cost_cursor->isNull());
+    EXPECT_EQ("forty two", cost_cursor->get());
+    EXPECT_FALSE(tc->hasMore());
+}
+
+TEST_F(TableTest, FilterNulls) {
+    std::shared_ptr<db::DBTable> dbTable;
+    EXPECT_EQ(Status::OK().code(), Tables::createChunkedDictionaryColumnsWithNulls(dbTable).code());
+
+    std::shared_ptr<Table> table = dbTable->getTable();
+    EXPECT_EQ(4, table->num_rows());
+    EXPECT_EQ(2, table->num_columns());
+
+    std::shared_ptr<db::TableCursor> tc = dbTable->getScanCursor();
+
+    auto leftNullFilter = std::make_shared<db::IsNullFilter>("id");
+    auto rightNullFilter = std::make_shared<db::IsNullFilter>("cost");
+
+    auto leftNotFilter = std::make_shared<db::NotFilter>(leftNullFilter);
+    auto rightNotFilter = std::make_shared<db::NotFilter>(rightNullFilter);
+
+    std::shared_ptr<db::Filter> andFilter =
+            std::make_shared<db::AndFilter>(leftNotFilter, rightNotFilter);
+
+    db::FilterProjectTableCursor fptc(*tc, andFilter);
+
+    auto id_cursor = fptc.getLongColumn(std::string("id"));
+    auto cost_cursor = fptc.getStringColumn(std::string("cost"));
+    EXPECT_TRUE(fptc.hasMore());
+    EXPECT_FALSE(id_cursor->isNull());
+    EXPECT_EQ(12, id_cursor->get());
+    EXPECT_FALSE(cost_cursor->isNull());
+    EXPECT_EQ("twenty two", cost_cursor->get());
+    EXPECT_FALSE(fptc.hasMore());
+}
+
 
 // TODO: filter on dictionary column (efficiently?)
 

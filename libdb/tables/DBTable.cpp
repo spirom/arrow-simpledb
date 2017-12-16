@@ -1,5 +1,6 @@
 
 
+#include <iostream>
 #include "DBTable.h"
 
 using arrow::Table;
@@ -51,7 +52,9 @@ void
 DBTable::addRow(std::vector<std::shared_ptr<db::GenValue>> values)
 {
     for (size_t i = 0; i < values.size(); i++) {
-        _builders.at(i)->add(values.at(i));
+        auto builder = _builders.at(i);
+        auto v = values.at(i);
+        builder->add(v);
     }
 }
 
@@ -85,3 +88,60 @@ DBTable::getTable()
     return _table;
 }
 
+void
+DBTable::dump()
+{
+    for (int i = 0; i < _table->num_columns(); i++) {
+        std::shared_ptr<arrow::Column> col = _table->column(i);
+        std::cout << "*** COLUMN " << i << " : " << col->name() << std::endl;
+        std::cout << "Num chunks: " << col->data()->num_chunks() << std::endl;
+        for (int c = 0; c < col->data()->num_chunks(); c++) {
+            std::cout << "Chunk " << c
+                      << " length: " << col->data()->chunk(c)->length()
+                      << " null count: " << col->data()->chunk(c)->null_count()
+                    << std::endl;
+            std::shared_ptr<arrow::DictionaryArray> da = std::dynamic_pointer_cast<arrow::DictionaryArray>(
+                    col->data()->chunk(c));
+            if (da == nullptr) {
+                std::cout << "SIMPLE array length: " << col->data()->chunk(c) << std::endl;
+            } else {
+                std::cout << "CHUNKED dict array: " << da.get() << std::endl;
+
+                std::cout << "dict array length: " << da->length() << std::endl;
+                std::cout << "dict array dict length: " << da->dictionary()->length() << std::endl;
+                std::cout << "dict array indices length: " << da->indices()->length() << std::endl;
+
+                std::cout << "dict array dictionary type: " << da->dictionary()->type_id() << std::endl;
+
+                std::cout << "dict array indices type: " << da->indices()->type_id() << std::endl;
+
+                std::shared_ptr<arrow::StringArray> stringDict =
+                        std::dynamic_pointer_cast<arrow::StringArray>(da->dictionary());
+                if (stringDict == nullptr) {
+
+                } else {
+                    for (int de = 0; de < stringDict->length(); de++) {
+                        std::cout << "Dict entry " << de << " : " << stringDict->GetString(de) << std:: endl;
+                    }
+                }
+
+                std::shared_ptr<arrow::NumericArray<arrow::Int8Type>> indices =
+                        std::dynamic_pointer_cast<arrow::NumericArray<arrow::Int8Type>>(da->indices());
+                if (indices != nullptr) {
+                    for (int ie = 0; ie < indices->length(); ie++) {
+                        if (indices->IsNull(ie)) {
+                            std::cout << "Index entry " << ie << " : IS NULL" << std:: endl;
+                        } else {
+                            std::cout << "Index entry " << ie << " : " << (int)indices->Value(ie) << std:: endl;
+                        }
+
+                    }
+                }
+
+
+            }
+        }
+    }
+
+
+}

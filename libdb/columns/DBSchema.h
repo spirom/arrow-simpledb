@@ -121,6 +121,10 @@ namespace db {
         T _value;
     };
 
+    class NullValue : public GenValue {
+
+    };
+
     /**
      * Create int64 value suitable for passing into addRow().
      * @param i
@@ -142,6 +146,7 @@ namespace db {
      */
     std::shared_ptr<GenValue> string_val(std::string s);
 
+    std::shared_ptr<GenValue> null_val();
 };
 
 

@@ -52,6 +52,14 @@ namespace db {
         virtual std::shared_ptr<ColumnCursorWrapper<db::DoubleType>> getDoubleColumn(std::string colName) = 0;
 
         /**
+         * Get access to the specified column, always synchronized with this cursor's position.
+         * UYse this in cases where you need need to deal with the column's type.
+         * @param colName
+         * @return
+         */
+        virtual std::shared_ptr<GenericColumnCursor> getColumn(std::string colName) = 0;
+
+        /**
          * True if there are more rows.
          * @return
          */

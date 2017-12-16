@@ -42,7 +42,7 @@ ChunkedDictColumnCursor<T>::next() {
 
 template<typename T>
 bool ChunkedDictColumnCursor<T>::isNull() {
-    return false; // TODO: handle nulls
+    return _current_indices->IsNull(_pos_in_chunk);
 }
 
 template<typename T>
@@ -86,7 +86,7 @@ ChunkedDictColumnCursor<T>::seek(uint64_t to) {
     // the key idea here is to avoid touching the memory of the intervening chunks completely
     int64_t distance = to - _pos;
     while (_pos_in_chunk + distance >= _current_indices->length()) {
-        int64_t advancing = _current_dict->length() - _pos_in_chunk;
+        int64_t advancing = _current_indices->length() - _pos_in_chunk;
         distance -= advancing;
         if (!advance_chunk()) return false;
         _pos += advancing;

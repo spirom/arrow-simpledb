@@ -61,6 +61,11 @@ namespace db {
          */
         void addRow(std::vector<std::shared_ptr<db::GenValue>> values);
 
+        /**
+         * Dump table for debugging
+         */
+        void dump();
+
 
     private:
         /**

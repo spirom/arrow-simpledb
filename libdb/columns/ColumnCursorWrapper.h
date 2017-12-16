@@ -1,7 +1,7 @@
 
 
-#ifndef COLUMNCURSORWRAPPER_H
-#define COLUMNCURSORWRAPPER_H
+#ifndef COLUMN_CURSOR_WRAPPER_H
+#define COLUMN_CURSOR_WRAPPER_H
 
 #include "tables/ScanTableCursor.h"
 #include "GenericColumnCursor.h"
@@ -28,16 +28,15 @@ namespace db {
                 db::ColumnEncoding encoding,
                 TableCursor &table_cursor);
 
-
         explicit ColumnCursorWrapper(
                 std::shared_ptr<BaseColumnCursor<T>> base_cursor,
                 TableCursor &table_cursor);
 
-        bool isNull();
+        bool isNull() override;
 
         typename T::ElementType get();
 
-        void reset();
+        void reset() override;
 
     private:
         std::shared_ptr<BaseColumnCursor<T>> _base_cursor;
@@ -46,4 +45,4 @@ namespace db {
 
 };
 
-#endif // COLUMNCURSORWRAPPER_H
+#endif // COLUMN_CURSOR_WRAPPER_H
