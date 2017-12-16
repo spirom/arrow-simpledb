@@ -3,7 +3,6 @@
 #ifndef COLUMN_CURSOR_WRAPPER_H
 #define COLUMN_CURSOR_WRAPPER_H
 
-#include "tables/ScanTableCursor.h"
 #include "GenericColumnCursor.h"
 #include "BaseColumnCursor.h"
 #include "columns/DBSchema.h"
