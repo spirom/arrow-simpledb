@@ -5,7 +5,7 @@
 #include <string>
 #include "Filter.h"
 #include "tables/TableCursor.h"
-#include "columns/ColumnCursorWrapper.h"
+#include "columns/BaseColumnCursor.h"
 
 namespace db {
 

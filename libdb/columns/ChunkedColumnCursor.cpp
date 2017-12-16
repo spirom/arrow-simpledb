@@ -8,8 +8,8 @@
 namespace db {
 
 template<typename T>
-ChunkedColumnCursor<T>::ChunkedColumnCursor(std::shared_ptr<arrow::Column> column)
-        : _column(std::move(column)) {
+ChunkedColumnCursor<T>::ChunkedColumnCursor(std::shared_ptr<arrow::Column> column, TableCursor &table_cursor)
+        : BaseColumnCursor<T>(table_cursor), _column(std::move(column)) {
     // std::cout << "Cursor: [" << _column->data()->num_chunks() << "]" << std::endl;
     reset();
 }
@@ -41,12 +41,14 @@ ChunkedColumnCursor<T>::next() {
 template<typename T>
 bool
 ChunkedColumnCursor<T>::isNull() {
+    seek(this->get_table_cursor_position());
     return _current_chunk->IsNull(_pos_in_chunk);
 }
 
 template<typename T>
 typename T::ElementType
 ChunkedColumnCursor<T>::get() {
+    seek(this->get_table_cursor_position());
     return _current_chunk->Value(_pos_in_chunk);
 }
 

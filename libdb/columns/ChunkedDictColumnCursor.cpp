@@ -11,8 +11,8 @@ using arrow::Int8Type;
 namespace db {
 
 template<typename T>
-ChunkedDictColumnCursor<T>::ChunkedDictColumnCursor(std::shared_ptr<arrow::Column> column)
-        : _column(column) {
+ChunkedDictColumnCursor<T>::ChunkedDictColumnCursor(std::shared_ptr<arrow::Column> column, TableCursor &table_cursor)
+        : BaseColumnCursor<T>(table_cursor), _column(column) {
     reset();
 }
 
@@ -42,12 +42,14 @@ ChunkedDictColumnCursor<T>::next() {
 
 template<typename T>
 bool ChunkedDictColumnCursor<T>::isNull() {
+    seek(this->get_table_cursor_position());
     return _current_indices->IsNull(_pos_in_chunk);
 }
 
 template<typename T>
 typename T::ElementType
 ChunkedDictColumnCursor<T>::get() {
+    seek(this->get_table_cursor_position());
     int index = _current_indices->Value(_pos_in_chunk);
     return _current_dict->Value(index);
 }

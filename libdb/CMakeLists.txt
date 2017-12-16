@@ -16,7 +16,7 @@ set(SOURCE_FILES
         columns/ChunkedColumnCursor.cpp
         columns/ChunkedDictColumnCursor.cpp
         tables/ScanTableCursor.cpp
-        columns/ColumnCursorWrapper.cpp columns/GenericColumnCursor.cpp tables/TableCursor.cpp
+        columns/GenericColumnCursor.cpp tables/TableCursor.cpp
         tables/FilterProjectTableCursor.cpp
         filters/Filter.h
         filters/GreaterThanFilter.cpp filters/GreaterThanFilter.h
@@ -25,7 +25,7 @@ set(SOURCE_FILES
         tables/DBTable.cpp tables/DBTable.h
         tables/DBColumnBuilder.cpp tables/DBColumnBuilder.h
         columns/DBSchema.h columns/DBSchema.cpp
-        filters/IsNullFilter.cpp filters/IsNullFilter.h filters/NotFilter.cpp filters/NotFilter.h)
+        filters/IsNullFilter.cpp filters/IsNullFilter.h filters/NotFilter.cpp filters/NotFilter.h columns/BaseColumnCursor.cpp)
 
 add_library(libdb STATIC ${SOURCE_FILES})
 

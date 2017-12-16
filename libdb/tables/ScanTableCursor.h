@@ -5,7 +5,7 @@
 
 #include <unordered_map>
 #include <arrow/table.h>
-#include "columns/ColumnCursorWrapper.h"
+#include "columns/BaseColumnCursor.h"
 #include "columns/GenericColumnCursor.h"
 #include "TableCursor.h"
 #include <columns/DBSchema.h>
@@ -41,11 +41,11 @@ namespace db {
                 std::shared_ptr<arrow::Table> table
         );
 
-        std::shared_ptr<ColumnCursorWrapper<db::StringType>> getStringColumn(std::string colName) override;
+        std::shared_ptr<BaseColumnCursor<db::StringType>> getStringColumn(std::string colName) override;
 
-        std::shared_ptr<ColumnCursorWrapper<db::LongType>> getLongColumn(std::string colName) override;
+        std::shared_ptr<BaseColumnCursor<db::LongType>> getLongColumn(std::string colName) override;
 
-        std::shared_ptr<ColumnCursorWrapper<db::DoubleType>> getDoubleColumn(std::string colName) override;
+        std::shared_ptr<BaseColumnCursor<db::DoubleType>> getDoubleColumn(std::string colName) override;
 
         std::shared_ptr<GenericColumnCursor> getColumn(std::string colName) override;
 

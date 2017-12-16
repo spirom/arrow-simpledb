@@ -25,7 +25,7 @@ namespace db {
          * Create from a column -- initially positioned at first element, if any.
          * @param column
          */
-        explicit ChunkedDictColumnCursor(std::shared_ptr<arrow::Column> column);
+        explicit ChunkedDictColumnCursor(std::shared_ptr<arrow::Column> column, TableCursor &table_cursor);
 
         /**
          * Will next() produce another element?

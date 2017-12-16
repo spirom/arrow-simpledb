@@ -10,6 +10,9 @@ namespace db {
 
     class Filter;
 
+    template <typename T>
+    class BaseColumnCursor;
+
 /**
  * Cursor for filtering and projecting a table. Compose with some other cursor.
  * Compose filters from classes like GreaterTHanFilter, LessThanFilter and AndFilter.
@@ -18,11 +21,11 @@ namespace db {
     public:
         explicit FilterProjectTableCursor(TableCursor &source_cursor, std::shared_ptr<Filter> &filter);
 
-        std::shared_ptr<ColumnCursorWrapper<db::StringType>> getStringColumn(std::string colName) override;
+        std::shared_ptr<BaseColumnCursor<db::StringType>> getStringColumn(std::string colName) override;
 
-        std::shared_ptr<ColumnCursorWrapper<db::LongType>> getLongColumn(std::string colName) override;
+        std::shared_ptr<BaseColumnCursor<db::LongType>> getLongColumn(std::string colName) override;
 
-        std::shared_ptr<ColumnCursorWrapper<db::DoubleType>> getDoubleColumn(std::string colName) override;
+        std::shared_ptr<BaseColumnCursor<db::DoubleType>> getDoubleColumn(std::string colName) override;
 
         std::shared_ptr<GenericColumnCursor> getColumn(std::string colName) override;
 

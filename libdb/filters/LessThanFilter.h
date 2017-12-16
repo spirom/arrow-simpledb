@@ -6,7 +6,7 @@
 #include <string>
 #include "filters/Filter.h"
 #include "tables/TableCursor.h"
-#include "columns/ColumnCursorWrapper.h"
+#include "columns/BaseColumnCursor.h"
 
 namespace db {
 
@@ -26,7 +26,7 @@ namespace db {
 
         double _value;
 
-        std::shared_ptr<ColumnCursorWrapper<T>> _cursor;
+        std::shared_ptr<BaseColumnCursor<T>> _cursor;
     };
 
 };

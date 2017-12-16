@@ -1,4 +1,5 @@
 
+#include <columns/BaseColumnCursor.h>
 #include "ScanTableCursor.h"
 
 using namespace db;
@@ -28,25 +29,25 @@ ScanTableCursor::ScanTableCursor(
     reset();
 }
 
-std::shared_ptr<ColumnCursorWrapper<db::StringType>>
+std::shared_ptr<BaseColumnCursor<db::StringType>>
 ScanTableCursor::getStringColumn(std::string colName)
 {
     if (_cursors.count(colName) == 0) return nullptr;
-    return std::dynamic_pointer_cast<ColumnCursorWrapper<db::StringType>>(_cursors[colName]);
+    return std::dynamic_pointer_cast<BaseColumnCursor<db::StringType>>(_cursors[colName]);
 }
 
-std::shared_ptr<ColumnCursorWrapper<db::LongType>>
+std::shared_ptr<BaseColumnCursor<db::LongType>>
 ScanTableCursor::getLongColumn(std::string colName)
 {
     if (_cursors.count(colName) == 0) return nullptr;
-    return std::dynamic_pointer_cast<ColumnCursorWrapper<db::LongType>>(_cursors[colName]);
+    return std::dynamic_pointer_cast<BaseColumnCursor<db::LongType>>(_cursors[colName]);
 }
 
-std::shared_ptr<ColumnCursorWrapper<db::DoubleType>>
+std::shared_ptr<BaseColumnCursor<db::DoubleType>>
 ScanTableCursor::getDoubleColumn(std::string colName)
 {
     if (_cursors.count(colName) == 0) return nullptr;
-    return std::dynamic_pointer_cast<ColumnCursorWrapper<db::DoubleType>>(_cursors[colName]);
+    return std::dynamic_pointer_cast<BaseColumnCursor<db::DoubleType>>(_cursors[colName]);
 }
 
 std::shared_ptr<GenericColumnCursor>
@@ -61,18 +62,15 @@ ScanTableCursor::addColumn(std::shared_ptr<arrow::Column> column, db::ColumnEnco
 {
     switch (column->type()->id()) {
         case arrow::Type::INT64: {
-            _cursors[column->name()] =
-                    std::make_shared<ColumnCursorWrapper<db::LongType>>(column, encoding, *this);
+            _cursors[column->name()] = BaseColumnCursor<db::LongType>::makeCursor(column, encoding, *this);
             return true;
         }
         case arrow::Type::DOUBLE: {
-            _cursors[column->name()] =
-                    std::make_shared<ColumnCursorWrapper<db::DoubleType>>(column, encoding, *this);
+            _cursors[column->name()] = BaseColumnCursor<db::DoubleType>::makeCursor(column, encoding, *this);
             return true;
         }
         case arrow::Type::STRING: {
-            _cursors[column->name()] =
-                    std::make_shared<ColumnCursorWrapper<db::StringType>>(column, encoding, *this);
+            _cursors[column->name()] = BaseColumnCursor<db::StringType>::makeCursor(column, encoding, *this);
             return true;
         }
         default:

@@ -17,12 +17,15 @@ namespace db {
     class FilterProjectTableCursor;
 
     template<typename T>
-    class ColumnCursorWrapper;
+    class BaseColumnCursor;
 
 /**
  * Common base of all table cursors, exposing row iteration and access to columns.
  */
     class TableCursor {
+
+        template <typename T>
+        friend class BaseColumnCursor;
 
         friend class GenericColumnCursor;
 
@@ -35,25 +38,25 @@ namespace db {
          * @param colName
          * @return
          */
-        virtual std::shared_ptr<ColumnCursorWrapper<db::StringType>> getStringColumn(std::string colName) = 0;
+        virtual std::shared_ptr<BaseColumnCursor<db::StringType>> getStringColumn(std::string colName) = 0;
 
         /**
          * Get access to the specified Long type column, always synchronized with this cursor's position.
          * @param colName
          * @return
          */
-        virtual std::shared_ptr<ColumnCursorWrapper<db::LongType>> getLongColumn(std::string colName) = 0;
+        virtual std::shared_ptr<BaseColumnCursor<db::LongType>> getLongColumn(std::string colName) = 0;
 
         /**
          * Get access to the specified Double type column, always synchronized with this cursor's position.
          * @param colName
          * @return
          */
-        virtual std::shared_ptr<ColumnCursorWrapper<db::DoubleType>> getDoubleColumn(std::string colName) = 0;
+        virtual std::shared_ptr<BaseColumnCursor<db::DoubleType>> getDoubleColumn(std::string colName) = 0;
 
         /**
          * Get access to the specified column, always synchronized with this cursor's position.
-         * UYse this in cases where you need need to deal with the column's type.
+         * UYse this in cases where you don't need to deal with the column's type.
          * @param colName
          * @return
          */
