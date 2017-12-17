@@ -30,7 +30,8 @@ namespace db {
         explicit DBTable(
                 std::vector<std::string> names,
                 std::vector<std::shared_ptr<db::DataType>> types,
-                std::vector<db::ColumnEncoding> encodings);
+                std::vector<db::ColumnEncoding> encodings,
+                arrow::MemoryPool *pool = arrow::default_memory_pool());
 
         /**
          * Start a new chunk for each column.

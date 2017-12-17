@@ -5,7 +5,6 @@
 #include <tables/DBTable.h>
 #include "arrow/api.h"
 
-#include <columns/DBSchema.h>
 #include <filters/IsNullFilter.h>
 #include <filters/NotFilter.h>
 
@@ -512,6 +511,22 @@ TEST_F(TableTest, FilterNulls) {
     EXPECT_FALSE(fptc.hasMore());
 }
 
+TEST_F(TableTest, Memory) {
+
+    arrow::MemoryPool *pool = arrow::default_memory_pool();
+
+    EXPECT_EQ(0, pool->bytes_allocated());
+
+    std::shared_ptr<db::DBTable> dbTable;
+    EXPECT_EQ(Status::OK().code(), Tables::createSmallSimpleColumns(dbTable, pool).code());
+
+    EXPECT_NE(0, pool->bytes_allocated());
+
+    dbTable.reset();
+
+    EXPECT_EQ(0, pool->bytes_allocated());
+
+}
 
 // TODO: filter on dictionary column (efficiently?)
 

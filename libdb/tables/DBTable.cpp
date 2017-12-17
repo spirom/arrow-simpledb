@@ -11,7 +11,8 @@ using namespace db;
 DBTable::DBTable(
         std::vector<std::string> names,
         std::vector<std::shared_ptr<db::DataType>> types,
-        std::vector<db::ColumnEncoding> encodings)
+        std::vector<db::ColumnEncoding> encodings,
+        arrow::MemoryPool *pool)
 {
 
     _encodings = encodings;
@@ -26,15 +27,15 @@ DBTable::DBTable(
 
         switch (tp->id()) {
             case db::ColumnType::LONG_TYPE: {
-                _builders.push_back(std::make_shared<DBColumnBuilder<db::LongType>>(field, encoding));
+                _builders.push_back(std::make_shared<DBColumnBuilder<db::LongType>>(field, encoding, pool));
                 break;
             }
             case db::ColumnType::DOUBLE_TYPE: {
-                _builders.push_back(std::make_shared<DBColumnBuilder<db::DoubleType>>(field, encoding));
+                _builders.push_back(std::make_shared<DBColumnBuilder<db::DoubleType>>(field, encoding, pool));
                 break;
             }
             case db::ColumnType::STRING_TYPE: {
-                _builders.push_back(std::make_shared<DBColumnBuilder<db::StringType>>(field, encoding));
+                _builders.push_back(std::make_shared<DBColumnBuilder<db::StringType>>(field, encoding, pool));
                 break;
             }
             default:

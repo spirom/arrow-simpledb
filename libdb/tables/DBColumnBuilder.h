@@ -29,7 +29,9 @@ namespace db {
 
     public:
 
-        explicit DBColumnBuilder(std::shared_ptr<arrow::Field> field, db::ColumnEncoding encoding);
+        explicit DBColumnBuilder(std::shared_ptr<arrow::Field> field,
+                                 db::ColumnEncoding encoding,
+                                 arrow::MemoryPool *pool = arrow::default_memory_pool());
 
         void add(std::shared_ptr<db::GenValue> value) override;
 

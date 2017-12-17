@@ -9,13 +9,14 @@ using namespace db;
 
 template <typename T>
 DBColumnBuilder<T>::DBColumnBuilder(std::shared_ptr<arrow::Field> field,
-                                    db::ColumnEncoding encoding)
+                                    db::ColumnEncoding encoding,
+                                    arrow::MemoryPool *pool)
 {
     _encoding = encoding;
     if (encoding == db::ColumnEncoding::DICT) {
-        _dictBuilder.reset(new typename T::DictionaryBuilderType(arrow::default_memory_pool()));
+        _dictBuilder.reset(new typename T::DictionaryBuilderType(pool));
     } else {
-        _builder.reset(new typename T::BuilderType());
+        _builder.reset(new typename T::BuilderType(pool));
     }
     _haveData = false;
     _field = field;

@@ -11,12 +11,14 @@ using arrow::Column;
 using arrow::Field;
 
 arrow::Status
-Tables::createNoRows(std::shared_ptr<db::DBTable>& table) {
+Tables::createNoRows(std::shared_ptr<db::DBTable>& table,
+                     arrow::MemoryPool *pool) {
 
     db::DBTable *pTable = new db::DBTable(
             {"id", "cost"},
             {db::long_type(), db::double_type()},
-            {db::ColumnEncoding::PLAIN, db::ColumnEncoding::PLAIN}
+            {db::ColumnEncoding::PLAIN, db::ColumnEncoding::PLAIN},
+            pool
     );
 
     table.reset(pTable);
@@ -27,12 +29,14 @@ Tables::createNoRows(std::shared_ptr<db::DBTable>& table) {
 }
 
 arrow::Status
-Tables::createSmallSimpleColumns(std::shared_ptr<db::DBTable>& table) {
+Tables::createSmallSimpleColumns(std::shared_ptr<db::DBTable>& table,
+                                 arrow::MemoryPool *pool) {
 
     db::DBTable *pTable = new db::DBTable(
                 {"id", "cost"},
                 {db::long_type(), db::double_type()},
-                {db::ColumnEncoding::PLAIN, db::ColumnEncoding::PLAIN}
+                {db::ColumnEncoding::PLAIN, db::ColumnEncoding::PLAIN},
+                pool
             );
 
     table.reset(pTable);
@@ -46,12 +50,14 @@ Tables::createSmallSimpleColumns(std::shared_ptr<db::DBTable>& table) {
 }
 
 arrow::Status
-Tables::createSmallSimpleStringColumns(std::shared_ptr<db::DBTable>& table)
+Tables::createSmallSimpleStringColumns(std::shared_ptr<db::DBTable>& table,
+                                       arrow::MemoryPool *pool)
 {
     db::DBTable *pTable = new db::DBTable(
             {"foo", "bar"},
             {db::string_type(), db::string_type()},
-            {db::ColumnEncoding::PLAIN, db::ColumnEncoding::PLAIN}
+            {db::ColumnEncoding::PLAIN, db::ColumnEncoding::PLAIN},
+            pool
     );
 
     table.reset(pTable);
@@ -65,12 +71,14 @@ Tables::createSmallSimpleStringColumns(std::shared_ptr<db::DBTable>& table)
 }
 
 arrow::Status
-Tables::createSmallChunkedColumns(std::shared_ptr<db::DBTable>& table)
+Tables::createSmallChunkedColumns(std::shared_ptr<db::DBTable>& table,
+                                  arrow::MemoryPool *pool)
 {
     db::DBTable *pTable = new db::DBTable(
             {"id", "cost"},
             {db::long_type(), db::double_type()},
-            {db::ColumnEncoding::PLAIN, db::ColumnEncoding::PLAIN}
+            {db::ColumnEncoding::PLAIN, db::ColumnEncoding::PLAIN},
+            pool
     );
 
     table.reset(pTable);
@@ -89,12 +97,14 @@ Tables::createSmallChunkedColumns(std::shared_ptr<db::DBTable>& table)
 }
 
 arrow::Status
-Tables::createSmallChunkedColumnsWithNulls(std::shared_ptr<db::DBTable>& table)
+Tables::createSmallChunkedColumnsWithNulls(std::shared_ptr<db::DBTable>& table,
+                                           arrow::MemoryPool *pool)
 {
     db::DBTable *pTable = new db::DBTable(
             {"id", "cost"},
             {db::long_type(), db::double_type()},
-            {db::ColumnEncoding::PLAIN, db::ColumnEncoding::PLAIN}
+            {db::ColumnEncoding::PLAIN, db::ColumnEncoding::PLAIN},
+            pool
     );
 
     table.reset(pTable);
@@ -113,12 +123,14 @@ Tables::createSmallChunkedColumnsWithNulls(std::shared_ptr<db::DBTable>& table)
 }
 
 arrow::Status
-Tables::createSimple(std::shared_ptr<db::DBTable>& table)
+Tables::createSimple(std::shared_ptr<db::DBTable>& table,
+                     arrow::MemoryPool *pool)
 {
     db::DBTable *pTable = new db::DBTable(
             {"id", "cost"},
             {db::long_type(), db::double_type()},
-            {db::ColumnEncoding::PLAIN, db::ColumnEncoding::PLAIN}
+            {db::ColumnEncoding::PLAIN, db::ColumnEncoding::PLAIN},
+            pool
     );
 
     table.reset(pTable);
@@ -139,12 +151,14 @@ Tables::createSimple(std::shared_ptr<db::DBTable>& table)
 }
 
 arrow::Status
-Tables::createSmallDictionaryColumns(std::shared_ptr<db::DBTable>& table)
+Tables::createSmallDictionaryColumns(std::shared_ptr<db::DBTable>& table,
+                                     arrow::MemoryPool *pool)
 {
     db::DBTable *pTable = new db::DBTable(
             {"id", "cost"},
             {db::long_type(), db::long_type()},
-            {db::ColumnEncoding::DICT, db::ColumnEncoding::DICT}
+            {db::ColumnEncoding::DICT, db::ColumnEncoding::DICT},
+            pool
     );
 
     table.reset(pTable);
@@ -160,12 +174,14 @@ Tables::createSmallDictionaryColumns(std::shared_ptr<db::DBTable>& table)
 }
 
 arrow::Status
-Tables::createSmallStringDictionaryColumns(std::shared_ptr<db::DBTable>& table)
+Tables::createSmallStringDictionaryColumns(std::shared_ptr<db::DBTable>& table,
+                                           arrow::MemoryPool *pool)
 {
     db::DBTable *pTable = new db::DBTable(
             {"foo", "bar"},
             {db::string_type(), db::string_type()},
-            {db::ColumnEncoding::DICT, db::ColumnEncoding::DICT}
+            {db::ColumnEncoding::DICT, db::ColumnEncoding::DICT},
+            pool
     );
 
     table.reset(pTable);
@@ -179,12 +195,14 @@ Tables::createSmallStringDictionaryColumns(std::shared_ptr<db::DBTable>& table)
 }
 
 arrow::Status
-Tables::createChunkedDictionaryColumns(std::shared_ptr<db::DBTable>& table)
+Tables::createChunkedDictionaryColumns(std::shared_ptr<db::DBTable>& table,
+                                       arrow::MemoryPool *pool)
 {
     db::DBTable *pTable = new db::DBTable(
             {"id", "cost"},
             {db::long_type(), db::string_type()},
-            {db::ColumnEncoding::DICT, db::ColumnEncoding::DICT}
+            {db::ColumnEncoding::DICT, db::ColumnEncoding::DICT},
+            pool
     );
 
     table.reset(pTable);
@@ -203,12 +221,14 @@ Tables::createChunkedDictionaryColumns(std::shared_ptr<db::DBTable>& table)
 }
 
 arrow::Status
-Tables::createChunkedDictionaryColumnsWithNulls(std::shared_ptr<db::DBTable>& table)
+Tables::createChunkedDictionaryColumnsWithNulls(std::shared_ptr<db::DBTable>& table,
+                                                arrow::MemoryPool *pool)
 {
     db::DBTable *pTable = new db::DBTable(
             {"id", "cost"},
             {db::long_type(), db::string_type()},
-            {db::ColumnEncoding::DICT, db::ColumnEncoding::DICT}
+            {db::ColumnEncoding::DICT, db::ColumnEncoding::DICT},
+            pool
     );
 
     table.reset(pTable);
