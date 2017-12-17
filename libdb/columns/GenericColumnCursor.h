@@ -16,6 +16,8 @@ namespace db {
      * ColumnCursorWrapper and call get().
      */
     class GenericColumnCursor {
+        friend class ScanTableCursor;
+
     public:
         virtual ~GenericColumnCursor() = default;
 
@@ -25,13 +27,13 @@ namespace db {
          */
         virtual bool isNull() = 0;
 
+    protected:
+        explicit GenericColumnCursor(TableCursor &table_cursor);
+
         /**
          * Reset to the first element, if any.
          */
         virtual void reset() = 0;
-
-    protected:
-        explicit GenericColumnCursor(TableCursor &table_cursor);
 
         uint64_t get_table_cursor_position();
 

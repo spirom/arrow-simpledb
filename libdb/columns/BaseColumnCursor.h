@@ -22,6 +22,23 @@ namespace db {
                 std::shared_ptr<arrow::Column> column, ColumnEncoding encoding, TableCursor &table_cursor);
 
         /**
+         * Get value at current position.
+         * @return
+         */
+        virtual typename T::ElementType get() = 0;
+
+        virtual ~BaseColumnCursor() = default;
+
+    protected:
+
+        /**
+         * Seek to the given position.
+         * @param to zero-based ordinal position of element in column
+         * @return True if successful.
+         */
+        virtual bool seek(uint64_t to) = 0;
+
+        /**
          * Will next() produce another element?
          * @return
          */
@@ -32,24 +49,6 @@ namespace db {
          * @return True if an element is available, false otherwise (end of column.)
          */
         virtual bool next() = 0;
-
-        /**
-         * Get value at current position.
-         * @return
-         */
-        virtual typename T::ElementType get() = 0;
-
-        /**
-         * Seek to the given position.
-         * @param to zero-based ordinal position of element in column
-         * @return True if successful.
-         */
-        virtual bool seek(uint64_t to) = 0;
-
-
-        virtual ~BaseColumnCursor() = default;
-
-    private:
 
     };
 };
