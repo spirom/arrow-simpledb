@@ -27,8 +27,6 @@ namespace db {
          */
         virtual typename T::ElementType get() = 0;
 
-        virtual ~BaseColumnCursor() = default;
-
     protected:
 
         /**

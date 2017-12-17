@@ -57,6 +57,7 @@ ChunkedDictColumnCursor<T>::get() {
 template<>
 typename db::StringType::ElementType
 ChunkedDictColumnCursor<db::StringType>::get() {
+    seek(this->get_table_cursor_position());
     int index = _current_indices->Value(_pos_in_chunk);
     return _current_dict->GetString(index);
 }

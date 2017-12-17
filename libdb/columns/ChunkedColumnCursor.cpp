@@ -55,6 +55,7 @@ ChunkedColumnCursor<T>::get() {
 template<>
 typename db::StringType::ElementType
 ChunkedColumnCursor<db::StringType>::get() {
+    seek(this->get_table_cursor_position());
     return _current_chunk->GetString(_pos_in_chunk);
 }
 
