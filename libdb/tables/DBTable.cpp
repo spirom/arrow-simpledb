@@ -26,15 +26,15 @@ DBTable::DBTable(
         schema_vector.push_back(field);
 
         switch (tp->id()) {
-            case db::ColumnType::LONG_TYPE: {
+            case db::ColumnType::LONG: {
                 _builders.push_back(std::make_shared<DBColumnBuilder<db::LongType>>(field, encoding, pool));
                 break;
             }
-            case db::ColumnType::DOUBLE_TYPE: {
+            case db::ColumnType::DOUBLE: {
                 _builders.push_back(std::make_shared<DBColumnBuilder<db::DoubleType>>(field, encoding, pool));
                 break;
             }
-            case db::ColumnType::STRING_TYPE: {
+            case db::ColumnType::STRING: {
                 _builders.push_back(std::make_shared<DBColumnBuilder<db::StringType>>(field, encoding, pool));
                 break;
             }

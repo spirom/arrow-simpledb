@@ -10,14 +10,14 @@ namespace db {
     /**
      * THe data type of a column
      */
-    enum ColumnType {
-        STRING_TYPE, LONG_TYPE, DOUBLE_TYPE
+    enum class ColumnType {
+        STRING, LONG, DOUBLE
     };
 
     /**
      * Encoding scheme for a column
      */
-    enum ColumnEncoding { PLAIN = 0, DICT };
+    enum class ColumnEncoding { PLAIN = 0, DICT };
 
     /**
      * Common base class for type fo a column
@@ -47,7 +47,7 @@ namespace db {
         typedef std::string ElementType;
         typedef arrow::StringBuilder BuilderType;
         typedef arrow::StringDictionaryBuilder DictionaryBuilderType;
-        const ColumnType TYPE_ID = ::db::STRING_TYPE;
+        const ColumnType TYPE_ID = ::db::ColumnType::STRING;
         ColumnType id() override { return TYPE_ID; };
         std::shared_ptr<arrow::DataType> getArrowType() override { return arrow::utf8(); }
     };
@@ -61,7 +61,7 @@ namespace db {
         typedef typename arrow::Int64Type::c_type ElementType;
         typedef arrow::Int64Builder BuilderType;
         typedef arrow::DictionaryBuilder<arrow::Int64Type> DictionaryBuilderType;
-        const ColumnType TYPE_ID = ::db::LONG_TYPE;
+        const ColumnType TYPE_ID = ::db::ColumnType::LONG;
         ColumnType id() override { return TYPE_ID; };
         std::shared_ptr<arrow::DataType> getArrowType() override { return arrow::int64(); }
     };
@@ -76,7 +76,7 @@ namespace db {
         typedef arrow::DoubleBuilder BuilderType;
         // TODO: what if there _is_ no corresponding dictionary type ???
         typedef arrow::DoubleBuilder DictionaryBuilderType;
-        const ColumnType TYPE_ID = ::db::DOUBLE_TYPE;
+        const ColumnType TYPE_ID = ::db::ColumnType::DOUBLE;
         ColumnType id() override { return TYPE_ID; };
         std::shared_ptr<arrow::DataType> getArrowType() override { return arrow::float64(); }
     };

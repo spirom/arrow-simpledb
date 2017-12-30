@@ -528,6 +528,75 @@ TEST_F(TableTest, Memory) {
 
 }
 
+class LimitedMemoryPool : public arrow::DefaultMemoryPool {
+public:
+    void SetLimit(uint64_t limit) {
+        _limit = limit;
+    }
+
+    Status Allocate(int64_t size, uint8_t** out) override
+    {
+        arrow::Status stat = CheckLimit(size);
+        if (stat.ok()) {
+            return arrow::DefaultMemoryPool::Allocate(size, out);
+        } else {
+            return stat;
+        }
+    }
+
+    Status Reallocate(int64_t old_size, int64_t new_size, uint8_t** ptr) override
+    {
+        arrow::Status stat = CheckLimit(new_size);
+        if (stat.ok()) {
+            return arrow::DefaultMemoryPool::Reallocate(old_size, new_size, ptr);
+        } else {
+            return stat;
+        }
+    }
+
+protected:
+    arrow::Status CheckLimit(int64_t size) {
+        if (_limit == -1) {
+            return arrow::Status::OK();
+        }
+        if (max_memory() + size > _limit) {
+            std::stringstream ss;
+            ss << "request for " << size << " exceeds limit of " << _limit;
+            return arrow::Status::OutOfMemory(ss.str());
+        } else {
+            return arrow::Status::OK();
+        }
+    }
+
+private:
+    int64_t _limit = -1;
+};
+
+TEST_F(TableTest, OutOfMemory) {
+
+    LimitedMemoryPool *pool = new LimitedMemoryPool();
+
+    EXPECT_EQ(0, pool->bytes_allocated());
+
+    std::shared_ptr<db::DBTable> dbTable;
+    EXPECT_EQ(Status::OK().code(), Tables::createSmallSimpleColumns(dbTable, pool).code());
+
+    int64_t used = pool->bytes_allocated();
+    EXPECT_NE(0, used);
+
+    pool->SetLimit((uint64_t) 1.5 * used);
+
+    std::shared_ptr<db::DBTable> dbTable2;
+    EXPECT_EQ(Status::OK().code(), Tables::createSmallSimpleColumns(dbTable2, pool).code());
+
+
+    EXPECT_EQ(0, pool->bytes_allocated());
+
+}
+
+
+
+
 // TODO: filter on dictionary column (efficiently?)
 
 // TODO: test mismatched column lengths
