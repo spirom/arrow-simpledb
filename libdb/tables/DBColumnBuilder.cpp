@@ -87,6 +87,6 @@ DBColumnBuilder<T>::getColumn()
     return std::make_shared<arrow::Column>(_field, _chunks);
 }
 
-template class DBColumnBuilder<db::LongType>;
-template class DBColumnBuilder<db::DoubleType>;
-template class DBColumnBuilder<db::StringType>;
+template class db::DBColumnBuilder<db::LongType>;
+template class db::DBColumnBuilder<db::DoubleType>;
+template class db::DBColumnBuilder<db::StringType>;

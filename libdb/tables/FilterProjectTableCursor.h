@@ -34,7 +34,7 @@ namespace db {
         void reset() override;
 
     protected:
-        uint64_t getPosition() override;
+        uint64_t getPosition() const override;
 
         bool satisfiesFilter();
 

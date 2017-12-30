@@ -76,7 +76,7 @@ namespace db {
         virtual ~TableCursor() = default;
 
     protected:
-        virtual uint64_t getPosition() = 0;
+        virtual uint64_t getPosition() const = 0;
     };
 
 };

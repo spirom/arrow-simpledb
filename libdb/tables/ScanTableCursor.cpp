@@ -104,7 +104,7 @@ ScanTableCursor::reset()
 }
 
 uint64_t
-ScanTableCursor::getPosition()
+ScanTableCursor::getPosition() const
 {
     return _position;
 }

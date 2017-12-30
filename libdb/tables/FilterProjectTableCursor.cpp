@@ -53,7 +53,7 @@ void FilterProjectTableCursor::reset()
 }
 
 uint64_t
-FilterProjectTableCursor::getPosition()
+FilterProjectTableCursor::getPosition() const
 {
     return _source_cursor.getPosition();
 }

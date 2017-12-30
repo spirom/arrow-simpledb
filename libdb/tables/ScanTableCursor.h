@@ -56,7 +56,7 @@ namespace db {
     protected:
         bool addColumn(std::shared_ptr<arrow::Column> column, db::ColumnEncoding encoding);
 
-        uint64_t getPosition();
+        uint64_t getPosition() const override;
 
     private:
         std::shared_ptr<arrow::Table> _table;
