@@ -43,10 +43,10 @@ namespace db {
      */
     class StringType : public DataType {
     public:
-        typedef typename arrow::StringArray ArrayType;
-        typedef std::string ElementType;
-        typedef arrow::StringBuilder BuilderType;
-        typedef arrow::StringDictionaryBuilder DictionaryBuilderType;
+        using ArrayType = arrow::StringArray;
+        using ElementType = std::string;
+        using BuilderType = arrow::StringBuilder ;
+        using DictionaryBuilderType = arrow::StringDictionaryBuilder;
         const ColumnType TYPE_ID = ::db::ColumnType::STRING;
         ColumnType id() override { return TYPE_ID; };
         std::shared_ptr<arrow::DataType> getArrowType() override { return arrow::utf8(); }
@@ -57,10 +57,10 @@ namespace db {
      */
     class LongType : public DataType  {
     public:
-        typedef typename arrow::NumericArray<arrow::Int64Type> ArrayType;
-        typedef typename arrow::Int64Type::c_type ElementType;
-        typedef arrow::Int64Builder BuilderType;
-        typedef arrow::DictionaryBuilder<arrow::Int64Type> DictionaryBuilderType;
+        using ArrayType = arrow::NumericArray<arrow::Int64Type>;
+        using ElementType = arrow::Int64Type::c_type;
+        using BuilderType = arrow::Int64Builder;
+        using DictionaryBuilderType = arrow::DictionaryBuilder<arrow::Int64Type>;
         const ColumnType TYPE_ID = ::db::ColumnType::LONG;
         ColumnType id() override { return TYPE_ID; };
         std::shared_ptr<arrow::DataType> getArrowType() override { return arrow::int64(); }
@@ -71,11 +71,11 @@ namespace db {
      */
     class DoubleType : public DataType  {
     public:
-        typedef typename arrow::NumericArray<arrow::DoubleType> ArrayType;
-        typedef typename arrow::DoubleType::c_type ElementType;
-        typedef arrow::DoubleBuilder BuilderType;
+        using ArrayType = arrow::NumericArray<arrow::DoubleType>;
+        using ElementType = arrow::DoubleType::c_type;
+        using BuilderType = arrow::DoubleBuilder;
         // TODO: what if there _is_ no corresponding dictionary type ???
-        typedef arrow::DoubleBuilder DictionaryBuilderType;
+        using DictionaryBuilderType = arrow::DoubleBuilder;
         const ColumnType TYPE_ID = ::db::ColumnType::DOUBLE;
         ColumnType id() override { return TYPE_ID; };
         std::shared_ptr<arrow::DataType> getArrowType() override { return arrow::float64(); }

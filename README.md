@@ -150,6 +150,7 @@ populating tables.
 # Things Not Yet Investigated
 
 * Memory pools are not used at all thoughtfully
+* Error handling is poor, and poorly integrated with Arrow's error handling
 * Filtering is not pushed down into dictionaries
 * Data representation
   * Non-relational data cannot yet be represented
