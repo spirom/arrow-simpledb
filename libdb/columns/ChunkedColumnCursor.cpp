@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include "ChunkedColumnCursor.h"
-#include "DBSchema.h"
+#include "core/DBSchema.h"
 
 
 namespace db {

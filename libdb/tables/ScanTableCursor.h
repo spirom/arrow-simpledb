@@ -8,7 +8,7 @@
 #include "columns/BaseColumnCursor.h"
 #include "columns/GenericColumnCursor.h"
 #include "TableCursor.h"
-#include <columns/DBSchema.h>
+#include <core/DBSchema.h>
 
 namespace db {
 

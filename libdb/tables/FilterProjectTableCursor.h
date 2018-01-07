@@ -4,7 +4,7 @@
 #define FILTER_PROJECT_TABLECURSOR_H
 
 #include "TableCursor.h"
-#include <columns/DBSchema.h>
+#include <core/DBSchema.h>
 
 namespace db {
 

@@ -1,6 +1,6 @@
 
 
-#include <columns/DBSchema.h>
+#include <core/DBSchema.h>
 #include "FilterProjectTableCursor.h"
 #include "filters/Filter.h"
 #include "columns/BaseColumnCursor.h"

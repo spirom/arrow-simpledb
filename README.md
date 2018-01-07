@@ -37,11 +37,13 @@ and [libdb/tables/DBTable.cpp](libdb/tables/DBTable.cpp)
 The `DBTable` class encapsulates an Arrow table together with additional metadata, such as column encodings.
 The following example creates two columns: `id` of type `long` and `cost` of type `double`.
 
-    db::DBTable *table = new db::DBTable(
-                {"id", "cost"},
-                {db::long_type(), db::double_type()},
-                {db::ColumnEncoding::PLAIN, db::ColumnEncoding::PLAIN}
-            );
+    std::shared_ptr<db::DBTable> dbTable;
+
+    db::Status status = db::DBTable::create(
+                         {"id", "cost"},
+                         {db::long_type(), db::double_type()},
+                         {db::ColumnEncoding::PLAIN, db::ColumnEncoding::PLAIN}
+                         &table);
 
     table->addRow({db::long_val(11), db::double_val(21.9)});
     table->addRow({db::long_val(12), db::double_val(22.9)});
@@ -55,11 +57,13 @@ Optional calls to `endChunk()` causes the underlying columns to be broken into m
 the current chunk for each column and begins a new one. In the following example, each column has two chunks of
 two values each.
 
-    db::DBTable *table = new db::DBTable(
-            {"id", "cost"},
-            {db::long_type(), db::double_type()},
-            {db::ColumnEncoding::PLAIN, db::ColumnEncoding::PLAIN}
-    );
+    std::shared_ptr<db::DBTable> dbTable;
+
+    db::Status status = db::DBTable::create(
+                         {"id", "cost"},
+                         {db::long_type(), db::double_type()},
+                         {db::ColumnEncoding::PLAIN, db::ColumnEncoding::PLAIN}
+                         &table);
 
     table->addRow({db::long_val(11), db::double_val(21.9)});
     table->addRow({db::long_val(12), db::double_val(22.9)});
@@ -140,6 +144,12 @@ calling `db::null_val()` as follows:
 
 Then call `isNull()` on a column cursor to check before attempting to obtain a non-null value.
 
+## Memory management
+
+To allocate an table within a specific memory pool, pass the pool as an optional extra parameter to the
+`DBTable::create()` call.
+
+## Error handling is similar to that in Arrow. See [libdb/core/Status.h](libdb/core/Status.h).
 
 ## More Examples
 
@@ -149,8 +159,7 @@ populating tables.
 
 # Things Not Yet Investigated
 
-* Memory pools are not used at all thoughtfully
-* Error handling is poor, and poorly integrated with Arrow's error handling
+* Error handling is poorly integrated with Arrow's error handling
 * Filtering is not pushed down into dictionaries
 * Data representation
   * Non-relational data cannot yet be represented

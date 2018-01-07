@@ -8,7 +8,7 @@
 #include <memory>
 
 #include <arrow/api.h>
-#include <columns/DBSchema.h>
+#include <core/DBSchema.h>
 
 namespace db {
 

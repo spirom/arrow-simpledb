@@ -24,8 +24,8 @@ set(SOURCE_FILES
         filters/AndFilter.cpp filters/AndFilter.h
         tables/DBTable.cpp tables/DBTable.h
         tables/DBColumnBuilder.cpp tables/DBColumnBuilder.h
-        columns/DBSchema.h columns/DBSchema.cpp
-        filters/IsNullFilter.cpp filters/IsNullFilter.h filters/NotFilter.cpp filters/NotFilter.h columns/BaseColumnCursor.cpp)
+        core/DBSchema.h core/DBSchema.cpp
+        filters/IsNullFilter.cpp filters/IsNullFilter.h filters/NotFilter.cpp filters/NotFilter.h columns/BaseColumnCursor.cpp core/Status.h)
 
 add_library(libdb STATIC ${SOURCE_FILES})
 

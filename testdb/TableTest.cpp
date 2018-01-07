@@ -3,7 +3,6 @@
 #include <filters/AndFilter.h>
 #include <filters/LessThanFilter.h>
 #include <tables/DBTable.h>
-#include "arrow/api.h"
 
 #include <filters/IsNullFilter.h>
 #include <filters/NotFilter.h>
@@ -12,12 +11,11 @@
 #include "Tables.h"
 
 using arrow::Table;
-using arrow::Status;
 
 
 TEST_F(TableTest, Simple) {
     std::shared_ptr<db::DBTable> dbTable;
-    EXPECT_EQ(Status::OK().code(), Tables::createSimple(dbTable).code());
+    EXPECT_EQ(db::Status::OK().code(), Tables::createSimple(dbTable).code());
 
     std::shared_ptr<Table> table = dbTable->getTable();
     EXPECT_EQ(200, table->num_rows());
@@ -26,7 +24,7 @@ TEST_F(TableTest, Simple) {
 
 TEST_F(TableTest, Cursor) {
     std::shared_ptr<db::DBTable> dbTable;
-    EXPECT_EQ(Status::OK().code(), Tables::createSimple(dbTable).code());
+    EXPECT_EQ(db::Status::OK().code(), Tables::createSimple(dbTable).code());
 
     std::shared_ptr<db::TableCursor> tc = dbTable->getScanCursor();
 
@@ -40,7 +38,7 @@ TEST_F(TableTest, Cursor) {
 
 TEST_F(TableTest, SmallSimpleColumns) {
     std::shared_ptr<db::DBTable> dbTable;
-    EXPECT_EQ(Status::OK().code(), Tables::createSmallSimpleColumns(dbTable).code());
+    EXPECT_EQ(db::Status::OK().code(), Tables::createSmallSimpleColumns(dbTable).code());
 
     std::shared_ptr<Table> table = dbTable->getTable();
     EXPECT_EQ(2, table->num_rows());
@@ -61,7 +59,7 @@ TEST_F(TableTest, SmallSimpleColumns) {
 
 TEST_F(TableTest, SmallSimpleStringColumns) {
     std::shared_ptr<db::DBTable> dbTable;
-    EXPECT_EQ(Status::OK().code(), Tables::createSmallSimpleStringColumns(dbTable).code());
+    EXPECT_EQ(db::Status::OK().code(), Tables::createSmallSimpleStringColumns(dbTable).code());
 
     std::shared_ptr<Table> table = dbTable->getTable();
     EXPECT_EQ(2, table->num_rows());
@@ -81,7 +79,7 @@ TEST_F(TableTest, SmallSimpleStringColumns) {
 
 TEST_F(TableTest, SmallChunkedColumns) {
     std::shared_ptr<db::DBTable> dbTable;
-    EXPECT_EQ(Status::OK().code(), Tables::createSmallChunkedColumns(dbTable).code());
+    EXPECT_EQ(db::Status::OK().code(), Tables::createSmallChunkedColumns(dbTable).code());
 
     std::shared_ptr<Table> table = dbTable->getTable();
     EXPECT_EQ(4, table->num_rows());
@@ -107,7 +105,7 @@ TEST_F(TableTest, SmallChunkedColumns) {
 
 TEST_F(TableTest, ComplexColumns) {
     std::shared_ptr<db::DBTable> dbTable;
-    EXPECT_EQ(Status::OK().code(), Tables::createSimple(dbTable).code());
+    EXPECT_EQ(db::Status::OK().code(), Tables::createSimple(dbTable).code());
 
     std::shared_ptr<db::TableCursor> tc = dbTable->getScanCursor();
     auto id_cursor = tc->getLongColumn(std::string("id"));
@@ -126,7 +124,7 @@ TEST_F(TableTest, ComplexColumns) {
 
 TEST_F(TableTest, SimpleFilter) {
     std::shared_ptr<db::DBTable> dbTable;
-    EXPECT_EQ(Status::OK().code(), Tables::createSmallChunkedColumns(dbTable).code());
+    EXPECT_EQ(db::Status::OK().code(), Tables::createSmallChunkedColumns(dbTable).code());
 
     std::shared_ptr<Table> table = dbTable->getTable();
     EXPECT_EQ(4, table->num_rows());
@@ -148,7 +146,7 @@ TEST_F(TableTest, SimpleFilter) {
 
 TEST_F(TableTest, ConjunctiveFilter) {
     std::shared_ptr<db::DBTable> dbTable;
-    EXPECT_EQ(Status::OK().code(), Tables::createSmallChunkedColumns(dbTable).code());
+    EXPECT_EQ(db::Status::OK().code(), Tables::createSmallChunkedColumns(dbTable).code());
 
     std::shared_ptr<Table> table = dbTable->getTable();
     EXPECT_EQ(4, table->num_rows());
@@ -176,7 +174,7 @@ TEST_F(TableTest, ConjunctiveFilter) {
 
 TEST_F(TableTest, NeverTrueFilter) {
     std::shared_ptr<db::DBTable> dbTable;
-    EXPECT_EQ(Status::OK().code(), Tables::createSmallChunkedColumns(dbTable).code());
+    EXPECT_EQ(db::Status::OK().code(), Tables::createSmallChunkedColumns(dbTable).code());
 
     std::shared_ptr<Table> table = dbTable->getTable();
     EXPECT_EQ(4, table->num_rows());
@@ -198,7 +196,7 @@ TEST_F(TableTest, NeverTrueFilter) {
 
 TEST_F(TableTest, TwoTypesSameFilter) {
     std::shared_ptr<db::DBTable> dbTable;
-    EXPECT_EQ(Status::OK().code(), Tables::createSmallChunkedColumns(dbTable).code());
+    EXPECT_EQ(db::Status::OK().code(), Tables::createSmallChunkedColumns(dbTable).code());
 
     std::shared_ptr<Table> table = dbTable->getTable();
     EXPECT_EQ(4, table->num_rows());
@@ -220,7 +218,7 @@ TEST_F(TableTest, TwoTypesSameFilter) {
 
 TEST_F(TableTest, FilterComposition) {
     std::shared_ptr<db::DBTable> dbTable;
-    EXPECT_EQ(Status::OK().code(), Tables::createSmallChunkedColumns(dbTable).code());
+    EXPECT_EQ(db::Status::OK().code(), Tables::createSmallChunkedColumns(dbTable).code());
 
     std::shared_ptr<Table> table = dbTable->getTable();
     EXPECT_EQ(4, table->num_rows());
@@ -248,7 +246,7 @@ TEST_F(TableTest, FilterComposition) {
 
 TEST_F(TableTest, SmallDictionaryColumns) {
     std::shared_ptr<db::DBTable> dbTable;
-    EXPECT_EQ(Status::OK().code(), Tables::createSmallDictionaryColumns(dbTable).code());
+    EXPECT_EQ(db::Status::OK().code(), Tables::createSmallDictionaryColumns(dbTable).code());
 
     std::shared_ptr<Table> table = dbTable->getTable();
     EXPECT_EQ(4, table->num_rows());
@@ -275,9 +273,22 @@ TEST_F(TableTest, SmallDictionaryColumns) {
     EXPECT_FALSE(tc->hasMore());
 }
 
+TEST_F(TableTest, BadDictionaryColumn) {
+    std::shared_ptr<db::DBTable> dbTable;
+
+    // can't have a dictionary column of double type
+    EXPECT_EQ(db::StatusCode::InvalidColumn, db::DBTable::create(
+            {"id", "cost"},
+            {db::long_type(), db::double_type()},
+            {db::ColumnEncoding::DICT, db::ColumnEncoding::DICT},
+            &dbTable).code());
+
+    EXPECT_EQ(nullptr, dbTable.get());
+}
+
 TEST_F(TableTest, SmallStringDictionaryColumns) {
     std::shared_ptr<db::DBTable> dbTable;
-    EXPECT_EQ(Status::OK().code(), Tables::createSmallStringDictionaryColumns(dbTable).code());
+    EXPECT_EQ(db::Status::OK().code(), Tables::createSmallStringDictionaryColumns(dbTable).code());
 
     std::shared_ptr<Table> table = dbTable->getTable();
     EXPECT_EQ(2, table->num_rows());
@@ -301,7 +312,7 @@ TEST_F(TableTest, SmallStringDictionaryColumns) {
 
 TEST_F(TableTest, ChunkedDictionaryColumns) {
     std::shared_ptr<db::DBTable> dbTable;
-    EXPECT_EQ(Status::OK().code(), Tables::createChunkedDictionaryColumns(dbTable).code());
+    EXPECT_EQ(db::Status::OK().code(), Tables::createChunkedDictionaryColumns(dbTable).code());
 
     std::shared_ptr<Table> table = dbTable->getTable();
 
@@ -327,7 +338,7 @@ TEST_F(TableTest, ChunkedDictionaryColumns) {
 
 TEST_F(TableTest, ResetCursor) {
     std::shared_ptr<db::DBTable> dbTable;
-    EXPECT_EQ(Status::OK().code(), Tables::createSmallChunkedColumns(dbTable).code());
+    EXPECT_EQ(db::Status::OK().code(), Tables::createSmallChunkedColumns(dbTable).code());
 
     std::shared_ptr<Table> table = dbTable->getTable();
     EXPECT_EQ(4, table->num_rows());
@@ -366,7 +377,7 @@ TEST_F(TableTest, ResetCursor) {
 
 TEST_F(TableTest, AddAfterMake) {
     std::shared_ptr<db::DBTable> dbTable;
-    EXPECT_EQ(Status::OK().code(), Tables::createSmallChunkedColumns(dbTable).code());
+    EXPECT_EQ(db::Status::OK().code(), Tables::createSmallChunkedColumns(dbTable).code());
 
     std::shared_ptr<Table> table = dbTable->getTable();
     EXPECT_EQ(4, table->num_rows());
@@ -407,7 +418,7 @@ TEST_F(TableTest, AddAfterMake) {
 
 TEST_F(TableTest, NoRows) {
     std::shared_ptr<db::DBTable> dbTable;
-    EXPECT_EQ(Status::OK().code(), Tables::createNoRows(dbTable).code());
+    EXPECT_EQ(db::Status::OK().code(), Tables::createNoRows(dbTable).code());
 
     std::shared_ptr<Table> table = dbTable->getTable();
     EXPECT_EQ(0, table->num_rows());
@@ -421,7 +432,7 @@ TEST_F(TableTest, NoRows) {
 
 TEST_F(TableTest, Nulls) {
     std::shared_ptr<db::DBTable> dbTable;
-    EXPECT_EQ(Status::OK().code(), Tables::createSmallChunkedColumnsWithNulls(dbTable).code());
+    EXPECT_EQ(db::Status::OK().code(), Tables::createSmallChunkedColumnsWithNulls(dbTable).code());
 
     std::shared_ptr<Table> table = dbTable->getTable();
     EXPECT_EQ(4, table->num_rows());
@@ -451,7 +462,7 @@ TEST_F(TableTest, Nulls) {
 
 TEST_F(TableTest, StringDictNulls) {
     std::shared_ptr<db::DBTable> dbTable;
-    EXPECT_EQ(Status::OK().code(), Tables::createChunkedDictionaryColumnsWithNulls(dbTable).code());
+    EXPECT_EQ(db::Status::OK().code(), Tables::createChunkedDictionaryColumnsWithNulls(dbTable).code());
 
     std::shared_ptr<Table> table = dbTable->getTable();
     EXPECT_EQ(4, table->num_rows());
@@ -482,7 +493,7 @@ TEST_F(TableTest, StringDictNulls) {
 
 TEST_F(TableTest, FilterNulls) {
     std::shared_ptr<db::DBTable> dbTable;
-    EXPECT_EQ(Status::OK().code(), Tables::createChunkedDictionaryColumnsWithNulls(dbTable).code());
+    EXPECT_EQ(db::Status::OK().code(), Tables::createChunkedDictionaryColumnsWithNulls(dbTable).code());
 
     std::shared_ptr<Table> table = dbTable->getTable();
     EXPECT_EQ(4, table->num_rows());
@@ -518,7 +529,7 @@ TEST_F(TableTest, Memory) {
     EXPECT_EQ(0, pool->bytes_allocated());
 
     std::shared_ptr<db::DBTable> dbTable;
-    EXPECT_EQ(Status::OK().code(), Tables::createSmallSimpleColumns(dbTable, pool).code());
+    EXPECT_EQ(db::Status::OK().code(), Tables::createSmallSimpleColumns(dbTable, pool).code());
 
     EXPECT_NE(0, pool->bytes_allocated());
 
@@ -528,13 +539,16 @@ TEST_F(TableTest, Memory) {
 
 }
 
+//
+// An Arrow memory pool with a size limit so that out-of-memory conditions can be tested.
+//
 class LimitedMemoryPool : public arrow::DefaultMemoryPool {
 public:
     void SetLimit(uint64_t limit) {
         _limit = limit;
     }
 
-    Status Allocate(int64_t size, uint8_t** out) override
+    arrow::Status Allocate(int64_t size, uint8_t** out) override
     {
         arrow::Status stat = CheckLimit(size);
         if (stat.ok()) {
@@ -544,7 +558,7 @@ public:
         }
     }
 
-    Status Reallocate(int64_t old_size, int64_t new_size, uint8_t** ptr) override
+    arrow::Status Reallocate(int64_t old_size, int64_t new_size, uint8_t** ptr) override
     {
         arrow::Status stat = CheckLimit(new_size);
         if (stat.ok()) {
@@ -574,28 +588,104 @@ private:
 
 TEST_F(TableTest, OutOfMemory) {
 
-    LimitedMemoryPool *pool = new LimitedMemoryPool();
+    LimitedMemoryPool pool;
 
-    EXPECT_EQ(0, pool->bytes_allocated());
+    EXPECT_EQ(0, pool.bytes_allocated());
 
     std::shared_ptr<db::DBTable> dbTable;
-    EXPECT_EQ(Status::OK().code(), Tables::createSmallSimpleColumns(dbTable, pool).code());
+    EXPECT_EQ(db::Status::OK().code(), Tables::createSmallSimpleColumns(dbTable, &pool).code());
 
-    int64_t used = pool->bytes_allocated();
+    int64_t used = pool.bytes_allocated();
     EXPECT_NE(0, used);
 
-    pool->SetLimit((uint64_t) 1.5 * used);
+    pool.SetLimit((uint64_t) 1.5 * used);
 
     std::shared_ptr<db::DBTable> dbTable2;
-    EXPECT_EQ(Status::OK().code(), Tables::createSmallSimpleColumns(dbTable2, pool).code());
+    EXPECT_EQ(db::StatusCode::OutOfMemory, Tables::createSmallSimpleColumns(dbTable2, &pool).code());
 
-
-    EXPECT_EQ(0, pool->bytes_allocated());
-
+    // no more memory used than before
+    EXPECT_EQ(used, pool.bytes_allocated());
 }
 
+TEST_F(TableTest, OutOfMemory_AddRow) {
 
+    LimitedMemoryPool pool;
 
+    EXPECT_EQ(0, pool.bytes_allocated());
+
+    std::shared_ptr<db::DBTable> dbTable;
+
+    EXPECT_EQ(db::StatusCode::OK, db::DBTable::create(
+            {"id", "cost"},
+            {db::long_type(), db::double_type()},
+            {db::ColumnEncoding::PLAIN, db::ColumnEncoding::PLAIN},
+            &dbTable,
+            &pool).code());
+
+    pool.SetLimit((uint64_t) 0);
+
+    EXPECT_EQ(db::StatusCode::OutOfMemory, dbTable->addRow({db::long_val(11), db::double_val(21.9)}).code());
+}
+
+TEST_F(TableTest, OutOfMemory_AddRowNull) {
+
+    LimitedMemoryPool pool;
+
+    EXPECT_EQ(0, pool.bytes_allocated());
+
+    std::shared_ptr<db::DBTable> dbTable;
+
+    EXPECT_EQ(db::StatusCode::OK, db::DBTable::create(
+            {"id", "cost"},
+            {db::long_type(), db::double_type()},
+            {db::ColumnEncoding::PLAIN, db::ColumnEncoding::PLAIN},
+            &dbTable,
+            &pool).code());
+
+    pool.SetLimit((uint64_t) 0);
+
+    EXPECT_EQ(db::StatusCode::OutOfMemory, dbTable->addRow({db::null_val(), db::null_val()}).code());
+}
+
+TEST_F(TableTest, OutOfMemory_AddRowDict) {
+
+    LimitedMemoryPool pool;
+
+    EXPECT_EQ(0, pool.bytes_allocated());
+
+    std::shared_ptr<db::DBTable> dbTable;
+
+    EXPECT_EQ(db::StatusCode::OK, db::DBTable::create(
+            {"id", "cost"},
+            {db::long_type(), db::string_type()},
+            {db::ColumnEncoding::DICT, db::ColumnEncoding::DICT},
+            &dbTable,
+            &pool).code());
+
+    pool.SetLimit((uint64_t) 0);
+
+    EXPECT_EQ(db::StatusCode::OutOfMemory, dbTable->addRow({db::long_val(11), db::string_val("twenty one")}).code());
+}
+
+TEST_F(TableTest, OutOfMemory_AddRowDictNull) {
+
+    LimitedMemoryPool pool;
+
+    EXPECT_EQ(0, pool.bytes_allocated());
+
+    std::shared_ptr<db::DBTable> dbTable;
+
+    EXPECT_EQ(db::StatusCode::OK, db::DBTable::create(
+            {"id", "cost"},
+            {db::long_type(), db::string_type()},
+            {db::ColumnEncoding::DICT, db::ColumnEncoding::DICT},
+            &dbTable,
+            &pool).code());
+
+    pool.SetLimit((uint64_t) 0);
+
+    EXPECT_EQ(db::StatusCode::OutOfMemory, dbTable->addRow({db::null_val(), db::null_val()}).code());
+}
 
 // TODO: filter on dictionary column (efficiently?)
 

@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include "ChunkedDictColumnCursor.h"
-#include "DBSchema.h"
+#include "core/DBSchema.h"
 
 using arrow::Int64Type;
 using arrow::Int8Type;

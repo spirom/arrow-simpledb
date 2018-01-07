@@ -11,9 +11,9 @@ namespace db {
 
     public:
 
-        virtual void add(std::shared_ptr<db::GenValue> value) = 0;
+        virtual Status add(std::shared_ptr<db::GenValue> value) = 0;
 
-        virtual void endChunk() = 0;
+        virtual Status endChunk() = 0;
 
         virtual std::shared_ptr<arrow::Column> getColumn() = 0;
 
@@ -21,7 +21,7 @@ namespace db {
 
     private:
 
-        virtual void addNull() = 0;
+        virtual Status addNull() = 0;
     };
 
     template<typename T>
@@ -33,17 +33,17 @@ namespace db {
                                  db::ColumnEncoding encoding,
                                  arrow::MemoryPool *pool = arrow::default_memory_pool());
 
-        void add(std::shared_ptr<db::GenValue> value) override;
+        Status add(std::shared_ptr<db::GenValue> value) override;
 
-        void endChunk() override;
+        Status endChunk() override;
 
         std::shared_ptr<arrow::Column> getColumn() override;
 
     protected:
 
-        void add(typename T::ElementType element);
+        Status add(typename T::ElementType element);
 
-        void addNull() override;
+        Status addNull() override;
 
     private:
 

@@ -6,7 +6,7 @@
 #include "GenericColumnCursor.h"
 #include <memory>
 #include "arrow/api.h"
-#include "DBSchema.h"
+#include "core/DBSchema.h"
 
 namespace db {
 

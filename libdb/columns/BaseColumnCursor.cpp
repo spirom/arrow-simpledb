@@ -1,7 +1,7 @@
 
 #include <memory>
 #include "BaseColumnCursor.h"
-#include "DBSchema.h"
+#include "core/DBSchema.h"
 #include "ChunkedColumnCursor.h"
 #include "ChunkedDictColumnCursor.h"
 
