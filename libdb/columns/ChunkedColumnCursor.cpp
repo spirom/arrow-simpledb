@@ -8,9 +8,9 @@
 namespace db {
 
 template<typename T>
-ChunkedColumnCursor<T>::ChunkedColumnCursor(std::shared_ptr<arrow::Column> column, TableCursor &table_cursor)
+ChunkedColumnCursor<T>::ChunkedColumnCursor(std::shared_ptr<arrow::ChunkedArray> column, TableCursor &table_cursor)
         : BaseColumnCursor<T>(table_cursor), _column(std::move(column)) {
-    // std::cout << "Cursor: [" << _column->data()->num_chunks() << "]" << std::endl;
+    // std::cout << "Cursor: [" << _column->num_chunks() << "]" << std::endl;
     reset();
 }
 
@@ -67,7 +67,7 @@ ChunkedColumnCursor<T>::reset() {
     _chunk = 0;
     _pos_in_chunk = 0;
     _current_chunk =
-            std::static_pointer_cast<typename T::ArrayType>(_column->data()->chunk(_chunk));
+            std::static_pointer_cast<typename T::ArrayType>(_column->chunk(_chunk));
     // TODO: this may fail if the column is empty
 }
 
@@ -92,11 +92,11 @@ ChunkedColumnCursor<T>::seek(uint64_t to) {
 template<typename T>
 bool
 ChunkedColumnCursor<T>::advance_chunk() {
-    if ((_chunk + 1) < _column->data()->num_chunks()) {
+    if ((_chunk + 1) < _column->num_chunks()) {
         _chunk++;
         _pos_in_chunk = 0;
         _current_chunk =
-                std::static_pointer_cast<typename T::ArrayType>(_column->data()->chunk(_chunk));
+                std::static_pointer_cast<typename T::ArrayType>(_column->chunk(_chunk));
         return true;
     } else {
         return false;

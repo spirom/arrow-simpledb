@@ -11,7 +11,7 @@ using arrow::Int8Type;
 namespace db {
 
 template<typename T>
-ChunkedDictColumnCursor<T>::ChunkedDictColumnCursor(std::shared_ptr<arrow::Column> column, TableCursor &table_cursor)
+ChunkedDictColumnCursor<T>::ChunkedDictColumnCursor(std::shared_ptr<arrow::ChunkedArray> column, TableCursor &table_cursor)
         : BaseColumnCursor<T>(table_cursor), _column(column) {
     reset();
 }
@@ -66,7 +66,7 @@ template<typename T>
 void
 ChunkedDictColumnCursor<T>::populate_pointers() {
     std::shared_ptr<arrow::DictionaryArray> dict_array =
-            std::dynamic_pointer_cast<arrow::DictionaryArray>(_column->data()->chunk(_chunk));
+            std::dynamic_pointer_cast<arrow::DictionaryArray>(_column->chunk(_chunk));
     _current_indices =
             std::dynamic_pointer_cast<arrow::NumericArray<Int8Type>>(dict_array->indices());
     _current_dict =
@@ -104,7 +104,7 @@ ChunkedDictColumnCursor<T>::seek(uint64_t to) {
 template<typename T>
 bool
 ChunkedDictColumnCursor<T>::advance_chunk() {
-    if ((_chunk + 1) < _column->data()->num_chunks()) {
+    if ((_chunk + 1) < _column->num_chunks()) {
         _chunk++;
         _pos_in_chunk = 0;
         populate_pointers();

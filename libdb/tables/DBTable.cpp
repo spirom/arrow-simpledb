@@ -120,7 +120,7 @@ DBTable::make() {
     for (auto builder : _builders) {
         _columns.push_back(builder->getColumn());
     }
-    _table = std::make_shared<Table>(_schema, _columns);
+    _table = Table::Make(_schema, _columns);
     return Status::OK();
 }
 
@@ -141,18 +141,18 @@ Status
 DBTable::dump() const
 {
     for (int i = 0; i < _table->num_columns(); i++) {
-        std::shared_ptr<arrow::Column> col = _table->column(i);
-        std::cout << "*** COLUMN " << i << " : " << col->name() << std::endl;
-        std::cout << "Num chunks: " << col->data()->num_chunks() << std::endl;
-        for (int c = 0; c < col->data()->num_chunks(); c++) {
+        std::shared_ptr<arrow::ChunkedArray> col = _table->column(i);
+        std::cout << "*** COLUMN " << i << " : " << _table->field(i)->name() << std::endl;
+        std::cout << "Num chunks: " << col->num_chunks() << std::endl;
+        for (int c = 0; c < col->num_chunks(); c++) {
             std::cout << "Chunk " << c
-                      << " length: " << col->data()->chunk(c)->length()
-                      << " null count: " << col->data()->chunk(c)->null_count()
+                      << " length: " << col->chunk(c)->length()
+                      << " null count: " << col->chunk(c)->null_count()
                     << std::endl;
             std::shared_ptr<arrow::DictionaryArray> da = std::dynamic_pointer_cast<arrow::DictionaryArray>(
-                    col->data()->chunk(c));
+                    col->chunk(c));
             if (da == nullptr) {
-                std::cout << "SIMPLE array length: " << col->data()->chunk(c) << std::endl;
+                std::cout << "SIMPLE array length: " << col->chunk(c) << std::endl;
             } else {
                 std::cout << "CHUNKED dict array: " << da.get() << std::endl;
 

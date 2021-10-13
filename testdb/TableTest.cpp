@@ -542,9 +542,9 @@ TEST_F(TableTest, Memory) {
 //
 // An Arrow memory pool with a size limit so that out-of-memory conditions can be tested.
 //
-class LimitedMemoryPool : public arrow::DefaultMemoryPool {
+/* class LimitedMemoryPool : public arrow::DefaultMemoryPool {
 public:
-    void SetLimit(uint64_t limit) {
+     void SetLimit(uint64_t limit) {
         _limit = limit;
     }
 
@@ -584,9 +584,9 @@ protected:
 
 private:
     int64_t _limit = -1;
-};
+}; */
 
-TEST_F(TableTest, OutOfMemory) {
+/* TEST_F(TableTest, OutOfMemory) {
 
     LimitedMemoryPool pool;
 
@@ -685,7 +685,7 @@ TEST_F(TableTest, OutOfMemory_AddRowDictNull) {
     pool.SetLimit((uint64_t) 0);
 
     EXPECT_EQ(db::StatusCode::OutOfMemory, dbTable->addRow({db::null_val(), db::null_val()}).code());
-}
+} */
 
 // TODO: filter on dictionary column (efficiently?)
 

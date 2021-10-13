@@ -6,7 +6,7 @@
 using namespace std;
 
 using arrow::Table;
-using arrow::Column;
+using arrow::ChunkedArray;
 using arrow::Field;
 
 db::Status

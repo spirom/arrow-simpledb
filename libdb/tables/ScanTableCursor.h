@@ -54,7 +54,7 @@ namespace db {
         void reset() override;
 
     protected:
-        bool addColumn(std::shared_ptr<arrow::Column> column, db::ColumnEncoding encoding);
+        bool addColumn(std::shared_ptr<arrow::ChunkedArray> column, const std::string& column_name, db::ColumnEncoding encoding);
 
         uint64_t getPosition() const override;
 

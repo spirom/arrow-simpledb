@@ -11,7 +11,7 @@ ScanTableCursor::ScanTableCursor(
 : _table(table)
 {
     for (int i = 0; i < table->num_columns(); i++) {
-        addColumn(table->column(i), encodings.at(i));
+        addColumn(table->column(i), table->field(i)->name(), encodings.at(i));
     }
     _size = (uint64_t) table->num_rows();
     reset();
@@ -23,7 +23,7 @@ ScanTableCursor::ScanTableCursor(
         : _table(table)
 {
     for (int i = 0; i < table->num_columns(); i++) {
-        addColumn(table->column(i), db::ColumnEncoding::PLAIN);
+        addColumn(table->column(i), table->field(i)->name(), db::ColumnEncoding::PLAIN);
     }
     _size = (uint64_t) table->num_rows();
     reset();
@@ -58,19 +58,19 @@ ScanTableCursor::getColumn(std::string colName)
 }
 
 bool
-ScanTableCursor::addColumn(std::shared_ptr<arrow::Column> column, db::ColumnEncoding encoding)
+ScanTableCursor::addColumn(std::shared_ptr<arrow::ChunkedArray> column, const std::string& column_name, db::ColumnEncoding encoding)
 {
     switch (column->type()->id()) {
         case arrow::Type::INT64: {
-            _cursors[column->name()] = BaseColumnCursor<db::LongType>::makeCursor(column, encoding, *this);
+            _cursors[column_name] = BaseColumnCursor<db::LongType>::makeCursor(column, encoding, *this);
             return true;
         }
         case arrow::Type::DOUBLE: {
-            _cursors[column->name()] = BaseColumnCursor<db::DoubleType>::makeCursor(column, encoding, *this);
+            _cursors[column_name] = BaseColumnCursor<db::DoubleType>::makeCursor(column, encoding, *this);
             return true;
         }
         case arrow::Type::STRING: {
-            _cursors[column->name()] = BaseColumnCursor<db::StringType>::makeCursor(column, encoding, *this);
+            _cursors[column_name] = BaseColumnCursor<db::StringType>::makeCursor(column, encoding, *this);
             return true;
         }
         default:

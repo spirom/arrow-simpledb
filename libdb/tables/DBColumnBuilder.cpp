@@ -90,12 +90,12 @@ DBColumnBuilder<T>::endChunk()
 
 
 template <typename T>
-std::shared_ptr<arrow::Column>
+std::shared_ptr<arrow::ChunkedArray>
 DBColumnBuilder<T>::getColumn()
 {
     endChunk(); // just in case it wasn't explicitly called
     // std::cout << "Finishing [" << _chunks.size() << "]" << std::endl;
-    return std::make_shared<arrow::Column>(_field, _chunks);
+    return std::make_shared<arrow::ChunkedArray>(std::move(_chunks));
 }
 
 template class db::DBColumnBuilder<db::LongType>;

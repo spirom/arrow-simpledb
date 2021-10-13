@@ -15,7 +15,7 @@ BaseColumnCursor<T>::BaseColumnCursor(TableCursor &table_cursor)
 template<typename T>
 std::shared_ptr<BaseColumnCursor<T>>
 BaseColumnCursor<T>::makeCursor(
-        std::shared_ptr<arrow::Column> column, ColumnEncoding encoding, TableCursor &table_cursor)
+        std::shared_ptr<arrow::ChunkedArray> column, ColumnEncoding encoding, TableCursor &table_cursor)
 {
     switch (encoding) {
         case db::ColumnEncoding::PLAIN: {

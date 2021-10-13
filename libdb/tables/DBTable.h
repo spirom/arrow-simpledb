@@ -121,7 +121,7 @@ namespace db {
         /**
          * Arrow columns
          */
-        std::vector<std::shared_ptr<arrow::Column>> _columns;
+        std::vector<std::shared_ptr<arrow::ChunkedArray>> _columns;
 
         /**
          * Builders being used to construct columns

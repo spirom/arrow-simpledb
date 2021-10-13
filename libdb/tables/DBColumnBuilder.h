@@ -15,7 +15,7 @@ namespace db {
 
         virtual Status endChunk() = 0;
 
-        virtual std::shared_ptr<arrow::Column> getColumn() = 0;
+        virtual std::shared_ptr<arrow::ChunkedArray> getColumn() = 0;
 
         virtual ~DBGenColumnBuilder() = default;
 
@@ -37,7 +37,7 @@ namespace db {
 
         Status endChunk() override;
 
-        std::shared_ptr<arrow::Column> getColumn() override;
+        std::shared_ptr<arrow::ChunkedArray> getColumn() override;
 
     protected:
 

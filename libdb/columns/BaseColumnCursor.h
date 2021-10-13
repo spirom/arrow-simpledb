@@ -19,7 +19,7 @@ namespace db {
         explicit BaseColumnCursor(TableCursor &table_cursor);
 
         static std::shared_ptr<BaseColumnCursor<T>> makeCursor(
-                std::shared_ptr<arrow::Column> column, ColumnEncoding encoding, TableCursor &table_cursor);
+                std::shared_ptr<arrow::ChunkedArray> column, ColumnEncoding encoding, TableCursor &table_cursor);
 
         /**
          * Get value at current position.

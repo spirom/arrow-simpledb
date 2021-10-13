@@ -21,7 +21,7 @@ namespace db {
          * Create from a column -- initially positioned at first element, if any.
          * @param column
          */
-        explicit ChunkedColumnCursor(std::shared_ptr<arrow::Column> column, TableCursor &table_cursor);
+        explicit ChunkedColumnCursor(std::shared_ptr<arrow::ChunkedArray> column, TableCursor &table_cursor);
 
         /**
          * Will next() produce another element?
@@ -73,7 +73,7 @@ namespace db {
         /**
          * The underlying column
          */
-        std::shared_ptr<arrow::Column> _column;
+        std::shared_ptr<arrow::ChunkedArray> _column;
 
         /**
          * The current chunk of the underlying column
